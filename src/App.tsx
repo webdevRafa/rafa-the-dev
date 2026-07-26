@@ -408,16 +408,36 @@ function App() {
             <motion.div
               className="system-visual"
               aria-label="Visual representation of an integrated business system"
-              initial={reduceMotion ? false : { opacity: 0, x: 42, rotateY: -4 }}
-              animate={{ opacity: 1, x: 0, rotateY: 0 }}
-              transition={{ duration: 0.85, delay: 0.28, ease: revealEase }}
+              initial={reduceMotion ? false : 'hidden'}
+              whileInView={reduceMotion ? undefined : 'visible'}
+              viewport={{ once: true, amount: 0.18, margin: '0px 0px -8% 0px' }}
+              variants={{
+                hidden: { opacity: 0, x: 42, rotateY: -4 },
+                visible: {
+                  opacity: 1,
+                  x: 0,
+                  rotateY: 0,
+                  transition: { duration: 0.78, ease: revealEase },
+                },
+              }}
             >
               <div className="visual-topbar">
                 <span>BUSINESS OS / LIVE</span>
                 <span className="visual-status">
                   <motion.i
-                    animate={reduceMotion ? undefined : { opacity: [1, 0.35, 1], scale: [1, 0.8, 1] }}
-                    transition={{ duration: 2.1, repeat: Infinity, ease: 'easeInOut' }}
+                    variants={{
+                      hidden: { opacity: 0, scale: 0.75 },
+                      visible: {
+                        opacity: [0.35, 1, 0.35],
+                        scale: [0.8, 1, 0.8],
+                        transition: {
+                          duration: 2.1,
+                          delay: 0.35,
+                          repeat: Infinity,
+                          ease: 'easeInOut',
+                        },
+                      },
+                    }}
                   />
                   All systems online
                 </span>
@@ -425,37 +445,61 @@ function App() {
               <div className="visual-canvas">
                 <motion.div
                   className="flow-card flow-card-main"
-                  initial={reduceMotion ? false : { opacity: 0, y: -16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.55, delay: 0.72, ease: revealEase }}
+                  variants={{
+                    hidden: { opacity: 0, y: -16 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      transition: { duration: 0.55, delay: 0.3, ease: revealEase },
+                    },
+                  }}
                 >
                   <small>NEW CUSTOMER</small>
                   <strong>Qualified lead captured</strong>
                   <div className="mini-progress">
                     <motion.span
-                      initial={reduceMotion ? false : { scaleX: 0 }}
-                      animate={{ scaleX: 1 }}
-                      transition={{ duration: 0.8, delay: 1.05, ease: revealEase }}
+                      variants={{
+                        hidden: { scaleX: 0 },
+                        visible: {
+                          scaleX: 1,
+                          transition: { duration: 0.8, delay: 0.62, ease: revealEase },
+                        },
+                      }}
                     />
                   </div>
                 </motion.div>
                 <motion.div
                   className="flow-connector connector-one"
-                  initial={reduceMotion ? false : { opacity: 0, scaleY: 0 }}
-                  animate={{ opacity: 1, scaleY: 1 }}
-                  transition={{ duration: 0.5, delay: 0.95 }}
+                  variants={{
+                    hidden: { opacity: 0, scaleY: 0 },
+                    visible: {
+                      opacity: 1,
+                      scaleY: 1,
+                      transition: { duration: 0.45, delay: 0.72 },
+                    },
+                  }}
                 />
                 <motion.div
                   className="flow-connector connector-two"
-                  initial={reduceMotion ? false : { opacity: 0, scaleX: 0 }}
-                  animate={{ opacity: 1, scaleX: 1 }}
-                  transition={{ duration: 0.5, delay: 1.18 }}
+                  variants={{
+                    hidden: { opacity: 0, scaleX: 0 },
+                    visible: {
+                      opacity: 1,
+                      scaleX: 1,
+                      transition: { duration: 0.45, delay: 0.98 },
+                    },
+                  }}
                 />
                 <motion.div
                   className="flow-card flow-card-small flow-booking"
-                  initial={reduceMotion ? false : { opacity: 0, x: 25 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.98, ease: revealEase }}
+                  variants={{
+                    hidden: { opacity: 0, x: 25 },
+                    visible: {
+                      opacity: 1,
+                      x: 0,
+                      transition: { duration: 0.5, delay: 0.75, ease: revealEase },
+                    },
+                  }}
                 >
                   <CalendarCheck2 size={19} />
                   <span><small>BOOKING</small><strong>Confirmed</strong></span>
@@ -463,9 +507,14 @@ function App() {
                 </motion.div>
                 <motion.div
                   className="flow-card flow-card-small flow-payment"
-                  initial={reduceMotion ? false : { opacity: 0, x: -25 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 1.2, ease: revealEase }}
+                  variants={{
+                    hidden: { opacity: 0, x: -25 },
+                    visible: {
+                      opacity: 1,
+                      x: 0,
+                      transition: { duration: 0.5, delay: 1.02, ease: revealEase },
+                    },
+                  }}
                 >
                   <CircleDollarSign size={19} />
                   <span><small>PAYMENT</small><strong>Processed</strong></span>
@@ -473,9 +522,14 @@ function App() {
                 </motion.div>
                 <motion.div
                   className="flow-card flow-card-small flow-portal"
-                  initial={reduceMotion ? false : { opacity: 0, x: 25 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 1.42, ease: revealEase }}
+                  variants={{
+                    hidden: { opacity: 0, x: 25 },
+                    visible: {
+                      opacity: 1,
+                      x: 0,
+                      transition: { duration: 0.5, delay: 1.28, ease: revealEase },
+                    },
+                  }}
                 >
                   <Users size={19} />
                   <span><small>PORTAL</small><strong>Account ready</strong></span>
@@ -483,17 +537,27 @@ function App() {
                 </motion.div>
                 <motion.div
                   className="visual-label visual-label-one"
-                  initial={reduceMotion ? false : { opacity: 0, scale: 0.7 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.35, delay: 1.58 }}
+                  variants={{
+                    hidden: { opacity: 0, scale: 0.7 },
+                    visible: {
+                      opacity: 1,
+                      scale: 1,
+                      transition: { duration: 0.35, delay: 1.42 },
+                    },
+                  }}
                 >
                   AUTOMATED
                 </motion.div>
                 <motion.div
                   className="visual-label visual-label-two"
-                  initial={reduceMotion ? false : { opacity: 0, scale: 0.7 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.35, delay: 1.7 }}
+                  variants={{
+                    hidden: { opacity: 0, scale: 0.7 },
+                    visible: {
+                      opacity: 1,
+                      scale: 1,
+                      transition: { duration: 0.35, delay: 1.55 },
+                    },
+                  }}
                 >
                   ONE RELIABLE SYSTEM
                 </motion.div>
@@ -503,18 +567,31 @@ function App() {
 
           <motion.div
             className="trust-strip flex items-center justify-between"
-            initial={reduceMotion ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.7, delay: 1.05 }}
+            initial={reduceMotion ? false : 'hidden'}
+            whileInView={reduceMotion ? undefined : 'visible'}
+            viewport={{ once: true, amount: 0.45 }}
+            variants={{
+              hidden: { opacity: 0, y: 14 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.55, ease: revealEase },
+              },
+            }}
           >
             <span>Built for real operations</span>
             <div className="tech-list" aria-label="Core technologies">
               {['React', 'TypeScript', 'Firebase', 'Stripe', 'Vercel'].map((technology, index) => (
                 <motion.span
                   key={technology}
-                  initial={reduceMotion ? false : { opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 1.12 + index * 0.06 }}
+                  variants={{
+                    hidden: { opacity: 0, y: 8 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      transition: { duration: 0.35, delay: 0.08 + index * 0.06 },
+                    },
+                  }}
                 >
                   {technology}
                 </motion.span>
