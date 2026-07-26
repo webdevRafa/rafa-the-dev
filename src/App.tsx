@@ -20,7 +20,6 @@ import {
   Copy,
   Database,
   Gauge,
-  Layers3,
   Menu,
   MessageSquare,
   ShieldCheck,
@@ -80,32 +79,13 @@ const projects = [
   {
     index: '02',
     name: 'RoofZeus',
-    category: 'Operations software',
+    category: 'Multi-tenant SaaS',
     description:
-      'A roofing operations platform that brings job progress, scheduling, crews, payouts, invoices, materials, and financial reporting into one system.',
-    tags: ['Job pipelines', 'Crew management', 'Reporting', 'Payout tracking'],
+      'A multi-tenant roofing SaaS application that brings job progress, scheduling, crews, payouts, invoices, materials, and financial reporting into one system.',
+    tags: ['Multi-tenant accounts', 'Job pipelines', 'Crew management', 'Financial reporting'],
     accent: 'blue',
-    cta: 'Private client system',
-  },
-  {
-    index: '03',
-    name: 'Rancho de Paloma Blanca',
-    category: 'Reservation system',
-    description:
-      'A custom booking and payment experience built around limited hunting dates, daily capacity, party options, packages, and secure checkout.',
-    tags: ['Capacity controls', 'Date-based pricing', 'Reservations', 'Online payments'],
-    accent: 'sand',
-    cta: 'Custom booking platform',
-  },
-  {
-    index: '04',
-    name: 'MMA Cortex',
-    category: 'Analytics application',
-    description:
-      'A private analytics product organizing MMA events, fighter histories, betting lines, projections, and AI-assisted analysis.',
-    tags: ['Structured data', 'AI workflows', 'Private access', 'Analytics'],
-    accent: 'coral',
-    cta: 'Private product',
+    href: 'https://roofzeus.com',
+    cta: 'View live multi-tenant SaaS',
   },
 ]
 
@@ -699,20 +679,19 @@ function App() {
                     {project.tags.map((tag) => <span key={tag}>{tag}</span>)}
                   </div>
                 </div>
-                <div className="project-footer relative z-10 flex items-center justify-between">
-                  <span>{project.cta}</span>
-                  {project.href ? (
-                    <a
-                      href={project.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`Visit ${project.name}`}
-                    >
+                <div className="project-footer relative z-10">
+                  <a
+                    className="project-link"
+                    href={project.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`Visit ${project.name}`}
+                  >
+                    <span>{project.cta}</span>
+                    <span className="project-link-icon" aria-hidden="true">
                       <ArrowUpRight size={20} />
-                    </a>
-                  ) : (
-                    <span className="project-private"><Layers3 size={18} /></span>
-                  )}
+                    </span>
+                  </a>
                 </div>
               </motion.article>
             ))}

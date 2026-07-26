@@ -715,8 +715,6 @@ summary:focus-visible {
 
 .project-lime { color: var(--lime); }
 .project-blue { color: var(--blue); }
-.project-sand { color: var(--sand); }
-.project-coral { color: var(--coral); }
 
 .project-meta {
   position: relative;
@@ -786,22 +784,36 @@ summary:focus-visible {
   text-transform: uppercase;
 }
 
-.project-footer a,
-.project-private {
+.project-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: inherit;
+  text-decoration: none;
+}
+
+.project-link-icon {
   display: grid;
   width: 42px;
   height: 42px;
+  flex: 0 0 auto;
   place-items: center;
   border: 1px solid currentColor;
   border-radius: 50%;
   color: inherit;
-  text-decoration: none;
-  transition: color 180ms ease, background 180ms ease;
+  transition: color 180ms ease, background 180ms ease, transform 180ms ease;
 }
 
-.project-footer a:hover {
+.project-link:hover .project-link-icon,
+.project-link:focus-visible .project-link-icon {
   color: var(--ink);
   background: var(--paper);
+  transform: translate(2px, -2px);
+}
+
+.project-link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 6px;
 }
 
 .capabilities-section {
