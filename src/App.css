@@ -27,6 +27,18 @@
   background-size: 72px 72px;
 }
 
+.scroll-progress {
+  position: fixed;
+  z-index: 210;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 2px;
+  background: var(--lime);
+  box-shadow: 0 0 18px rgba(216, 255, 101, 0.5);
+  transform-origin: left center;
+}
+
 .skip-link {
   position: fixed;
   left: 1rem;
@@ -164,6 +176,11 @@
   cursor: pointer;
 }
 
+.menu-icon-wrap {
+  display: grid;
+  place-items: center;
+}
+
 .button {
   display: inline-flex;
   min-height: 50px;
@@ -242,7 +259,6 @@ summary:focus-visible {
 .hero-copy {
   position: relative;
   z-index: 2;
-  animation: reveal-up 700ms ease both;
 }
 
 .eyebrow,
@@ -322,7 +338,7 @@ summary:focus-visible {
   border: 1px solid var(--line-strong);
   background: rgba(18, 21, 19, 0.76);
   box-shadow: 0 30px 100px rgba(0, 0, 0, 0.4);
-  animation: reveal-up 700ms 120ms ease both;
+  transform-style: preserve-3d;
 }
 
 .visual-topbar {
@@ -399,6 +415,7 @@ summary:focus-visible {
   width: 76%;
   height: 100%;
   background: var(--lime);
+  transform-origin: left center;
 }
 
 .flow-card-small {
@@ -452,6 +469,7 @@ summary:focus-visible {
   z-index: 1;
   border-color: rgba(216, 255, 101, 0.36);
   border-style: dashed;
+  transform-origin: top left;
 }
 
 .connector-one {
@@ -783,7 +801,7 @@ summary:focus-visible {
 
 .project-footer a:hover {
   color: var(--ink);
-  background: currentColor;
+  background: var(--paper);
 }
 
 .capabilities-section {
@@ -1308,17 +1326,6 @@ summary:focus-visible {
 .footer-bottom p {
   max-width: 630px;
   margin: 0;
-}
-
-@keyframes reveal-up {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

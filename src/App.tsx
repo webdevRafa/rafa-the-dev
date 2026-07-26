@@ -1,5 +1,12 @@
 import { useEffect, useState } from 'react'
-import type { FormEvent } from 'react'
+import type { FormEvent, ReactNode } from 'react'
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+} from 'framer-motion'
 import {
   ArrowDown,
   ArrowUpRight,
@@ -171,6 +178,44 @@ const projectTypes = [
   'Not sure yet',
 ]
 
+const revealEase = [0.22, 1, 0.36, 1] as const
+const revealViewport = { once: true, amount: 0.16 } as const
+const heroItem = {
+  hidden: { opacity: 0, y: 28, filter: 'blur(7px)' },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: { duration: 0.72, ease: revealEase },
+  },
+}
+
+function Reveal({
+  children,
+  className,
+  delay = 0,
+  distance = 34,
+}: {
+  children: ReactNode
+  className?: string
+  delay?: number
+  distance?: number
+}) {
+  const reduceMotion = useReducedMotion()
+
+  return (
+    <motion.div
+      className={className}
+      initial={reduceMotion ? false : { opacity: 0, y: distance, filter: 'blur(6px)' }}
+      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0, filter: 'blur(0px)' }}
+      viewport={revealViewport}
+      transition={{ duration: 0.72, delay, ease: revealEase }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
 function LogoMark() {
   return (
     <span className="logo-mark" aria-hidden="true">
@@ -184,6 +229,13 @@ function App() {
   const [briefReady, setBriefReady] = useState(false)
   const [briefCopied, setBriefCopied] = useState(false)
   const [projectBrief, setProjectBrief] = useState('')
+  const reduceMotion = useReducedMotion()
+  const { scrollYProgress } = useScroll()
+  const smoothScrollProgress = useSpring(scrollYProgress, {
+    stiffness: 180,
+    damping: 28,
+    restDelta: 0.001,
+  })
 
   useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {
@@ -231,18 +283,36 @@ function App() {
 
   return (
     <div className="site-shell min-h-screen overflow-hidden bg-ink text-paper">
+      {!reduceMotion && (
+        <motion.div
+          className="scroll-progress"
+          style={{ scaleX: smoothScrollProgress }}
+          aria-hidden="true"
+        />
+      )}
       <a className="skip-link" href="#main">
         Skip to content
       </a>
 
-      <header className="site-header fixed inset-x-0 top-0 z-50 flex items-center justify-between">
-        <a className="brand inline-flex items-center no-underline" href="#top" aria-label="Rafa the Dev home">
+      <motion.header
+        className="site-header fixed inset-x-0 top-0 z-50 flex items-center justify-between"
+        initial={reduceMotion ? false : { opacity: 0, y: -18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: revealEase }}
+      >
+        <motion.a
+          className="brand inline-flex items-center no-underline"
+          href="#top"
+          aria-label="Rafa the Dev home"
+          whileHover={reduceMotion ? undefined : { scale: 1.025 }}
+          whileTap={reduceMotion ? undefined : { scale: 0.98 }}
+        >
           <LogoMark />
           <span className="brand-copy">
             <strong>RAFA THE DEV</strong>
             <small>FULL-STACK DEVELOPER</small>
           </span>
-        </a>
+        </motion.a>
 
         <nav className={`nav-links items-center ${menuOpen ? 'is-open' : ''}`} aria-label="Main navigation">
           <a href="#work" onClick={closeMenu}>Work</a>
@@ -282,87 +352,180 @@ function App() {
             aria-expanded={menuOpen}
             aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
           >
-            {menuOpen ? <X /> : <Menu />}
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.span
+                key={menuOpen ? 'close' : 'menu'}
+                className="menu-icon-wrap"
+                initial={reduceMotion ? false : { opacity: 0, rotate: -45, scale: 0.75 }}
+                animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                exit={reduceMotion ? undefined : { opacity: 0, rotate: 45, scale: 0.75 }}
+                transition={{ duration: 0.16 }}
+              >
+                {menuOpen ? <X /> : <Menu />}
+              </motion.span>
+            </AnimatePresence>
           </button>
         </div>
-      </header>
+      </motion.header>
 
       <main id="main">
         <section className="hero-section mx-auto min-h-screen max-w-[1400px]" id="top">
           <div className="hero-grid grid items-center">
-            <div className="hero-copy">
-              <p className="eyebrow">
+            <motion.div
+              className="hero-copy"
+              variants={{ visible: { transition: { staggerChildren: 0.1, delayChildren: 0.16 } } }}
+              initial={reduceMotion ? false : 'hidden'}
+              animate="visible"
+            >
+              <motion.p className="eyebrow" variants={heroItem}>
                 <span className="status-dot" />
                 Full-stack developer in San Antonio
-              </p>
-              <h1>
+              </motion.p>
+              <motion.h1 variants={heroItem}>
                 I build software that helps businesses <em>run better.</em>
-              </h1>
-              <p className="hero-intro">
+              </motion.h1>
+              <motion.p className="hero-intro" variants={heroItem}>
                 Custom websites and software systems for businesses that need bookings,
                 payments, portals, dashboards, and better operational tools.
-              </p>
-              <div className="hero-actions flex items-center">
-                <a className="button button-primary" href="#contact">
+              </motion.p>
+              <motion.div className="hero-actions flex items-center" variants={heroItem}>
+                <motion.a
+                  className="button button-primary"
+                  href="#contact"
+                  whileHover={reduceMotion ? undefined : { y: -3, scale: 1.015 }}
+                  whileTap={reduceMotion ? undefined : { scale: 0.98 }}
+                >
                   Tell me about your project
                   <ArrowUpRight size={18} />
-                </a>
+                </motion.a>
                 <a className="text-link" href="#work">
                   View my work
                   <ArrowDown size={17} />
                 </a>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
-            <div className="system-visual" aria-label="Visual representation of an integrated business system">
+            <motion.div
+              className="system-visual"
+              aria-label="Visual representation of an integrated business system"
+              initial={reduceMotion ? false : { opacity: 0, x: 42, rotateY: -4 }}
+              animate={{ opacity: 1, x: 0, rotateY: 0 }}
+              transition={{ duration: 0.85, delay: 0.28, ease: revealEase }}
+            >
               <div className="visual-topbar">
                 <span>BUSINESS OS / LIVE</span>
-                <span className="visual-status"><i /> All systems online</span>
+                <span className="visual-status">
+                  <motion.i
+                    animate={reduceMotion ? undefined : { opacity: [1, 0.35, 1], scale: [1, 0.8, 1] }}
+                    transition={{ duration: 2.1, repeat: Infinity, ease: 'easeInOut' }}
+                  />
+                  All systems online
+                </span>
               </div>
               <div className="visual-canvas">
-                <div className="flow-card flow-card-main">
+                <motion.div
+                  className="flow-card flow-card-main"
+                  initial={reduceMotion ? false : { opacity: 0, y: -16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.55, delay: 0.72, ease: revealEase }}
+                >
                   <small>NEW CUSTOMER</small>
                   <strong>Qualified lead captured</strong>
-                  <div className="mini-progress"><span /></div>
-                </div>
-                <div className="flow-connector connector-one" />
-                <div className="flow-connector connector-two" />
-                <div className="flow-card flow-card-small flow-booking">
+                  <div className="mini-progress">
+                    <motion.span
+                      initial={reduceMotion ? false : { scaleX: 0 }}
+                      animate={{ scaleX: 1 }}
+                      transition={{ duration: 0.8, delay: 1.05, ease: revealEase }}
+                    />
+                  </div>
+                </motion.div>
+                <motion.div
+                  className="flow-connector connector-one"
+                  initial={reduceMotion ? false : { opacity: 0, scaleY: 0 }}
+                  animate={{ opacity: 1, scaleY: 1 }}
+                  transition={{ duration: 0.5, delay: 0.95 }}
+                />
+                <motion.div
+                  className="flow-connector connector-two"
+                  initial={reduceMotion ? false : { opacity: 0, scaleX: 0 }}
+                  animate={{ opacity: 1, scaleX: 1 }}
+                  transition={{ duration: 0.5, delay: 1.18 }}
+                />
+                <motion.div
+                  className="flow-card flow-card-small flow-booking"
+                  initial={reduceMotion ? false : { opacity: 0, x: 25 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.98, ease: revealEase }}
+                >
                   <CalendarCheck2 size={19} />
                   <span><small>BOOKING</small><strong>Confirmed</strong></span>
                   <Check size={15} />
-                </div>
-                <div className="flow-card flow-card-small flow-payment">
+                </motion.div>
+                <motion.div
+                  className="flow-card flow-card-small flow-payment"
+                  initial={reduceMotion ? false : { opacity: 0, x: -25 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 1.2, ease: revealEase }}
+                >
                   <CircleDollarSign size={19} />
                   <span><small>PAYMENT</small><strong>Processed</strong></span>
                   <Check size={15} />
-                </div>
-                <div className="flow-card flow-card-small flow-portal">
+                </motion.div>
+                <motion.div
+                  className="flow-card flow-card-small flow-portal"
+                  initial={reduceMotion ? false : { opacity: 0, x: 25 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 1.42, ease: revealEase }}
+                >
                   <Users size={19} />
                   <span><small>PORTAL</small><strong>Account ready</strong></span>
                   <Check size={15} />
-                </div>
-                <div className="visual-label visual-label-one">AUTOMATED</div>
-                <div className="visual-label visual-label-two">ONE RELIABLE SYSTEM</div>
+                </motion.div>
+                <motion.div
+                  className="visual-label visual-label-one"
+                  initial={reduceMotion ? false : { opacity: 0, scale: 0.7 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.35, delay: 1.58 }}
+                >
+                  AUTOMATED
+                </motion.div>
+                <motion.div
+                  className="visual-label visual-label-two"
+                  initial={reduceMotion ? false : { opacity: 0, scale: 0.7 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.35, delay: 1.7 }}
+                >
+                  ONE RELIABLE SYSTEM
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
           </div>
 
-          <div className="trust-strip flex items-center justify-between">
+          <motion.div
+            className="trust-strip flex items-center justify-between"
+            initial={reduceMotion ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.7, delay: 1.05 }}
+          >
             <span>Built for real operations</span>
             <div className="tech-list" aria-label="Core technologies">
-              <span>React</span>
-              <span>TypeScript</span>
-              <span>Firebase</span>
-              <span>Stripe</span>
-              <span>Vercel</span>
+              {['React', 'TypeScript', 'Firebase', 'Stripe', 'Vercel'].map((technology, index) => (
+                <motion.span
+                  key={technology}
+                  initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 1.12 + index * 0.06 }}
+                >
+                  {technology}
+                </motion.span>
+              ))}
             </div>
-          </div>
+          </motion.div>
         </section>
 
         <section className="statement-section section mx-auto grid max-w-[1400px]">
-          <div className="section-label">THE OPPORTUNITY</div>
-          <div className="statement-copy">
+          <Reveal className="section-label">THE OPPORTUNITY</Reveal>
+          <Reveal className="statement-copy" delay={0.08}>
             <h2>More than a website.</h2>
             <p>
               Your website can collect qualified leads, accept bookings and payments,
@@ -373,11 +536,11 @@ function App() {
               I build around the way your business actually works—not the limits of a
               generic template.
             </p>
-          </div>
+          </Reveal>
         </section>
 
         <section className="services-section section mx-auto max-w-[1400px]" id="services">
-          <div className="section-heading grid items-end">
+          <Reveal className="section-heading grid items-end">
             <div>
               <p className="section-kicker">WHAT I BUILD</p>
               <h2>Software shaped around your business.</h2>
@@ -386,16 +549,29 @@ function App() {
               From a focused marketing site to the system that runs your daily
               operation, every build starts with the outcome you need.
             </p>
-          </div>
+          </Reveal>
 
           <div className="services-grid grid md:grid-cols-2">
-            {services.map((service) => {
+            {services.map((service, index) => {
               const Icon = service.icon
               return (
-                <article className="service-card flex flex-col" key={service.title}>
+                <motion.article
+                  className="service-card flex flex-col"
+                  key={service.title}
+                  initial={reduceMotion ? false : { opacity: 0, y: 42, scale: 0.985 }}
+                  whileInView={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
+                  viewport={revealViewport}
+                  transition={{ duration: 0.65, delay: (index % 2) * 0.1, ease: revealEase }}
+                  whileHover={reduceMotion ? undefined : { y: -7 }}
+                >
                   <div className="service-card-top flex items-center justify-between">
                     <span>{service.number}</span>
-                    <Icon size={23} strokeWidth={1.8} />
+                    <motion.span
+                      whileHover={reduceMotion ? undefined : { rotate: 8, scale: 1.12 }}
+                      transition={{ type: 'spring', stiffness: 320, damping: 18 }}
+                    >
+                      <Icon size={23} strokeWidth={1.8} />
+                    </motion.span>
                   </div>
                   <h3>{service.title}</h3>
                   <p>{service.description}</p>
@@ -404,14 +580,14 @@ function App() {
                       <li key={feature}><Check size={14} />{feature}</li>
                     ))}
                   </ul>
-                </article>
+                </motion.article>
               )
             })}
           </div>
         </section>
 
         <section className="work-section section mx-auto max-w-[1400px]" id="work">
-          <div className="section-heading grid items-end">
+          <Reveal className="section-heading grid items-end">
             <div>
               <p className="section-kicker">SELECTED WORK</p>
               <h2>Systems designed around real problems.</h2>
@@ -420,11 +596,19 @@ function App() {
               A few examples of how focused software can connect people, payments,
               information, and day-to-day operations.
             </p>
-          </div>
+          </Reveal>
 
           <div className="projects-list grid md:grid-cols-2">
-            {projects.map((project) => (
-              <article className={`project-card project-${project.accent} relative flex flex-col overflow-hidden`} key={project.name}>
+            {projects.map((project, index) => (
+              <motion.article
+                className={`project-card project-${project.accent} relative flex flex-col overflow-hidden`}
+                key={project.name}
+                initial={reduceMotion ? false : { opacity: 0, y: 54, rotateX: 2 }}
+                whileInView={reduceMotion ? undefined : { opacity: 1, y: 0, rotateX: 0 }}
+                viewport={revealViewport}
+                transition={{ duration: 0.72, delay: (index % 2) * 0.11, ease: revealEase }}
+                whileHover={reduceMotion ? undefined : { y: -8, scale: 1.008 }}
+              >
                 <div className="project-meta relative z-10 flex items-center justify-between">
                   <span>{project.index}</span>
                   <span>{project.category}</span>
@@ -453,35 +637,43 @@ function App() {
                     <span className="project-private"><Layers3 size={18} /></span>
                   )}
                 </div>
-              </article>
+              </motion.article>
             ))}
           </div>
         </section>
 
         <section className="capabilities-section section mx-auto grid max-w-[1400px]">
-          <div className="capability-intro">
+          <Reveal className="capability-intro">
             <p className="section-kicker">BEHIND THE SCREEN</p>
             <h2>The interface is only the beginning.</h2>
             <p>
               I build the underlying systems that make a product secure, reliable,
               and useful—from account permissions to payments and operational data.
             </p>
-          </div>
+          </Reveal>
           <div className="capabilities-grid grid md:grid-cols-2">
-            {capabilities.map((capability) => {
+            {capabilities.map((capability, index) => {
               const Icon = capability.icon
               return (
-                <div className="capability-item flex items-center" key={capability.label}>
+                <motion.div
+                  className="capability-item flex items-center"
+                  key={capability.label}
+                  initial={reduceMotion ? false : { opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
+                  whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }}
+                  viewport={revealViewport}
+                  transition={{ duration: 0.5, delay: (index % 4) * 0.07, ease: revealEase }}
+                  whileHover={reduceMotion ? undefined : { backgroundColor: 'rgba(216, 255, 101, 0.055)' }}
+                >
                   <Icon size={19} strokeWidth={1.8} />
                   <span>{capability.label}</span>
-                </div>
+                </motion.div>
               )
             })}
           </div>
         </section>
 
         <section className="process-section section mx-auto max-w-[1400px]" id="process">
-          <div className="section-heading grid items-end">
+          <Reveal className="section-heading grid items-end">
             <div>
               <p className="section-kicker">HOW WE GET THERE</p>
               <h2>A practical development process.</h2>
@@ -490,20 +682,35 @@ function App() {
               Clear decisions, direct communication, and a focused first version
               keep the project moving toward a useful result.
             </p>
-          </div>
+          </Reveal>
           <div className="process-grid grid sm:grid-cols-2 lg:grid-cols-4">
-            {process.map((item) => (
-              <article className="process-card" key={item.step}>
+            {process.map((item, index) => (
+              <motion.article
+                className="process-card"
+                key={item.step}
+                initial={reduceMotion ? false : { opacity: 0, y: 36 }}
+                whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                viewport={revealViewport}
+                transition={{ duration: 0.58, delay: index * 0.09, ease: revealEase }}
+                whileHover={reduceMotion ? undefined : { y: -6, backgroundColor: 'rgba(216, 255, 101, 0.12)' }}
+              >
                 <span>{item.step}</span>
                 <h3>{item.title}</h3>
                 <p>{item.copy}</p>
-              </article>
+              </motion.article>
             ))}
           </div>
         </section>
 
         <section className="about-section section mx-auto grid max-w-[1400px] items-center" id="about">
-          <div className="about-portrait" aria-hidden="true">
+          <motion.div
+            className="about-portrait"
+            aria-hidden="true"
+            initial={reduceMotion ? false : { opacity: 0, x: -45, rotate: -1.5 }}
+            whileInView={reduceMotion ? undefined : { opacity: 1, x: 0, rotate: 0 }}
+            viewport={revealViewport}
+            transition={{ duration: 0.78, ease: revealEase }}
+          >
             <div className="portrait-code">
               <span>const builder = {'{'}</span>
               <span>&nbsp;&nbsp;name: 'Rafa',</span>
@@ -511,10 +718,18 @@ function App() {
               <span>&nbsp;&nbsp;focus: 'useful software'</span>
               <span>{'}'}</span>
             </div>
-            <div className="portrait-monogram">RC</div>
+            <motion.div
+              className="portrait-monogram"
+              initial={reduceMotion ? false : { opacity: 0, scale: 0.82 }}
+              whileInView={reduceMotion ? undefined : { opacity: 1, scale: 1 }}
+              viewport={revealViewport}
+              transition={{ duration: 0.8, delay: 0.18, ease: revealEase }}
+            >
+              RC
+            </motion.div>
             <span className="portrait-caption">FOUNDER / BUILDER</span>
-          </div>
-          <div className="about-copy">
+          </motion.div>
+          <Reveal className="about-copy" delay={0.08}>
             <p className="section-kicker">ABOUT RAFA</p>
             <h2>Hi, I’m Rafa.</h2>
             <p className="about-lead">
@@ -542,12 +757,12 @@ function App() {
               Follow the build at @rafathedev
               <ArrowUpRight size={16} />
             </a>
-          </div>
+          </Reveal>
         </section>
 
         <section className="fit-section section mx-auto grid max-w-[1400px]">
-          <div className="section-label">A GOOD FIT</div>
-          <div className="fit-content">
+          <Reveal className="section-label">A GOOD FIT</Reveal>
+          <Reveal className="fit-content" delay={0.08}>
             <h2>For businesses that need more than a template.</h2>
             <div className="fit-list">
               {[
@@ -556,34 +771,50 @@ function App() {
                 'Your customers need accounts, bookings, payments, or a private portal.',
                 'Existing software does not match the way your business operates.',
                 'You want to work directly with the developer building the product.',
-              ].map((item) => (
-                <div key={item}><Check size={17} /><span>{item}</span></div>
+              ].map((item, index) => (
+                <motion.div
+                  key={item}
+                  initial={reduceMotion ? false : { opacity: 0, x: -18 }}
+                  whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }}
+                  viewport={revealViewport}
+                  transition={{ duration: 0.45, delay: index * 0.06 }}
+                >
+                  <Check size={17} /><span>{item}</span>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </Reveal>
         </section>
 
         <section className="faq-section section mx-auto grid max-w-[1400px]">
-          <div className="faq-heading">
+          <Reveal className="faq-heading">
             <p className="section-kicker">COMMON QUESTIONS</p>
             <h2>A few things clients usually ask.</h2>
-          </div>
+          </Reveal>
           <div className="faq-list">
             {faqs.map((faq, index) => (
-              <details key={faq.question}>
-                <summary>
-                  <span>{String(index + 1).padStart(2, '0')}</span>
-                  {faq.question}
-                  <i />
-                </summary>
-                <p>{faq.answer}</p>
-              </details>
+              <motion.div
+                key={faq.question}
+                initial={reduceMotion ? false : { opacity: 0, x: 24 }}
+                whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }}
+                viewport={revealViewport}
+                transition={{ duration: 0.5, delay: index * 0.07, ease: revealEase }}
+              >
+                <details>
+                  <summary>
+                    <span>{String(index + 1).padStart(2, '0')}</span>
+                    {faq.question}
+                    <i />
+                  </summary>
+                  <p>{faq.answer}</p>
+                </details>
+              </motion.div>
             ))}
           </div>
         </section>
 
         <section className="contact-section section mx-auto grid max-w-[1400px]" id="contact">
-          <div className="contact-copy">
+          <Reveal className="contact-copy">
             <p className="section-kicker">START A CONVERSATION</p>
             <h2>Have a project in mind?</h2>
             <p>
@@ -601,11 +832,20 @@ function App() {
                 manager.
               </span>
             </div>
-          </div>
+          </Reveal>
 
-          <div className="inquiry-panel">
+          <Reveal className="inquiry-panel" delay={0.1}>
+            <AnimatePresence mode="wait" initial={false}>
             {!briefReady ? (
-              <form className="flex flex-col" onSubmit={buildBrief}>
+              <motion.form
+                key="inquiry-form"
+                className="flex flex-col"
+                onSubmit={buildBrief}
+                initial={reduceMotion ? false : { opacity: 0, x: -18 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={reduceMotion ? undefined : { opacity: 0, x: -18 }}
+                transition={{ duration: 0.35, ease: revealEase }}
+              >
                 <input type="hidden" name="leadSource" value="rafathedev" />
                 <div className="form-row grid">
                   <label>
@@ -672,10 +912,25 @@ function App() {
                   No account required. Your details stay in your browser until you
                   choose how to send them.
                 </p>
-              </form>
+              </motion.form>
             ) : (
-              <div className="brief-ready flex flex-col items-start justify-center" aria-live="polite">
-                <div className="success-icon"><Check size={27} /></div>
+              <motion.div
+                key="brief-ready"
+                className="brief-ready flex flex-col items-start justify-center"
+                aria-live="polite"
+                initial={reduceMotion ? false : { opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={reduceMotion ? undefined : { opacity: 0, x: 20 }}
+                transition={{ duration: 0.4, ease: revealEase }}
+              >
+                <motion.div
+                  className="success-icon"
+                  initial={reduceMotion ? false : { scale: 0.5, rotate: -20 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ type: 'spring', stiffness: 320, damping: 18 }}
+                >
+                  <Check size={27} />
+                </motion.div>
                 <p className="section-kicker">YOUR BRIEF IS READY</p>
                 <h3>Let’s continue on Instagram.</h3>
                 <p>
@@ -701,13 +956,20 @@ function App() {
                 <button className="start-over" type="button" onClick={() => setBriefReady(false)}>
                   Edit my answers
                 </button>
-              </div>
+              </motion.div>
             )}
-          </div>
+            </AnimatePresence>
+          </Reveal>
         </section>
       </main>
 
-      <footer className="site-footer mx-auto max-w-[1400px]">
+      <motion.footer
+        className="site-footer mx-auto max-w-[1400px]"
+        initial={reduceMotion ? false : { opacity: 0, y: 28 }}
+        whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+        viewport={revealViewport}
+        transition={{ duration: 0.65, ease: revealEase }}
+      >
         <div className="footer-top flex items-center justify-between">
           <a className="brand footer-brand inline-flex items-center no-underline" href="#top">
             <LogoMark />
@@ -730,7 +992,7 @@ function App() {
           <p>© {new Date().getFullYear()} Rafa Castro. San Antonio, Texas.</p>
           <p>Rafa the Dev is the personal brand of Rafa Castro. Development services are provided by Devnetiks LLC.</p>
         </div>
-      </footer>
+      </motion.footer>
     </div>
   )
 }
