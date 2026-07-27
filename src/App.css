@@ -1364,6 +1364,12 @@ summary:focus-visible {
   margin: 0;
 }
 
+@media (min-width: 1081px) {
+  .hero-copy h1 {
+    font-size: clamp(4rem, 5.8vw, 6.7rem);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
