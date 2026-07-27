@@ -24,7 +24,7 @@
   max-width: 760px;
   margin: 0;
   font-family: var(--headline);
-  font-size: clamp(4.2rem, 5.6vw, 6.4rem);
+  font-size: clamp(3.7rem, 4.45vw, 5.35rem);
   font-weight: 800;
   line-height: 0.92;
   letter-spacing: 0;
@@ -544,10 +544,6 @@
     grid-template-columns: minmax(0, 1fr) minmax(390px, 0.9fr);
     gap: 3rem;
   }
-
-  .free-hero-copy h1 {
-    font-size: clamp(3.8rem, 5.6vw, 5.1rem);
-  }
 }
 
 @media (max-width: 1080px) {
@@ -558,8 +554,8 @@
   }
 
   .free-hero-copy h1 {
-    max-width: 880px;
-    font-size: clamp(4rem, 8.8vw, 6rem);
+    max-width: 900px;
+    font-size: clamp(3.7rem, 5.35vw, 6rem);
   }
 
   .giveaway-brief {
@@ -598,7 +594,7 @@
   }
 
   .free-hero-copy h1 {
-    font-size: clamp(3.3rem, 14vw, 4.2rem);
+    font-size: clamp(3.25rem, 13.75vw, 3.75rem);
   }
 
   .free-hero-intro {
