@@ -693,9 +693,9 @@ function App() {
         </section>
 
         <section className="fit-section section mx-auto grid max-w-[1400px]">
-          <Reveal className="section-label">A GOOD FIT IF</Reveal>
           <Reveal className="fit-content" delay={0.08}>
             <h2>For businesses that need more than a template.</h2>
+            <p className="section-label fit-list-label">A GOOD FIT IF</p>
             <div className="fit-list">
               {[
                 'You have a web application idea but need help defining the right first version.',

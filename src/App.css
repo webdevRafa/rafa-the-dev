@@ -879,11 +879,16 @@ summary:focus-visible {
 }
 
 .fit-content {
+  grid-column: 2;
   max-width: 1000px;
 }
 
+.fit-list-label {
+  margin: 3rem 0 0;
+}
+
 .fit-list {
-  margin-top: 3.5rem;
+  margin-top: 0.9rem;
   border-top: 1px solid var(--line);
 }
 
@@ -1513,6 +1518,10 @@ summary:focus-visible {
   .fit-section {
     grid-template-columns: 1fr;
     gap: 2rem;
+  }
+
+  .fit-content {
+    grid-column: auto;
   }
 
   .statement-copy h2,
