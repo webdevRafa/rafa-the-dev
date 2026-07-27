@@ -802,7 +802,7 @@ summary:focus-visible {
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  width: min(80%, 440px);
+  width: min(64%, 352px);
   aspect-ratio: 3 / 4;
   justify-self: center;
   border: 1px solid var(--line);
@@ -1374,6 +1374,10 @@ summary:focus-visible {
 }
 
 @media (max-width: 760px) {
+  .about-portrait {
+    width: clamp(150px, 40%, 220px);
+  }
+
   .header-brand .brand-copy strong {
     font-size: 1rem;
   }
