@@ -326,7 +326,7 @@ summary:focus-visible {
   font-size: clamp(4.15rem, 6.25vw, 7rem);
   font-weight: 800;
   line-height: 0.92;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
@@ -588,7 +588,7 @@ summary:focus-visible {
   font-size: clamp(2.8rem, 4.7vw, 5rem);
   font-weight: 800;
   line-height: 0.96;
-  letter-spacing: -0.018em;
+  letter-spacing: -0.005em;
   text-transform: uppercase;
 }
 
