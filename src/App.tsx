@@ -166,31 +166,31 @@ const brandLabelScenes = [
     id: 'systems',
     words: ['BOOKING', 'PAYMENT', 'SCHEDULING'],
     suffix: 'SYSTEMS',
-    termWidth: '10.5ch',
+    termWidth: '11.25ch',
   },
   {
     id: 'portals',
     words: ['CUSTOMER', 'EMPLOYEE', 'ADMIN'],
     suffix: 'PORTALS',
-    termWidth: '8.5ch',
+    termWidth: '9.25ch',
   },
   {
     id: 'dashboards',
     words: ['OPERATIONS', 'ANALYTICS', 'CLIENT'],
     suffix: 'DASHBOARDS',
-    termWidth: '10.5ch',
+    termWidth: '11.25ch',
   },
   {
     id: 'websites',
     words: ['BROCHURE', 'CONVERSION', 'BUSINESS'],
     suffix: 'WEBSITES',
-    termWidth: '10.5ch',
+    termWidth: '11.25ch',
   },
   {
     id: 'tools',
     words: ['WORKFLOW', 'REPORTING', 'AUTOMATION'],
     suffix: 'TOOLS',
-    termWidth: '10.5ch',
+    termWidth: '11.25ch',
   },
 ] as const
 
@@ -250,7 +250,7 @@ function RotatingBrandLabel() {
 
     const hasSharedWord = 'words' in scene
     const isLastWord = hasSharedWord && wordIndex === scene.words.length - 1
-    const delay = hasSharedWord ? 2200 : 3200
+    const delay = hasSharedWord ? 3000 : 4200
     const timer = window.setTimeout(() => {
       if (hasSharedWord && !isLastWord) {
         setWordIndex((current) => current + 1)

@@ -134,12 +134,14 @@
   display: inline-block;
   height: 1.2em;
   overflow: hidden;
+  margin-right: 0.75ch;
 }
 
 .brand-label-term {
   position: absolute;
   top: 0;
-  left: 0;
+  right: 0;
+  text-align: right;
 }
 
 .nav-links {
