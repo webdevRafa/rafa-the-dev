@@ -264,18 +264,30 @@ summary:focus-visible {
 .button-small {
   min-height: 40px;
   padding: 0.6rem 0.9rem;
-  color: var(--ink);
-  background: var(--lime);
 }
 
+.button-small,
 .button-primary {
-  color: var(--ink);
-  background: var(--lime);
+  color: var(--paper);
+  border-color: var(--lime);
+  background: rgba(216, 255, 101, 0.035);
 }
 
 .button-primary:hover,
 .button-small:hover {
-  background: #e5ff91;
+  color: #fff;
+  border-color: #e5ff91;
+  background: rgba(216, 255, 101, 0.11);
+}
+
+.button-primary:active,
+.button-small:active {
+  background: rgba(216, 255, 101, 0.17);
+}
+
+.button-primary svg,
+.button-small svg {
+  color: var(--lime);
 }
 
 .button-secondary {
