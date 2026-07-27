@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { FormEvent, ReactNode } from 'react'
 import {
   AnimatePresence,
@@ -6,6 +6,7 @@ import {
   useReducedMotion,
   useScroll,
   useSpring,
+  useTransform,
 } from 'framer-motion'
 import {
   ArrowDown,
@@ -225,12 +226,19 @@ function App() {
   const [briefCopied, setBriefCopied] = useState(false)
   const [projectBrief, setProjectBrief] = useState('')
   const reduceMotion = useReducedMotion()
+  const portraitRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll()
+  const { scrollYProgress: portraitScrollProgress } = useScroll({
+    target: portraitRef,
+    offset: ['start end', 'end start'],
+  })
   const smoothScrollProgress = useSpring(scrollYProgress, {
     stiffness: 180,
     damping: 28,
     restDelta: 0.001,
   })
+  const portraitY = useTransform(portraitScrollProgress, [0, 0.5, 1], ['-4%', '0%', '4%'])
+  const portraitScale = useTransform(portraitScrollProgress, [0, 0.5, 1], [1.08, 1, 1.08])
 
   const buildBrief = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -495,29 +503,26 @@ function App() {
         <section className="about-section section mx-auto grid max-w-[1400px] items-center" id="about">
           <motion.div
             className="about-portrait"
-            aria-hidden="true"
+            ref={portraitRef}
             initial={reduceMotion ? false : { opacity: 0, x: -45, rotate: -1.5 }}
             whileInView={reduceMotion ? undefined : { opacity: 1, x: 0, rotate: 0 }}
             viewport={revealViewport}
             transition={{ duration: 0.78, ease: revealEase }}
           >
-            <div className="portrait-code">
-              <span>const builder = {'{'}</span>
-              <span>&nbsp;&nbsp;name: 'Rafa',</span>
-              <span>&nbsp;&nbsp;base: 'San Antonio',</span>
-              <span>&nbsp;&nbsp;focus: 'useful software'</span>
-              <span>{'}'}</span>
-            </div>
-            <motion.div
-              className="portrait-monogram"
-              initial={reduceMotion ? false : { opacity: 0, scale: 0.82 }}
-              whileInView={reduceMotion ? undefined : { opacity: 1, scale: 1 }}
-              viewport={revealViewport}
-              transition={{ duration: 0.8, delay: 0.18, ease: revealEase }}
-            >
-              RC
-            </motion.div>
-            <span className="portrait-caption">FOUNDER / BUILDER</span>
+            <motion.img
+              className="about-portrait-image"
+              src="/rafa-castro-portrait.png"
+              alt="Black-and-white portrait of Rafa Castro"
+              width="1254"
+              height="1254"
+              loading="lazy"
+              decoding="async"
+              style={
+                reduceMotion
+                  ? { y: 0, scale: 1 }
+                  : { y: portraitY, scale: portraitScale }
+              }
+            />
           </motion.div>
           <Reveal className="about-copy" delay={0.08}>
             <p className="section-kicker">ABOUT RAFA</p>
