@@ -915,33 +915,34 @@ summary:focus-visible {
   border-top: 1px solid var(--line);
 }
 
-.faq-list details {
+.faq-item {
   border-bottom: 1px solid var(--line);
 }
 
-.faq-list summary {
+.faq-question {
   position: relative;
   display: grid;
+  width: 100%;
   grid-template-columns: 34px 1fr 28px;
   gap: 1rem;
   align-items: center;
   padding: 1.6rem 0;
+  border: 0;
+  color: var(--paper);
+  background: transparent;
   cursor: pointer;
+  font: inherit;
   font-weight: 600;
-  list-style: none;
+  text-align: left;
 }
 
-.faq-list summary::-webkit-details-marker {
-  display: none;
-}
-
-.faq-list summary > span {
+.faq-number {
   color: var(--lime);
   font: 500 0.62rem/1 var(--mono);
 }
 
-.faq-list summary i,
-.faq-list summary i::after {
+.faq-question i,
+.faq-question i::after {
   display: block;
   width: 16px;
   height: 1px;
@@ -950,15 +951,19 @@ summary:focus-visible {
   transition: transform 180ms ease;
 }
 
-.faq-list summary i::after {
+.faq-question i::after {
   transform: rotate(90deg);
 }
 
-.faq-list details[open] summary i::after {
+.faq-item.is-open .faq-question i::after {
   transform: rotate(0);
 }
 
-.faq-list details > p {
+.faq-answer-shell {
+  overflow: hidden;
+}
+
+.faq-answer-shell p {
   max-width: 700px;
   margin: -0.3rem 0 1.7rem 50px;
   color: var(--muted);
@@ -1561,13 +1566,13 @@ summary:focus-visible {
     margin-top: 3.8rem;
   }
 
-  .faq-list summary {
+  .faq-question {
     grid-template-columns: 28px 1fr 20px;
     gap: 0.7rem;
     font-size: 0.84rem;
   }
 
-  .faq-list details > p {
+  .faq-answer-shell p {
     margin-left: 35px;
     font-size: 0.8rem;
   }

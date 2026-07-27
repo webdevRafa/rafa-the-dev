@@ -100,24 +100,24 @@ const process = [
 
 const faqs = [
   {
-    question: 'Do you build regular business websites?',
+    question: 'Do I need a complete plan before we start?',
     answer:
-      'Yes. I can build a polished marketing site on its own or make it the public-facing part of a larger web application.',
+      'No. Bring me the problem, goal, or idea. I will ask the right questions and help turn it into a clear plan before anything is built.',
   },
   {
-    question: 'Can you build user accounts, bookings, or payments?',
+    question: 'How much will my project cost?',
     answer:
-      'Yes. I build secure account systems, custom booking experiences, checkout and deposit flows, dashboards, portals, and marketplace payment architecture.',
+      'Cost depends on the scope and complexity. After we discuss what you need, I will provide a clear proposal with the work, timeline, and price before development begins.',
   },
   {
-    question: 'Do I need to know exactly what features I need?',
+    question: 'How long will it take?',
     answer:
-      'No. Start by explaining the business problem, your current process, and the outcome you want. I can help define the right first version from there.',
+      'Timelines vary by project. A focused website can take a few weeks, while a custom application may take longer. I will set a realistic schedule upfront and keep you updated throughout.',
   },
   {
-    question: 'Will I work directly with you?',
+    question: 'What happens after launch?',
     answer:
-      'Yes. You will communicate directly with me throughout planning and development—there is no sales team translating your idea before it reaches the builder.',
+      'I will make sure everything is deployed and working as expected. From there, we can arrange ongoing support or plan future improvements if you need them.',
   },
 ]
 
@@ -218,6 +218,66 @@ function RotatingHeroOutcome() {
         </motion.em>
       </AnimatePresence>
     </span>
+  )
+}
+
+function FaqItem({
+  faq,
+  index,
+}: {
+  faq: { question: string; answer: string }
+  index: number
+}) {
+  const [isOpen, setIsOpen] = useState(false)
+  const reduceMotion = useReducedMotion()
+  const questionId = `faq-question-${index}`
+  const answerId = `faq-answer-${index}`
+
+  return (
+    <motion.div
+      initial={reduceMotion ? false : { opacity: 0, x: 24 }}
+      whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }}
+      viewport={revealViewport}
+      transition={{ duration: 0.5, delay: index * 0.07, ease: revealEase }}
+    >
+      <div className={`faq-item${isOpen ? ' is-open' : ''}`}>
+        <button
+          className="faq-question"
+          id={questionId}
+          type="button"
+          aria-expanded={isOpen}
+          aria-controls={answerId}
+          onClick={() => setIsOpen((current) => !current)}
+        >
+          <span className="faq-number">{String(index + 1).padStart(2, '0')}</span>
+          <span>{faq.question}</span>
+          <i aria-hidden="true" />
+        </button>
+        <AnimatePresence initial={false}>
+          {isOpen && (
+            <motion.div
+              className="faq-answer-shell"
+              id={answerId}
+              role="region"
+              aria-labelledby={questionId}
+              initial={reduceMotion ? false : { height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={reduceMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
+              transition={
+                reduceMotion
+                  ? { duration: 0 }
+                  : {
+                      height: { duration: 0.38, ease: revealEase },
+                      opacity: { duration: 0.24, ease: 'easeOut' },
+                    }
+              }
+            >
+              <p>{faq.answer}</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.div>
   )
 }
 
@@ -725,22 +785,11 @@ function App() {
           </Reveal>
           <div className="faq-list">
             {faqs.map((faq, index) => (
-              <motion.div
+              <FaqItem
                 key={faq.question}
-                initial={reduceMotion ? false : { opacity: 0, x: 24 }}
-                whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }}
-                viewport={revealViewport}
-                transition={{ duration: 0.5, delay: index * 0.07, ease: revealEase }}
-              >
-                <details>
-                  <summary>
-                    <span>{String(index + 1).padStart(2, '0')}</span>
-                    {faq.question}
-                    <i />
-                  </summary>
-                  <p>{faq.answer}</p>
-                </details>
-              </motion.div>
+                faq={faq}
+                index={index}
+              />
             ))}
           </div>
         </section>
