@@ -503,25 +503,7 @@ function App() {
               }}
             >
               <div className="visual-topbar">
-                <span>BUSINESS OS / LIVE</span>
-                <span className="visual-status">
-                  <motion.i
-                    variants={{
-                      hidden: { opacity: 0, scale: 0.75 },
-                      visible: {
-                        opacity: [0.35, 1, 0.35],
-                        scale: [0.8, 1, 0.8],
-                        transition: {
-                          duration: 2.1,
-                          delay: 0.35,
-                          repeat: Infinity,
-                          ease: 'easeInOut',
-                        },
-                      },
-                    }}
-                  />
-                  All systems online
-                </span>
+                <span>COMPLETE SYSTEMS</span>
               </div>
               <div className="visual-canvas">
                 <motion.div

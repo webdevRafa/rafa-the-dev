@@ -382,25 +382,12 @@ summary:focus-visible {
   display: flex;
   height: 54px;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 0 1.25rem;
   border-bottom: 1px solid var(--line);
   color: var(--muted);
   font: 500 0.6rem/1 var(--mono);
   letter-spacing: 0.08em;
-}
-
-.visual-status {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.visual-status i {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--lime);
 }
 
 .visual-canvas {
