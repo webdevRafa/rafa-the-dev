@@ -573,13 +573,14 @@ function App() {
           <Reveal className="statement-copy" delay={0.08}>
             <h2>More than a website.</h2>
             <p>
-              Your website can collect qualified leads, accept bookings and payments,
-              organize business data, automate repetitive tasks, and give your team a
-              clear view of what is happening.
+              I build websites and custom software that can capture qualified leads,
+              handle bookings and payments, organize business data, automate
+              repetitive work, and give your team a clear view of day-to-day
+              operations.
             </p>
             <p>
-              I build around the way your business actually works—not the limits of a
-              generic template.
+              Every project is shaped around how your business works—so the software
+              fits your process, not the other way around.
             </p>
           </Reveal>
         </section>
