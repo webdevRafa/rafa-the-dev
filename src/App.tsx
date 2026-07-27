@@ -396,10 +396,10 @@ function App() {
         </motion.a>
 
         <nav className={`nav-links items-center ${menuOpen ? 'is-open' : ''}`} aria-label="Main navigation">
-          <a href="#work" onClick={closeMenu}>Work</a>
+          <a href="#work" onClick={closeMenu}>My Work</a>
           <a href="#services" onClick={closeMenu}>Services</a>
-          <a href="#process" onClick={closeMenu}>Process</a>
-          <a href="#about" onClick={closeMenu}>About</a>
+          <a href="#process" onClick={closeMenu}>The Process</a>
+          <a href="#about" onClick={closeMenu}>About Me</a>
           <a
             className="instagram-link mobile-instagram"
             href="https://www.instagram.com/rafathedev/"
@@ -747,7 +747,7 @@ function App() {
         <section className="work-section section mx-auto max-w-[1400px]" id="work">
           <Reveal className="section-heading grid items-end">
             <div>
-              <p className="section-kicker">SELECTED WORK</p>
+              <p className="section-kicker">PROOF OF CONCEPT</p>
               <h2>Systems designed around real problems.</h2>
             </div>
             <p>
@@ -1136,9 +1136,10 @@ function App() {
             </span>
           </a>
           <div className="footer-links flex flex-wrap justify-end">
-            <a href="#work">Work</a>
+            <a href="#work">My Work</a>
             <a href="#services">Services</a>
-            <a href="#about">About</a>
+            <a href="#process">The Process</a>
+            <a href="#about">About Me</a>
             <a href="#contact">Contact</a>
             <a href="https://www.instagram.com/rafathedev/" target="_blank" rel="noreferrer">
               Instagram <ArrowUpRight size={14} />
