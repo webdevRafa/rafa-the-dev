@@ -198,6 +198,17 @@
   letter-spacing: 0.04em;
 }
 
+.giveaway-brief-grid .giveaway-brief-instagram {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.giveaway-brief-instagram svg {
+  flex: 0 0 auto;
+  color: var(--lime);
+}
+
 .free-section {
   padding: clamp(6rem, 10vw, 10rem) 3.5vw;
   border-top: 1px solid var(--line);

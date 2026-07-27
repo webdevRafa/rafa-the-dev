@@ -228,7 +228,7 @@ function FreeWebsitePage() {
                 rel="noreferrer"
               >
                 <FaInstagram size={18} aria-hidden="true" />
-                Following @rafathedev is required
+                Must follow @rafathedev to enter
                 <ArrowUpRight size={15} />
               </a>
             </motion.div>
@@ -242,14 +242,14 @@ function FreeWebsitePage() {
             transition={{ duration: 0.8, delay: 0.35, ease: revealEase }}
           >
             <div className="giveaway-brief-top">
-              <span>THE GIVEAWAY / 001</span>
+              <span>GIVEAWAY / 001</span>
               <Gift size={18} />
             </div>
             <div className="giveaway-brief-body">
               <p>ONE WINNER</p>
-              <strong>ONE CUSTOM WEBSITE</strong>
+              <strong>FULLY CUSTOM WEBSITE</strong>
               <span>
-                Built around a real story, a clear goal, and the people it needs to reach.
+                Built around what you do, who you serve, and what you want people to do next.
               </span>
             </div>
             <div className="giveaway-brief-grid">
@@ -258,16 +258,19 @@ function FreeWebsitePage() {
                 <strong>$0</strong>
               </div>
               <div>
-                <span>FORMAT</span>
-                <strong>RESPONSIVE</strong>
+                <span>DELIVERABLE</span>
+                <strong>RESPONSIVE WEBSITE</strong>
               </div>
               <div>
-                <span>SELECTION</span>
+                <span>SELECTION BASED ON</span>
                 <strong>STORY + IMPACT</strong>
               </div>
               <div>
-                <span>REQUIRED</span>
-                <strong>@RAFATHEDEV</strong>
+                <span>MUST FOLLOW</span>
+                <strong className="giveaway-brief-instagram">
+                  <FaInstagram size={13} aria-hidden="true" />
+                  @RAFATHEDEV
+                </strong>
               </div>
             </div>
           </motion.aside>
