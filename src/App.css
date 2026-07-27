@@ -802,7 +802,9 @@ summary:focus-visible {
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  min-height: 660px;
+  width: min(80%, 440px);
+  aspect-ratio: 3 / 4;
+  justify-self: center;
   border: 1px solid var(--line);
   background: #0d0f0e;
 }
@@ -825,6 +827,8 @@ summary:focus-visible {
   height: 100%;
   object-fit: cover;
   object-position: center;
+  opacity: 0.74;
+  filter: brightness(0.84) contrast(1.04);
   transform-origin: center;
   will-change: transform;
 }
@@ -839,6 +843,10 @@ summary:focus-visible {
   margin: 1.7rem 0 0;
   color: var(--muted);
   line-height: 1.8;
+}
+
+.about-copy > p.about-lead {
+  margin-top: 0;
 }
 
 .instagram-about {
@@ -1363,9 +1371,6 @@ summary:focus-visible {
     position: static;
   }
 
-  .about-portrait {
-    min-height: 560px;
-  }
 }
 
 @media (max-width: 760px) {
@@ -1522,10 +1527,6 @@ summary:focus-visible {
 
   .service-card h3 {
     margin-top: 3.8rem;
-  }
-
-  .about-portrait {
-    min-height: 440px;
   }
 
   .faq-list summary {

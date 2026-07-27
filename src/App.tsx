@@ -526,7 +526,6 @@ function App() {
           </motion.div>
           <Reveal className="about-copy" delay={0.08}>
             <p className="section-kicker">ABOUT RAFA</p>
-            <h2>Hi, I’m Rafa.</h2>
             <p className="about-lead">
               I’m a full-stack developer based in San Antonio and the owner of
               Devnetiks LLC.
