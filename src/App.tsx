@@ -112,7 +112,7 @@ const faqs = [
   {
     question: 'How long will it take?',
     answer:
-      'Timelines vary by project. A focused website can take a few weeks, while a custom application may take longer. I will set a realistic schedule upfront and keep you updated throughout.',
+      'Timelines depend on the scope. A straightforward website may be ready in as little as a couple of days, while more involved websites or custom applications can take several weeks or longer. I like to move quickly without rushing the details, and I will give you a realistic timeline once we define what you need.',
   },
   {
     question: 'What happens after launch?',
