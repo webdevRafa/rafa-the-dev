@@ -669,8 +669,8 @@ function App() {
               <h2>A practical development process.</h2>
             </div>
             <p>
-              Clear decisions, direct communication, and a focused first version
-              keep the project moving toward a useful result.
+              Good communication and thoughtful decisions keep us aligned and
+              help us build the right solution.
             </p>
           </Reveal>
           <div className="process-grid grid sm:grid-cols-2 lg:grid-cols-4">
