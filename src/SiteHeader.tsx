@@ -178,21 +178,18 @@ function SiteHeader() {
         initial={reduceMotion ? false : 'hidden'}
         animate="visible"
       >
-        <MotionLink custom={0} variants={navigationItemVariants} to="/#work" onClick={closeMenu}>
-          My Work
-        </MotionLink>
-        <MotionLink custom={1} variants={navigationItemVariants} to="/#services" onClick={closeMenu}>
+        <MotionLink custom={0} variants={navigationItemVariants} to="/#services" onClick={closeMenu}>
           Services
         </MotionLink>
-        <MotionLink custom={2} variants={navigationItemVariants} to="/#process" onClick={closeMenu}>
+        <MotionLink custom={1} variants={navigationItemVariants} to="/#process" onClick={closeMenu}>
           The Process
         </MotionLink>
-        <MotionLink custom={3} variants={navigationItemVariants} to="/#about" onClick={closeMenu}>
+        <MotionLink custom={2} variants={navigationItemVariants} to="/#about" onClick={closeMenu}>
           About Me
         </MotionLink>
         <MotionLink
           className={`nav-feature-link ${freeWebsiteActive ? 'is-active' : ''}`}
-          custom={4}
+          custom={3}
           variants={navigationItemVariants}
           to="/free-website"
           aria-current={freeWebsiteActive ? 'page' : undefined}
@@ -202,7 +199,7 @@ function SiteHeader() {
         </MotionLink>
         <motion.a
           className="instagram-link mobile-instagram"
-          custom={5}
+          custom={4}
           variants={navigationItemVariants}
           href="https://www.instagram.com/rafathedev/"
           target="_blank"
@@ -214,7 +211,7 @@ function SiteHeader() {
         </motion.a>
         <MotionLink
           className="button button-small nav-cta"
-          custom={5}
+          custom={4}
           variants={navigationCtaVariants}
           to="/#contact"
           onClick={closeMenu}

@@ -611,7 +611,6 @@ function FreeWebsitePage() {
             </span>
           </Link>
           <div className="footer-links">
-            <Link to="/#work">My Work</Link>
             <Link to="/#services">Services</Link>
             <Link to="/#process">The Process</Link>
             <Link to="/#about">About Me</Link>

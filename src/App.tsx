@@ -63,31 +63,6 @@ const services = [
   },
 ]
 
-const projects = [
-  {
-    index: '01',
-    name: 'SATX Ink',
-    category: 'Marketplace platform',
-    description:
-      'A San Antonio marketplace connecting tattoo clients with local artists through discovery, requests, booking, messaging, and payments.',
-    tags: ['Multi-role accounts', 'Stripe Connect', 'Booking workflows', 'Artist portfolios'],
-    accent: 'lime',
-    href: 'https://satxink.com',
-    cta: 'View live platform',
-  },
-  {
-    index: '02',
-    name: 'RoofZeus',
-    category: 'Multi-tenant SaaS',
-    description:
-      'A multi-tenant roofing SaaS application that brings job progress, scheduling, crews, payouts, invoices, materials, and financial reporting into one system.',
-    tags: ['Multi-tenant accounts', 'Job pipelines', 'Crew management', 'Financial reporting'],
-    accent: 'blue',
-    href: 'https://roofzeus.com',
-    cta: 'View live multi-tenant SaaS',
-  },
-]
-
 const capabilities = [
   { icon: ShieldCheck, label: 'Secure authentication & permissions' },
   { icon: Database, label: 'Cloud databases & file storage' },
@@ -333,8 +308,8 @@ function App() {
                   Tell me about your project
                   <ArrowUpRight size={18} />
                 </motion.a>
-                <a className="text-link" href="#work">
-                  View my work
+                <a className="text-link" href="#services">
+                  Explore my services
                   <ArrowDown size={17} />
                 </a>
               </motion.div>
@@ -577,61 +552,6 @@ function App() {
                 </motion.article>
               )
             })}
-          </div>
-        </section>
-
-        <section className="work-section section mx-auto max-w-[1400px]" id="work">
-          <Reveal className="section-heading grid items-end">
-            <div>
-              <p className="section-kicker">PROOF OF CONCEPT</p>
-              <h2>Systems designed around real problems.</h2>
-            </div>
-            <p>
-              A few examples of how focused software can connect people, payments,
-              information, and day-to-day operations.
-            </p>
-          </Reveal>
-
-          <div className="projects-list grid md:grid-cols-2">
-            {projects.map((project, index) => (
-              <motion.article
-                className={`project-card project-${project.accent} relative flex flex-col overflow-hidden`}
-                key={project.name}
-                initial={reduceMotion ? false : { opacity: 0, y: 54, rotateX: 2 }}
-                whileInView={reduceMotion ? undefined : { opacity: 1, y: 0, rotateX: 0 }}
-                viewport={revealViewport}
-                transition={{ duration: 0.72, delay: (index % 2) * 0.11, ease: revealEase }}
-                whileHover={reduceMotion ? undefined : { y: -8, scale: 1.008 }}
-              >
-                <div className="project-meta relative z-10 flex items-center justify-between">
-                  <span>{project.index}</span>
-                  <span>{project.category}</span>
-                </div>
-                <div className="project-content relative z-10 flex flex-1 flex-col justify-center">
-                  <div>
-                    <h3>{project.name}</h3>
-                    <p>{project.description}</p>
-                  </div>
-                  <div className="project-tags flex flex-wrap">
-                    {project.tags.map((tag) => <span key={tag}>{tag}</span>)}
-                  </div>
-                </div>
-                <div className="project-footer relative z-10">
-                  <a
-                    className="project-link"
-                    href={project.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={`Visit ${project.name}`}
-                  >
-                    <span>{project.cta}</span>
-                    <span className="project-link-icon" aria-hidden="true">
-                      <ArrowUpRight size={20} />
-                    </span>
-                  </a>
-                </div>
-              </motion.article>
-            ))}
           </div>
         </section>
 
@@ -972,7 +892,6 @@ function App() {
             </span>
           </a>
           <div className="footer-links flex flex-wrap justify-end">
-            <a href="#work">My Work</a>
             <a href="#services">Services</a>
             <a href="#process">The Process</a>
             <a href="#about">About Me</a>
