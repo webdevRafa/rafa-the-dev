@@ -201,6 +201,11 @@
   display: none !important;
 }
 
+.button.nav-cta {
+  will-change: opacity, transform;
+  transition: color 180ms ease, background 180ms ease, border-color 180ms ease;
+}
+
 .menu-button {
   display: grid;
   width: 42px;

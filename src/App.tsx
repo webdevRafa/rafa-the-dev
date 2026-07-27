@@ -226,6 +226,19 @@ const navigationItemVariants = {
   }),
 }
 
+const navigationCtaVariants = {
+  hidden: { opacity: 0, x: -14 },
+  visible: (order: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.42,
+      delay: 0.28 + order * 0.09,
+      ease: revealEase,
+    },
+  }),
+}
+
 function Reveal({
   children,
   className,
@@ -483,9 +496,15 @@ function App() {
           <motion.a
             className="button button-small nav-cta"
             custom={4}
-            variants={navigationItemVariants}
+            variants={navigationCtaVariants}
             href="#contact"
             onClick={closeMenu}
+            whileHover={
+              reduceMotion
+                ? undefined
+                : { y: -2, transition: { duration: 0.18, ease: 'easeOut' } }
+            }
+            whileTap={reduceMotion ? undefined : { scale: 0.98 }}
           >
             Start a project
             <ArrowUpRight size={16} />
