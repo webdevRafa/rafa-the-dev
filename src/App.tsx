@@ -588,7 +588,7 @@ function App() {
         <section className="services-section section mx-auto max-w-[1400px]" id="services">
           <Reveal className="section-heading grid items-end">
             <div>
-              <p className="section-kicker">WHAT I BUILD</p>
+              <p className="section-kicker">HOW I CAN HELP</p>
               <h2>Software shaped around your business.</h2>
             </div>
             <p>
