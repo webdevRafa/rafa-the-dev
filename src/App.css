@@ -1379,6 +1379,20 @@ summary:focus-visible {
   }
 }
 
+@keyframes mobile-nav-item-enter {
+  from {
+    opacity: 0;
+    filter: blur(5px);
+    transform: translate3d(-24px, 8px, 0);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -1388,8 +1402,10 @@ summary:focus-visible {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
   }
 }
 
@@ -1419,6 +1435,34 @@ summary:focus-visible {
     visibility: visible;
     opacity: 1;
     transform: translateY(0);
+  }
+
+  .nav-links.is-open > a {
+    animation: mobile-nav-item-enter 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .nav-links.is-open > a:nth-child(1) {
+    animation-delay: 80ms;
+  }
+
+  .nav-links.is-open > a:nth-child(2) {
+    animation-delay: 135ms;
+  }
+
+  .nav-links.is-open > a:nth-child(3) {
+    animation-delay: 190ms;
+  }
+
+  .nav-links.is-open > a:nth-child(4) {
+    animation-delay: 245ms;
+  }
+
+  .nav-links.is-open > a:nth-child(5) {
+    animation-delay: 300ms;
+  }
+
+  .nav-links.is-open > a:nth-child(6) {
+    animation-delay: 355ms;
   }
 
   .nav-links > a:not(.button) {

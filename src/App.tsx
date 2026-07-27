@@ -13,7 +13,6 @@ import {
   Braces,
   Building2,
   CalendarCheck2,
-  Camera,
   Check,
   CircleDollarSign,
   Code2,
@@ -27,6 +26,7 @@ import {
   Workflow,
   X,
 } from 'lucide-react'
+import { FaInstagram } from 'react-icons/fa6'
 import './App.css'
 
 const services = [
@@ -210,6 +210,20 @@ const heroItem = {
     filter: 'blur(0px)',
     transition: { duration: 0.72, ease: revealEase },
   },
+}
+
+const navigationItemVariants = {
+  hidden: { opacity: 0, x: -18, filter: 'blur(4px)' },
+  visible: (order: number) => ({
+    opacity: 1,
+    x: 0,
+    filter: 'blur(0px)',
+    transition: {
+      duration: 0.48,
+      delay: 0.28 + order * 0.09,
+      ease: revealEase,
+    },
+  }),
 }
 
 function Reveal({
@@ -436,26 +450,47 @@ function App() {
           </span>
         </motion.a>
 
-        <nav className={`nav-links items-center ${menuOpen ? 'is-open' : ''}`} aria-label="Main navigation">
-          <a href="#work" onClick={closeMenu}>My Work</a>
-          <a href="#services" onClick={closeMenu}>Services</a>
-          <a href="#process" onClick={closeMenu}>The Process</a>
-          <a href="#about" onClick={closeMenu}>About Me</a>
-          <a
+        <motion.nav
+          className={`nav-links items-center ${menuOpen ? 'is-open' : ''}`}
+          aria-label="Main navigation"
+          initial={reduceMotion ? false : 'hidden'}
+          animate="visible"
+        >
+          <motion.a custom={0} variants={navigationItemVariants} href="#work" onClick={closeMenu}>
+            My Work
+          </motion.a>
+          <motion.a custom={1} variants={navigationItemVariants} href="#services" onClick={closeMenu}>
+            Services
+          </motion.a>
+          <motion.a custom={2} variants={navigationItemVariants} href="#process" onClick={closeMenu}>
+            The Process
+          </motion.a>
+          <motion.a custom={3} variants={navigationItemVariants} href="#about" onClick={closeMenu}>
+            About Me
+          </motion.a>
+          <motion.a
             className="instagram-link mobile-instagram"
+            custom={4}
+            variants={navigationItemVariants}
             href="https://www.instagram.com/rafathedev/"
             target="_blank"
             rel="noreferrer"
             onClick={closeMenu}
           >
-            <Camera size={17} />
+            <FaInstagram size={17} aria-hidden="true" />
             @rafathedev
-          </a>
-          <a className="button button-small nav-cta" href="#contact" onClick={closeMenu}>
+          </motion.a>
+          <motion.a
+            className="button button-small nav-cta"
+            custom={4}
+            variants={navigationItemVariants}
+            href="#contact"
+            onClick={closeMenu}
+          >
             Start a project
             <ArrowUpRight size={16} />
-          </a>
-        </nav>
+          </motion.a>
+        </motion.nav>
 
         <div className="header-actions">
           <a
@@ -465,7 +500,7 @@ function App() {
             rel="noreferrer"
             aria-label="Follow Rafa the Dev on Instagram"
           >
-            <Camera size={18} />
+            <FaInstagram size={18} aria-hidden="true" />
           </a>
           <button
             className="menu-button"
@@ -936,7 +971,7 @@ function App() {
               target="_blank"
               rel="noreferrer"
             >
-              <Camera size={18} />
+              <FaInstagram size={18} aria-hidden="true" />
               Follow the build at @rafathedev
               <ArrowUpRight size={16} />
             </a>
@@ -1132,7 +1167,7 @@ function App() {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <Camera size={18} />
+                    <FaInstagram size={18} aria-hidden="true" />
                     Open Instagram
                   </a>
                 </div>
