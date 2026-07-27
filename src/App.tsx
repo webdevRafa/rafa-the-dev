@@ -36,14 +36,14 @@ const services = [
     title: 'Business websites',
     description:
       'Fast, responsive websites built to explain what you do, earn trust, and turn attention into qualified inquiries.',
-    features: ['Clear service architecture', 'Lead-generation flows', 'Search-friendly structure'],
+    features: ['Clear service presentation', 'Lead generation', 'Easy to find online'],
   },
   {
     number: '02',
     icon: Braces,
     title: 'Custom web applications',
     description:
-      'Purpose-built software for businesses whose workflows have outgrown templates and disconnected tools.',
+      'Purpose-built software for businesses whose workflows have outgrown templates and generic tools.',
     features: ['Secure user accounts', 'Admin and client dashboards', 'Custom business logic'],
   },
   {
