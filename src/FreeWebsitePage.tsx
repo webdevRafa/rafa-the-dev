@@ -184,7 +184,7 @@ function FreeWebsitePage() {
               FREE WEBSITE GIVEAWAY
             </motion.p>
             <motion.h1
-              aria-label="You bring the story. I'll build the website."
+              aria-label="You bring the story. I'll build the solution."
               variants={{
                 hidden: { opacity: 0, y: 28, filter: 'blur(7px)' },
                 visible: {
@@ -197,7 +197,7 @@ function FreeWebsitePage() {
             >
               <span className="free-hero-static-line">You bring the</span>
               <RotatingGiveawayWord />
-              <span className="free-hero-static-line">I&apos;ll build the website.</span>
+              <span className="free-hero-static-line">I&apos;ll build the solution.</span>
             </motion.h1>
             <motion.p
               className="free-hero-intro"
