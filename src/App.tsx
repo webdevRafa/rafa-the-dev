@@ -160,6 +160,40 @@ const projectTypes = [
 
 const revealEase = [0.22, 1, 0.36, 1] as const
 const revealViewport = { once: true, amount: 0.16 } as const
+const brandLabelScenes = [
+  { id: 'developer', label: 'FULL-STACK DEVELOPER' },
+  {
+    id: 'systems',
+    words: ['BOOKING', 'PAYMENT', 'SCHEDULING'],
+    suffix: 'SYSTEMS',
+    termWidth: '10.5ch',
+  },
+  {
+    id: 'portals',
+    words: ['CUSTOMER', 'EMPLOYEE', 'ADMIN'],
+    suffix: 'PORTALS',
+    termWidth: '8.5ch',
+  },
+  {
+    id: 'dashboards',
+    words: ['OPERATIONS', 'ANALYTICS', 'CLIENT'],
+    suffix: 'DASHBOARDS',
+    termWidth: '10.5ch',
+  },
+  {
+    id: 'websites',
+    words: ['BROCHURE', 'CONVERSION', 'BUSINESS'],
+    suffix: 'WEBSITES',
+    termWidth: '10.5ch',
+  },
+  {
+    id: 'tools',
+    words: ['WORKFLOW', 'REPORTING', 'AUTOMATION'],
+    suffix: 'TOOLS',
+    termWidth: '10.5ch',
+  },
+] as const
+
 const heroItem = {
   hidden: { opacity: 0, y: 28, filter: 'blur(7px)' },
   visible: {
@@ -201,6 +235,74 @@ function LogoMark() {
     <span className="logo-mark" aria-hidden="true">
       R/
     </span>
+  )
+}
+
+function RotatingBrandLabel() {
+  const reduceMotion = useReducedMotion()
+  const [sceneIndex, setSceneIndex] = useState(0)
+  const [wordIndex, setWordIndex] = useState(0)
+  const activeSceneIndex = reduceMotion ? 0 : sceneIndex
+  const scene = brandLabelScenes[activeSceneIndex]
+
+  useEffect(() => {
+    if (reduceMotion) return
+
+    const hasSharedWord = 'words' in scene
+    const isLastWord = hasSharedWord && wordIndex === scene.words.length - 1
+    const delay = hasSharedWord ? 2200 : 3200
+    const timer = window.setTimeout(() => {
+      if (hasSharedWord && !isLastWord) {
+        setWordIndex((current) => current + 1)
+        return
+      }
+
+      setSceneIndex((current) => (current + 1) % brandLabelScenes.length)
+      setWordIndex(0)
+    }, delay)
+
+    return () => window.clearTimeout(timer)
+  }, [reduceMotion, scene, wordIndex])
+
+  return (
+    <small
+      className="brand-rotator"
+      aria-label="Full-stack developer building websites, booking and payment systems, portals, dashboards, and analytics tools"
+    >
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.span
+          className="brand-label-scene"
+          key={scene.id}
+          aria-hidden="true"
+          initial={reduceMotion ? false : { opacity: 0, x: 16, filter: 'blur(3px)' }}
+          animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+          exit={reduceMotion ? undefined : { opacity: 0, x: -16, filter: 'blur(3px)' }}
+          transition={{ duration: 0.38, ease: revealEase }}
+        >
+          {'words' in scene ? (
+            <span className="brand-label-shared">
+              <span className="brand-label-term-window" style={{ width: scene.termWidth }}>
+                <AnimatePresence mode="popLayout" initial={false}>
+                  <motion.span
+                    className="brand-label-term"
+                    key={scene.words[wordIndex]}
+                    initial={reduceMotion ? false : { opacity: 0, y: '85%' }}
+                    animate={{ opacity: 1, y: '0%' }}
+                    exit={reduceMotion ? undefined : { opacity: 0, y: '-85%' }}
+                    transition={{ duration: 0.34, ease: revealEase }}
+                  >
+                    {scene.words[wordIndex]}
+                  </motion.span>
+                </AnimatePresence>
+              </span>
+              <span>{scene.suffix}</span>
+            </span>
+          ) : (
+            scene.label
+          )}
+        </motion.span>
+      </AnimatePresence>
+    </small>
   )
 }
 
@@ -281,16 +383,15 @@ function App() {
         transition={{ duration: 0.6, ease: revealEase }}
       >
         <motion.a
-          className="brand inline-flex items-center no-underline"
+          className="brand header-brand inline-flex items-center no-underline"
           href="#top"
           aria-label="Rafa the Dev home"
           whileHover={reduceMotion ? undefined : { scale: 1.025 }}
           whileTap={reduceMotion ? undefined : { scale: 0.98 }}
         >
-          <LogoMark />
           <span className="brand-copy">
             <strong>RAFA THE DEV</strong>
-            <small>FULL-STACK DEVELOPER</small>
+            <RotatingBrandLabel />
           </span>
         </motion.a>
 

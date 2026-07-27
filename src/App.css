@@ -107,6 +107,41 @@
   letter-spacing: 0.08em;
 }
 
+.brand-rotator {
+  position: relative;
+  display: block;
+  width: 24ch;
+  height: 1.2em;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.brand-label-scene {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+}
+
+.brand-label-shared {
+  display: inline-flex;
+  align-items: center;
+}
+
+.brand-label-term-window {
+  position: relative;
+  display: inline-block;
+  height: 1.2em;
+  overflow: hidden;
+}
+
+.brand-label-term {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .nav-links {
   display: flex;
   align-items: center;
@@ -1455,7 +1490,16 @@ summary:focus-visible {
 }
 
 @media (max-width: 760px) {
-  .brand-copy small {
+  .header-brand .brand-copy strong {
+    font-size: 1rem;
+  }
+
+  .header-brand .brand-copy small {
+    font-size: 0.52rem;
+    letter-spacing: 0.06em;
+  }
+
+  .footer-brand .brand-copy small {
     display: none;
   }
 
