@@ -83,18 +83,18 @@ const process = [
   },
   {
     step: '02',
-    title: 'Define the first version',
-    copy: 'We separate the essential features from the ideas that can wait, creating a focused plan you can act on.',
+    title: 'Define the vision',
+    copy: 'We turn what we learned into a clear plan, prioritizing the features that matter most and setting the direction for the project.',
   },
   {
     step: '03',
     title: 'Design the experience',
-    copy: 'I map the main user flows and design an interface that feels clear, intentional, and useful on every screen.',
+    copy: 'I map how people will use the product and design each screen to feel clear, natural, and easy to navigate.',
   },
   {
     step: '04',
     title: 'Build, test & launch',
-    copy: 'I develop the full system, test the important workflows, deploy it, and improve it based on real use.',
+    copy: 'I bring the plan to life, test the important details, launch with confidence, and refine the product with real feedback.',
   },
 ]
 
