@@ -243,7 +243,7 @@ function FreeWebsitePage() {
               <p>ONE WINNER</p>
               <strong>FULLY CUSTOM WEBSITE</strong>
               <span>
-                Built from scratch around your story, your goals, and what you actually need.
+                Built from scratch around your story, your goals, and what you need.
               </span>
             </div>
             <div className="giveaway-brief-grid">
