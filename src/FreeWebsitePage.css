@@ -129,7 +129,7 @@
 
 .giveaway-brief-body {
   display: flex;
-  min-height: 350px;
+  min-height: 300px;
   flex-direction: column;
   justify-content: center;
   padding: clamp(2rem, 4vw, 4rem);
@@ -144,11 +144,12 @@
 }
 
 .giveaway-brief-body strong {
-  max-width: 430px;
   font-family: var(--headline);
-  font-size: clamp(3.3rem, 4vw, 5rem);
+  font-size: clamp(2rem, 2.35vw, 2.8rem);
   font-weight: 800;
-  line-height: 0.94;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
   text-transform: uppercase;
 }
 
@@ -601,12 +602,12 @@
   }
 
   .giveaway-brief-body {
-    min-height: 300px;
+    min-height: 240px;
     padding: 2rem 1.35rem;
   }
 
   .giveaway-brief-body strong {
-    font-size: clamp(3rem, 14vw, 4.3rem);
+    font-size: clamp(1.45rem, 7.8vw, 2.35rem);
   }
 
   .free-section {
