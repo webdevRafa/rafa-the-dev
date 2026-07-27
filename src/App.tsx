@@ -698,7 +698,7 @@ function App() {
             <p className="section-label fit-list-label">A GOOD FIT IF</p>
             <div className="fit-list">
               {[
-                'You have a web application idea but need help defining the right first version.',
+                'You have an idea for a web application and need someone to plan, design, and build it.',
                 'Your team relies on spreadsheets, text messages, or repetitive manual work.',
                 'Your customers need accounts, bookings, payments, or a private portal.',
                 'Existing software does not match the way your business operates.',
