@@ -159,6 +159,11 @@
   text-decoration: none;
 }
 
+.nav-links > .nav-feature-link:not(.button),
+.nav-links > .nav-feature-link.is-active:not(.button) {
+  color: var(--lime);
+}
+
 .nav-links > a:not(.button)::after,
 .footer-links > a::after {
   position: absolute;
@@ -1468,6 +1473,10 @@ summary:focus-visible {
 
   .nav-links.is-open > a:nth-child(6) {
     animation-delay: 355ms;
+  }
+
+  .nav-links.is-open > a:nth-child(7) {
+    animation-delay: 410ms;
   }
 
   .nav-links > a:not(.button) {
