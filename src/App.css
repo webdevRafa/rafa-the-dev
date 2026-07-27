@@ -623,15 +623,11 @@ summary:focus-visible {
 }
 
 .statement-copy > p {
-  max-width: 900px;
+  max-width: 650px;
   margin: 2rem 0 0;
-  color: #b7bcb5;
-  font-size: clamp(1.25rem, 2.15vw, 2rem);
-  line-height: 1.48;
-}
-
-.statement-copy > p:last-child {
-  color: var(--paper);
+  color: #b4b9b2;
+  font-size: clamp(1rem, 1.35vw, 1.22rem);
+  line-height: 1.7;
 }
 
 .section-heading {
@@ -1519,7 +1515,7 @@ summary:focus-visible {
   }
 
   .statement-copy > p {
-    font-size: 1.1rem;
+    font-size: 0.97rem;
   }
 
   .section-heading {
