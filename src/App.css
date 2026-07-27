@@ -661,6 +661,17 @@ summary:focus-visible {
   transition: background 220ms ease;
 }
 
+@media (min-width: 761px) {
+  .services-grid {
+    gap: clamp(0.75rem, 1.1vw, 1.1rem);
+    border: 0;
+  }
+
+  .service-card {
+    border: 1px solid var(--line);
+  }
+}
+
 .service-card:hover {
   background: var(--panel);
 }
