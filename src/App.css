@@ -807,6 +807,8 @@ summary:focus-visible {
   justify-self: center;
   border: 1px solid var(--line);
   background: #0d0f0e;
+  transform-origin: center;
+  will-change: transform, opacity;
 }
 
 .about-portrait::after {
@@ -829,8 +831,6 @@ summary:focus-visible {
   object-position: center;
   opacity: 0.74;
   filter: brightness(0.84) contrast(1.04);
-  transform-origin: center;
-  will-change: transform;
 }
 
 .about-lead {

@@ -237,8 +237,26 @@ function App() {
     damping: 28,
     restDelta: 0.001,
   })
-  const portraitY = useTransform(portraitScrollProgress, [0, 0.5, 1], ['-4%', '0%', '4%'])
-  const portraitScale = useTransform(portraitScrollProgress, [0, 0.5, 1], [1.08, 1, 1.08])
+  const portraitFrameScaleTarget = useTransform(
+    portraitScrollProgress,
+    [0, 0.2, 0.4, 0.6, 0.8, 1],
+    [0.76, 0.76, 1, 1, 0.76, 0.76],
+  )
+  const portraitFrameOpacityTarget = useTransform(
+    portraitScrollProgress,
+    [0, 0.2, 0.4, 0.6, 0.8, 1],
+    [0, 0.32, 1, 1, 0.32, 0],
+  )
+  const portraitFrameScale = useSpring(portraitFrameScaleTarget, {
+    stiffness: 180,
+    damping: 30,
+    mass: 0.35,
+  })
+  const portraitFrameOpacity = useSpring(portraitFrameOpacityTarget, {
+    stiffness: 180,
+    damping: 30,
+    mass: 0.35,
+  })
 
   const buildBrief = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -504,12 +522,13 @@ function App() {
           <motion.div
             className="about-portrait"
             ref={portraitRef}
-            initial={reduceMotion ? false : { opacity: 0, x: -45, rotate: -1.5 }}
-            whileInView={reduceMotion ? undefined : { opacity: 1, x: 0, rotate: 0 }}
-            viewport={revealViewport}
-            transition={{ duration: 0.78, ease: revealEase }}
+            style={
+              reduceMotion
+                ? { opacity: 1, scale: 1 }
+                : { opacity: portraitFrameOpacity, scale: portraitFrameScale }
+            }
           >
-            <motion.img
+            <img
               className="about-portrait-image"
               src="/rafa-castro-portrait.png"
               alt="Black-and-white portrait of Rafa Castro"
@@ -517,11 +536,6 @@ function App() {
               height="1254"
               loading="lazy"
               decoding="async"
-              style={
-                reduceMotion
-                  ? { y: 0, scale: 1 }
-                  : { y: portraitY, scale: portraitScale }
-              }
             />
           </motion.div>
           <Reveal className="about-copy" delay={0.08}>
