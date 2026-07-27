@@ -562,7 +562,7 @@ function App() {
               rel="noreferrer"
             >
               <FaInstagram size={18} aria-hidden="true" />
-              Follow the build at @rafathedev
+              Follow at @rafathedev
               <ArrowUpRight size={16} />
             </a>
           </Reveal>
@@ -592,8 +592,8 @@ function App() {
               <h2>Software shaped around your business.</h2>
             </div>
             <p>
-              From a focused marketing site to the system that runs your daily
-              operation, every build starts with the outcome you need.
+              Whether you need a focused marketing site or software to support your
+              day-to-day work, I build the solution around the outcome you want.
             </p>
           </Reveal>
 
