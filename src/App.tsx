@@ -492,6 +492,64 @@ function App() {
           </motion.div>
         </section>
 
+        <section className="about-section section mx-auto grid max-w-[1400px] items-center" id="about">
+          <motion.div
+            className="about-portrait"
+            aria-hidden="true"
+            initial={reduceMotion ? false : { opacity: 0, x: -45, rotate: -1.5 }}
+            whileInView={reduceMotion ? undefined : { opacity: 1, x: 0, rotate: 0 }}
+            viewport={revealViewport}
+            transition={{ duration: 0.78, ease: revealEase }}
+          >
+            <div className="portrait-code">
+              <span>const builder = {'{'}</span>
+              <span>&nbsp;&nbsp;name: 'Rafa',</span>
+              <span>&nbsp;&nbsp;base: 'San Antonio',</span>
+              <span>&nbsp;&nbsp;focus: 'useful software'</span>
+              <span>{'}'}</span>
+            </div>
+            <motion.div
+              className="portrait-monogram"
+              initial={reduceMotion ? false : { opacity: 0, scale: 0.82 }}
+              whileInView={reduceMotion ? undefined : { opacity: 1, scale: 1 }}
+              viewport={revealViewport}
+              transition={{ duration: 0.8, delay: 0.18, ease: revealEase }}
+            >
+              RC
+            </motion.div>
+            <span className="portrait-caption">FOUNDER / BUILDER</span>
+          </motion.div>
+          <Reveal className="about-copy" delay={0.08}>
+            <p className="section-kicker">ABOUT RAFA</p>
+            <h2>Hi, I’m Rafa.</h2>
+            <p className="about-lead">
+              I’m a full-stack developer based in San Antonio and the owner of
+              Devnetiks LLC.
+            </p>
+            <p>
+              I enjoy understanding how a business works and turning that process
+              into software that feels clear, useful, and intentional. My projects
+              have included marketplaces, booking platforms, payment systems,
+              operations software, dashboards, portals, and analytics tools.
+            </p>
+            <p>
+              When we work together, you communicate directly with the person
+              planning and building the system. My goal is not to add technology
+              for the sake of it—it is to build the right system for the problem.
+            </p>
+            <a
+              className="text-link instagram-about"
+              href="https://www.instagram.com/rafathedev/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <FaInstagram size={18} aria-hidden="true" />
+              Follow the build at @rafathedev
+              <ArrowUpRight size={16} />
+            </a>
+          </Reveal>
+        </section>
+
         <section className="statement-section section mx-auto grid max-w-[1400px]">
           <Reveal className="section-label">THE OPPORTUNITY</Reveal>
           <Reveal className="statement-copy" delay={0.08}>
@@ -613,64 +671,6 @@ function App() {
               </motion.article>
             ))}
           </div>
-        </section>
-
-        <section className="about-section section mx-auto grid max-w-[1400px] items-center" id="about">
-          <motion.div
-            className="about-portrait"
-            aria-hidden="true"
-            initial={reduceMotion ? false : { opacity: 0, x: -45, rotate: -1.5 }}
-            whileInView={reduceMotion ? undefined : { opacity: 1, x: 0, rotate: 0 }}
-            viewport={revealViewport}
-            transition={{ duration: 0.78, ease: revealEase }}
-          >
-            <div className="portrait-code">
-              <span>const builder = {'{'}</span>
-              <span>&nbsp;&nbsp;name: 'Rafa',</span>
-              <span>&nbsp;&nbsp;base: 'San Antonio',</span>
-              <span>&nbsp;&nbsp;focus: 'useful software'</span>
-              <span>{'}'}</span>
-            </div>
-            <motion.div
-              className="portrait-monogram"
-              initial={reduceMotion ? false : { opacity: 0, scale: 0.82 }}
-              whileInView={reduceMotion ? undefined : { opacity: 1, scale: 1 }}
-              viewport={revealViewport}
-              transition={{ duration: 0.8, delay: 0.18, ease: revealEase }}
-            >
-              RC
-            </motion.div>
-            <span className="portrait-caption">FOUNDER / BUILDER</span>
-          </motion.div>
-          <Reveal className="about-copy" delay={0.08}>
-            <p className="section-kicker">ABOUT RAFA</p>
-            <h2>Hi, I’m Rafa.</h2>
-            <p className="about-lead">
-              I’m a full-stack developer based in San Antonio and the owner of
-              Devnetiks LLC.
-            </p>
-            <p>
-              I enjoy understanding how a business works and turning that process
-              into software that feels clear, useful, and intentional. My projects
-              have included marketplaces, booking platforms, payment systems,
-              operations software, dashboards, portals, and analytics tools.
-            </p>
-            <p>
-              When we work together, you communicate directly with the person
-              planning and building the system. My goal is not to add technology
-              for the sake of it—it is to build the right system for the problem.
-            </p>
-            <a
-              className="text-link instagram-about"
-              href="https://www.instagram.com/rafathedev/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <FaInstagram size={18} aria-hidden="true" />
-              Follow the build at @rafathedev
-              <ArrowUpRight size={16} />
-            </a>
-          </Reveal>
         </section>
 
         <section className="fit-section section mx-auto grid max-w-[1400px]">
