@@ -497,7 +497,7 @@ function App() {
               },
             }}
           >
-            <span>Built for real operations</span>
+            <span>Built with modern tools</span>
             <div className="tech-list" aria-label="Core technologies">
               {['React', 'TypeScript', 'Firebase', 'Stripe', 'Vercel'].map((technology, index) => (
                 <motion.span
