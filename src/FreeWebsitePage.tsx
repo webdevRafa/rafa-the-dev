@@ -15,7 +15,6 @@ import {
 } from 'lucide-react'
 import { FaInstagram } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
-import SiteHeader from './SiteHeader'
 import './App.css'
 import './FreeWebsitePage.css'
 
@@ -161,11 +160,6 @@ function FreeWebsitePage() {
           aria-hidden="true"
         />
       )}
-      <a className="skip-link" href="#main">
-        Skip to content
-      </a>
-      <SiteHeader />
-
       <main id="main">
         <section className="free-hero mx-auto max-w-[1400px]" id="top">
           <motion.div

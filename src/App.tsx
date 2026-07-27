@@ -26,7 +26,6 @@ import {
 } from 'lucide-react'
 import { FaInstagram } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
-import SiteHeader from './SiteHeader'
 import './App.css'
 
 const services = [
@@ -301,12 +300,6 @@ function App() {
           aria-hidden="true"
         />
       )}
-      <a className="skip-link" href="#main">
-        Skip to content
-      </a>
-
-      <SiteHeader />
-
       <main id="main">
         <section className="hero-section mx-auto min-h-screen max-w-[1400px]" id="top">
           <div className="hero-grid grid items-center">
