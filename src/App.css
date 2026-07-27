@@ -14,6 +14,7 @@
   --coral: #ff8d71;
   --mono: 'DM Mono', ui-monospace, monospace;
   --display: 'Oswald', Impact, sans-serif;
+  --headline: 'ballinger-condensed', 'Oswald', Impact, sans-serif;
   --content-width: 1400px;
 }
 
@@ -321,11 +322,11 @@ summary:focus-visible {
 .hero-copy h1 {
   max-width: 780px;
   margin: 0;
-  font-family: var(--display);
+  font-family: var(--headline);
   font-size: clamp(4.15rem, 6.25vw, 7rem);
-  font-weight: 500;
-  line-height: 0.94;
-  letter-spacing: -0.015em;
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
 }
 
@@ -583,11 +584,11 @@ summary:focus-visible {
 .faq-heading h2,
 .contact-copy h2 {
   margin: 0;
-  font-family: var(--display);
+  font-family: var(--headline);
   font-size: clamp(2.8rem, 4.7vw, 5rem);
-  font-weight: 500;
-  line-height: 0.99;
-  letter-spacing: -0.012em;
+  font-weight: 800;
+  line-height: 0.96;
+  letter-spacing: -0.018em;
   text-transform: uppercase;
 }
 
