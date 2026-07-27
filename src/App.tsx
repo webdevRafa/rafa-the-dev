@@ -193,6 +193,14 @@ const brandLabelScenes = [
     termWidth: '11.25ch',
   },
 ] as const
+const heroOutcomes = [
+  'RUN BETTER.',
+  'CAPTURE LEADS.',
+  'BOOK CLIENTS.',
+  'TAKE PAYMENTS.',
+  'SAVE TIME.',
+  'GROW FASTER.',
+] as const
 
 const heroItem = {
   hidden: { opacity: 0, y: 28, filter: 'blur(7px)' },
@@ -303,6 +311,39 @@ function RotatingBrandLabel() {
         </motion.span>
       </AnimatePresence>
     </small>
+  )
+}
+
+function RotatingHeroOutcome() {
+  const reduceMotion = useReducedMotion()
+  const [outcomeIndex, setOutcomeIndex] = useState(0)
+  const activeOutcomeIndex = reduceMotion ? 0 : outcomeIndex
+
+  useEffect(() => {
+    if (reduceMotion) return
+
+    const timer = window.setTimeout(() => {
+      setOutcomeIndex((current) => (current + 1) % heroOutcomes.length)
+    }, 3800)
+
+    return () => window.clearTimeout(timer)
+  }, [outcomeIndex, reduceMotion])
+
+  return (
+    <span className="hero-outcome-window" aria-hidden="true">
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.em
+          className="hero-outcome"
+          key={heroOutcomes[activeOutcomeIndex]}
+          initial={reduceMotion ? false : { opacity: 0, y: '90%', filter: 'blur(5px)' }}
+          animate={{ opacity: 1, y: '0%', filter: 'blur(0px)' }}
+          exit={reduceMotion ? undefined : { opacity: 0, y: '-90%', filter: 'blur(5px)' }}
+          transition={{ duration: 0.48, ease: revealEase }}
+        >
+          {heroOutcomes[activeOutcomeIndex]}
+        </motion.em>
+      </AnimatePresence>
+    </span>
   )
 }
 
@@ -459,11 +500,14 @@ function App() {
               animate="visible"
             >
               <motion.p className="eyebrow" variants={heroItem}>
-                <span className="status-dot" />
                 Full-stack developer in San Antonio
               </motion.p>
-              <motion.h1 variants={heroItem}>
-                I build software that helps businesses <em>run better.</em>
+              <motion.h1
+                aria-label="I build software that helps businesses run better."
+                variants={heroItem}
+              >
+                I build software that helps businesses
+                <RotatingHeroOutcome />
               </motion.h1>
               <motion.p className="hero-intro" variants={heroItem}>
                 Custom websites and software systems for businesses that need bookings,

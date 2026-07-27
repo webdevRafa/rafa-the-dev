@@ -311,14 +311,6 @@ summary:focus-visible {
   text-transform: uppercase;
 }
 
-.status-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--lime);
-  box-shadow: 0 0 0 5px rgba(216, 255, 101, 0.1);
-}
-
 .hero-copy h1 {
   max-width: 780px;
   margin: 0;
@@ -333,6 +325,22 @@ summary:focus-visible {
 .hero-copy h1 em {
   color: var(--lime);
   font-style: normal;
+}
+
+.hero-outcome-window {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 0.94em;
+  overflow: hidden;
+}
+
+.hero-outcome {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: 100%;
+  white-space: nowrap;
 }
 
 .hero-intro {
@@ -1517,6 +1525,10 @@ summary:focus-visible {
 
   .hero-copy h1 {
     font-size: clamp(3.5rem, 15.75vw, 4.75rem);
+  }
+
+  .hero-outcome {
+    font-size: 0.88em;
   }
 
   .hero-intro {
