@@ -551,9 +551,9 @@ function App() {
               operations software, dashboards, portals, and analytics tools.
             </p>
             <p>
-              When we work together, you communicate directly with the person
-              planning and building the system. My goal is not to add technology
-              for the sake of it—it is to build the right system for the problem.
+              I like keeping the process straightforward and collaborative. I’ll
+              listen, ask questions, and keep you in the loop while we build
+              something that makes your day-to-day work easier.
             </p>
             <a
               className="text-link instagram-about"
