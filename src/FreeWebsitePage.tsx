@@ -63,6 +63,15 @@ const scopeOptions = [
   'Not sure yet',
 ]
 
+const giveawayHeroWords = [
+  'STORY.',
+  'IDEA.',
+  'VISION.',
+  'MISSION.',
+  'PROBLEM.',
+  'DREAM.',
+] as const
+
 function PageReveal({
   children,
   className,
@@ -84,6 +93,39 @@ function PageReveal({
     >
       {children}
     </motion.div>
+  )
+}
+
+function RotatingGiveawayWord() {
+  const reduceMotion = useReducedMotion()
+  const [wordIndex, setWordIndex] = useState(0)
+  const activeWordIndex = reduceMotion ? 0 : wordIndex
+
+  useEffect(() => {
+    if (reduceMotion) return
+
+    const timer = window.setTimeout(() => {
+      setWordIndex((current) => (current + 1) % giveawayHeroWords.length)
+    }, 3600)
+
+    return () => window.clearTimeout(timer)
+  }, [reduceMotion, wordIndex])
+
+  return (
+    <span className="free-hero-word-window" aria-hidden="true">
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.em
+          className="free-hero-word"
+          key={giveawayHeroWords[activeWordIndex]}
+          initial={reduceMotion ? false : { opacity: 0, y: '90%', filter: 'blur(5px)' }}
+          animate={{ opacity: 1, y: '0%', filter: 'blur(0px)' }}
+          exit={reduceMotion ? undefined : { opacity: 0, y: '-90%', filter: 'blur(5px)' }}
+          transition={{ duration: 0.48, ease: revealEase }}
+        >
+          {giveawayHeroWords[activeWordIndex]}
+        </motion.em>
+      </AnimatePresence>
+    </span>
   )
 }
 
@@ -142,6 +184,7 @@ function FreeWebsitePage() {
               FREE WEBSITE GIVEAWAY
             </motion.p>
             <motion.h1
+              aria-label="You bring the story. I'll build the website."
               variants={{
                 hidden: { opacity: 0, y: 28, filter: 'blur(7px)' },
                 visible: {
@@ -152,7 +195,9 @@ function FreeWebsitePage() {
                 },
               }}
             >
-              Your story could become a <em>real website.</em>
+              <span className="free-hero-static-line">You bring the</span>
+              <RotatingGiveawayWord />
+              <span className="free-hero-static-line">I&apos;ll build the website.</span>
             </motion.h1>
             <motion.p
               className="free-hero-intro"
