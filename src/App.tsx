@@ -693,7 +693,7 @@ function App() {
         </section>
 
         <section className="fit-section section mx-auto grid max-w-[1400px]">
-          <Reveal className="section-label">A GOOD FIT</Reveal>
+          <Reveal className="section-label">A GOOD FIT IF</Reveal>
           <Reveal className="fit-content" delay={0.08}>
             <h2>For businesses that need more than a template.</h2>
             <div className="fit-list">
