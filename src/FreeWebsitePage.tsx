@@ -277,9 +277,8 @@ function FreeWebsitePage() {
         </section>
 
         <section className="free-section free-process mx-auto max-w-[1400px]" id="how-it-works">
-          <PageReveal className="free-section-heading">
+          <PageReveal className="free-section-heading free-process-heading">
             <p className="section-kicker">HOW IT WORKS</p>
-            <h2>Three clear steps. One meaningful build.</h2>
             <p>
               You do not need technical language or a polished pitch. The best submission
               will help me understand the person, the need, and the difference this project

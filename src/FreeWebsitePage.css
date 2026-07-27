@@ -216,6 +216,19 @@
   margin-bottom: -1rem;
 }
 
+.free-process-heading {
+  align-items: start;
+  row-gap: clamp(2rem, 4vw, 4rem);
+}
+
+.free-process-heading .section-kicker {
+  margin-bottom: 0;
+}
+
+.free-process-heading > p:last-child {
+  grid-column: 2;
+}
+
 .free-section h2 {
   max-width: 760px;
   margin: 0;
@@ -545,6 +558,10 @@
   .free-scope,
   .free-application {
     grid-template-columns: 1fr;
+  }
+
+  .free-process-heading > p:last-child {
+    grid-column: 1;
   }
 
   .free-application-copy {
