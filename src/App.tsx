@@ -601,8 +601,7 @@ function App() {
           <Reveal className="about-copy" delay={0.08}>
             <p className="section-kicker">ABOUT RAFA</p>
             <p className="about-lead">
-              I’m a full-stack developer based in San Antonio and the owner of
-              Devnetiks LLC.
+              I’m a full-stack developer based in San Antonio.
             </p>
             <p>
               I enjoy understanding how a business works and turning that process
