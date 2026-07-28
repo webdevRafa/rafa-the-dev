@@ -321,26 +321,20 @@ function App() {
     damping: 28,
     restDelta: 0.001,
   })
-  const smoothProcessIntroProgress = useSpring(processIntroScrollProgress, {
-    stiffness: 110,
-    damping: 28,
-    mass: 0.4,
-    restDelta: 0.001,
-  })
   const processIntroLeftX = useTransform(
-    smoothProcessIntroProgress,
-    [0, 0.18, 0.43, 0.57, 0.82, 1],
-    ['-135%', '-135%', '0%', '0%', '-135%', '-135%'],
+    processIntroScrollProgress,
+    [0, 0.5, 1],
+    ['-135%', '0%', '-135%'],
   )
   const processIntroRightDesktopX = useTransform(
-    smoothProcessIntroProgress,
-    [0, 0.18, 0.43, 0.57, 0.82, 1],
-    ['135%', '135%', '0%', '0%', '135%', '135%'],
+    processIntroScrollProgress,
+    [0, 0.5, 1],
+    ['135%', '0%', '135%'],
   )
   const processIntroOpacity = useTransform(
-    smoothProcessIntroProgress,
-    [0, 0.18, 0.43, 0.57, 0.82, 1],
-    [0, 0, 1, 1, 0, 0],
+    processIntroScrollProgress,
+    [0, 0.5, 1],
+    [0, 1, 0],
   )
   const portraitFrameScaleTarget = useTransform(
     portraitScrollProgress,
