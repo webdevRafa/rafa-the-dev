@@ -324,17 +324,17 @@ function App() {
   const processIntroLeftX = useTransform(
     processIntroScrollProgress,
     [0, 0.5, 1],
-    ['-135%', '0%', '-135%'],
+    ['-135%', '0%', '0%'],
   )
   const processIntroRightDesktopX = useTransform(
     processIntroScrollProgress,
     [0, 0.5, 1],
-    ['135%', '0%', '135%'],
+    ['135%', '0%', '0%'],
   )
   const processIntroOpacity = useTransform(
     processIntroScrollProgress,
     [0, 0.5, 1],
-    [0, 1, 0],
+    [0, 1, 1],
   )
   const portraitFrameScaleTarget = useTransform(
     portraitScrollProgress,
