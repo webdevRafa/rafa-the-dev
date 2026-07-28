@@ -763,8 +763,23 @@ summary:focus-visible {
 }
 
 .process-section {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   background: var(--paper);
   color: var(--ink);
+}
+
+.process-intro-motion {
+  backface-visibility: hidden;
+}
+
+.process-intro-heading[data-motion-active='true'] .process-intro-motion {
+  will-change: transform, opacity;
+}
+
+.process-intro-heading[data-motion-active='false'] .process-intro-motion {
+  pointer-events: none;
 }
 
 .process-section .section-kicker {
