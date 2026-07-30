@@ -67,11 +67,7 @@ function HeroCodeVisual() {
         </div>
         <div className="code-file-tab">
           <span className="code-file-icon">&lt;&gt;</span>
-          solution.jsx
-        </div>
-        <div className="code-live-state">
-          <span />
-          Building live
+          solution.tsx
         </div>
       </div>
 
@@ -86,15 +82,6 @@ function HeroCodeVisual() {
             <span ref={typedTargetRef} />
           </code>
         </pre>
-      </div>
-
-      <div className="code-statusbar" aria-hidden="true">
-        <span className="code-status-message">
-          <i />
-          Human-first software
-        </span>
-        <span>JSX</span>
-        <span>UTF-8</span>
       </div>
 
       <p className="visually-hidden">

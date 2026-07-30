@@ -405,7 +405,7 @@ summary:focus-visible {
   display: grid;
   height: 560px;
   min-height: 560px;
-  grid-template-rows: 54px minmax(0, 1fr) 34px;
+  grid-template-rows: 54px minmax(0, 1fr);
   border: 1px solid var(--line-strong);
   background:
     radial-gradient(circle at 82% 24%, rgba(216, 255, 101, 0.055), transparent 28%),
@@ -416,7 +416,7 @@ summary:focus-visible {
 
 .code-visual::after {
   position: absolute;
-  inset: 54px 0 34px;
+  inset: 54px 0 0;
   z-index: 0;
   background:
     linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
@@ -482,22 +482,6 @@ summary:focus-visible {
 .code-file-icon {
   color: var(--blue);
   font-size: 0.64rem;
-}
-
-.code-live-state {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  margin-left: auto;
-  text-transform: uppercase;
-}
-
-.code-live-state > span {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--lime);
-  box-shadow: 0 0 10px rgba(216, 255, 101, 0.65);
 }
 
 .code-editor-body {
@@ -570,37 +554,6 @@ summary:focus-visible {
   line-height: 1;
   opacity: 1;
   animation: code-cursor-blink 0.78s step-end infinite;
-}
-
-.code-statusbar {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 1rem;
-  padding: 0 1rem;
-  border-top: 1px solid var(--line);
-  color: #767d77;
-  background: #101311;
-  font: 500 0.52rem/1 var(--mono);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.code-status-message {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  margin-right: auto;
-  color: #929991;
-}
-
-.code-status-message i {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--lime);
 }
 
 .visually-hidden {
@@ -1553,10 +1506,6 @@ summary:focus-visible {
     padding-inline: 0.7rem;
   }
 
-  .code-live-state {
-    display: none;
-  }
-
   .code-editor-body {
     grid-template-columns: 36px minmax(0, 1fr);
     padding-top: 2.5rem;
@@ -1569,15 +1518,6 @@ summary:focus-visible {
   .code-stage {
     padding-right: 0.8rem;
     padding-left: 0.8rem;
-  }
-
-  .code-statusbar {
-    gap: 0.65rem;
-    padding-inline: 0.8rem;
-  }
-
-  .code-statusbar > span:not(.code-status-message) {
-    display: none;
   }
 
   .trust-strip {
