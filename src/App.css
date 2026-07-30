@@ -399,168 +399,226 @@ summary:focus-visible {
   transform: translate(2px, 2px);
 }
 
-.system-visual {
+.code-visual {
   position: relative;
   overflow: hidden;
+  display: grid;
+  height: 560px;
   min-height: 560px;
+  grid-template-rows: 54px minmax(0, 1fr) 34px;
   border: 1px solid var(--line-strong);
-  background: rgba(18, 21, 19, 0.76);
+  background:
+    radial-gradient(circle at 82% 24%, rgba(216, 255, 101, 0.055), transparent 28%),
+    rgba(14, 17, 15, 0.94);
   box-shadow: 0 30px 100px rgba(0, 0, 0, 0.4);
   transform-style: preserve-3d;
 }
 
-.visual-topbar {
+.code-visual::after {
+  position: absolute;
+  inset: 54px 0 34px;
+  z-index: 0;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 42px 42px;
+  content: '';
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), transparent 88%);
+  pointer-events: none;
+}
+
+.code-editor-topbar {
+  position: relative;
+  z-index: 2;
   display: flex;
   height: 54px;
   align-items: center;
-  justify-content: flex-start;
-  padding: 0 1.25rem;
+  padding: 0 1rem;
   border-bottom: 1px solid var(--line);
-  color: var(--muted);
-  font: 500 0.6rem/1 var(--mono);
-  letter-spacing: 0.08em;
+  color: #858b85;
+  background: rgba(17, 20, 18, 0.96);
+  font: 500 0.58rem/1 var(--mono);
+  letter-spacing: 0.05em;
 }
 
-.visual-canvas {
-  position: relative;
-  min-height: 505px;
-  background:
-    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  background-size: 42px 42px;
-}
-
-.flow-card {
-  position: absolute;
-  z-index: 2;
-  border: 1px solid var(--line-strong);
-  background: #181c19;
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
-}
-
-.flow-card-main {
-  top: 58px;
-  left: 9%;
-  width: 54%;
-  padding: 1.4rem;
-}
-
-.flow-card small {
-  display: block;
-  color: var(--muted);
-  font: 500 0.55rem/1.3 var(--mono);
-  letter-spacing: 0.09em;
-}
-
-.flow-card-main strong {
-  display: block;
-  margin-top: 0.8rem;
-  font-size: 1rem;
-}
-
-.mini-progress {
-  overflow: hidden;
-  height: 4px;
-  margin-top: 1.2rem;
-  background: #333933;
-}
-
-.mini-progress span {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: var(--lime);
-  transform-origin: left center;
-}
-
-.flow-card-small {
+.code-window-controls {
   display: flex;
-  width: 62%;
-  min-height: 76px;
   align-items: center;
-  gap: 0.85rem;
-  padding: 1rem;
+  gap: 0.42rem;
+  margin-right: 1.25rem;
 }
 
-.flow-card-small > svg:first-child {
-  flex: 0 0 auto;
-  color: var(--lime);
+.code-window-controls span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #454b46;
 }
 
-.flow-card-small > svg:last-child {
+.code-window-controls span:first-child {
+  background: var(--coral);
+}
+
+.code-window-controls span:nth-child(2) {
+  background: var(--sand);
+}
+
+.code-window-controls span:last-child {
+  background: var(--lime);
+}
+
+.code-file-tab {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 1rem;
+  border-right: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  color: #d3d7d1;
+  background: rgba(11, 13, 12, 0.72);
+}
+
+.code-file-icon {
+  color: var(--blue);
+  font-size: 0.64rem;
+}
+
+.code-live-state {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
   margin-left: auto;
-  color: var(--ink);
+  text-transform: uppercase;
+}
+
+.code-live-state > span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow: 0 0 10px rgba(216, 255, 101, 0.65);
+}
+
+.code-editor-body {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  overflow: hidden;
+  min-height: 0;
+  grid-template-columns: 48px minmax(0, 1fr);
+  align-content: start;
+  padding: clamp(3.6rem, 8vh, 5.25rem) 0 2rem;
+}
+
+.code-line-numbers {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  gap: 0;
+  padding-right: 0.9rem;
+  color: #4e554f;
+  font: 400 clamp(0.72rem, 0.95vw, 0.9rem)/1.9 var(--mono);
+  user-select: none;
+}
+
+.code-line-numbers span {
+  height: 1.9em;
+}
+
+.code-stage {
+  overflow: hidden;
+  min-width: 0;
+  min-height: calc(1.9em * 8);
+  margin: 0;
+  padding: 0 clamp(1rem, 2.6vw, 2rem);
+  color: #d4d4d4;
+  font: 400 clamp(0.72rem, 0.95vw, 0.9rem)/1.9 var(--mono);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.code-stage code {
+  font: inherit;
+}
+
+.syntax-punctuation,
+.syntax-operator {
+  color: #a9b0aa;
+}
+
+.syntax-component {
+  color: #4ec9b0;
+}
+
+.syntax-property {
+  color: #9cdcfe;
+}
+
+.syntax-string {
+  color: #ce9178;
+}
+
+.syntax-expression {
+  color: #dcdcaa;
+}
+
+.typed-cursor {
+  display: inline;
+  color: var(--lime);
+  font-size: 0.82em;
+  line-height: 1;
+  opacity: 1;
+  animation: code-cursor-blink 0.78s step-end infinite;
+}
+
+.code-statusbar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 0 1rem;
+  border-top: 1px solid var(--line);
+  color: #767d77;
+  background: #101311;
+  font: 500 0.52rem/1 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.code-status-message {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-right: auto;
+  color: #929991;
+}
+
+.code-status-message i {
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--lime);
 }
 
-.flow-card-small span {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+.visually-hidden {
+  position: absolute !important;
+  overflow: hidden !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  margin: -1px !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
 }
 
-.flow-card-small strong {
-  font-size: 0.78rem;
-}
-
-.flow-booking {
-  top: 215px;
-  right: 7%;
-}
-
-.flow-payment {
-  top: 314px;
-  left: 7%;
-}
-
-.flow-portal {
-  right: 7%;
-  bottom: 27px;
-}
-
-.flow-connector {
-  position: absolute;
-  z-index: 1;
-  border-color: rgba(216, 255, 101, 0.36);
-  border-style: dashed;
-  transform-origin: top left;
-}
-
-.connector-one {
-  top: 150px;
-  right: 22%;
-  width: 29%;
-  height: 112px;
-  border-width: 0 1px 1px 0;
-}
-
-.connector-two {
-  top: 290px;
-  left: 20%;
-  width: 41%;
-  height: 115px;
-  border-width: 0 0 1px 1px;
-}
-
-.visual-label {
-  position: absolute;
-  z-index: 3;
-  padding: 0.45rem 0.6rem;
-  color: var(--ink);
-  background: var(--lime);
-  font: 500 0.52rem/1 var(--mono);
-  letter-spacing: 0.06em;
-}
-
-.visual-label-one {
-  top: 184px;
-  left: 15%;
-}
-
-.visual-label-two {
-  right: 14%;
-  bottom: 119px;
+@keyframes code-cursor-blink {
+  50% {
+    opacity: 0;
+  }
 }
 
 .trust-strip {
@@ -1392,7 +1450,8 @@ summary:focus-visible {
     max-width: 900px;
   }
 
-  .system-visual {
+  .code-visual {
+    height: 520px;
     min-height: 520px;
   }
 
@@ -1477,43 +1536,47 @@ summary:focus-visible {
     justify-content: center;
   }
 
-  .system-visual {
+  .code-visual {
+    height: 420px;
     min-height: 420px;
   }
 
-  .visual-canvas {
-    min-height: 365px;
+  .code-editor-topbar {
+    padding-inline: 0.8rem;
   }
 
-  .flow-card-main {
-    top: 38px;
-    width: 67%;
+  .code-window-controls {
+    margin-right: 0.75rem;
   }
 
-  .flow-card-small {
-    width: 78%;
-    min-height: 64px;
-    padding: 0.8rem;
+  .code-file-tab {
+    padding-inline: 0.7rem;
   }
 
-  .flow-booking {
-    top: 155px;
-    right: 5%;
+  .code-live-state {
+    display: none;
   }
 
-  .flow-payment {
-    top: 236px;
-    left: 5%;
+  .code-editor-body {
+    grid-template-columns: 36px minmax(0, 1fr);
+    padding-top: 2.5rem;
   }
 
-  .flow-portal {
-    right: 5%;
-    bottom: 18px;
+  .code-line-numbers {
+    padding-right: 0.6rem;
   }
 
-  .connector-one,
-  .connector-two,
-  .visual-label {
+  .code-stage {
+    padding-right: 0.8rem;
+    padding-left: 0.8rem;
+  }
+
+  .code-statusbar {
+    gap: 0.65rem;
+    padding-inline: 0.8rem;
+  }
+
+  .code-statusbar > span:not(.code-status-message) {
     display: none;
   }
 
