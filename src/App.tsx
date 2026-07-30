@@ -29,6 +29,7 @@ import {
 import { FaInstagram } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
 import './App.css'
+import AmbientVectorField from './AmbientVectorField'
 import HeroCodeVisual from './HeroCodeVisual'
 
 const services = [
@@ -401,8 +402,13 @@ function App() {
           aria-hidden="true"
         />
       )}
+      <AmbientVectorField />
       <main id="main">
-        <section className="hero-section mx-auto min-h-screen max-w-[1400px]" id="top">
+        <section
+          className="hero-section mx-auto min-h-screen max-w-[1400px]"
+          id="top"
+          data-ambient-scene="0"
+        >
           <div className="hero-grid grid items-center">
             <motion.div
               className="hero-copy"
@@ -496,7 +502,11 @@ function App() {
           </motion.div>
         </section>
 
-        <section className="about-section section mx-auto grid max-w-[1400px] items-center" id="about">
+        <section
+          className="about-section section mx-auto grid max-w-[1400px] items-center"
+          id="about"
+          data-ambient-scene="1"
+        >
           <motion.div
             className="about-portrait"
             ref={portraitRef}
@@ -545,7 +555,10 @@ function App() {
           </Reveal>
         </section>
 
-        <section className="statement-section section mx-auto grid max-w-[1400px]">
+        <section
+          className="statement-section section mx-auto grid max-w-[1400px]"
+          data-ambient-scene="2"
+        >
           <Reveal className="section-label">THE OPPORTUNITY</Reveal>
           <Reveal className="statement-copy" delay={0.08}>
             <h2>More than a website.</h2>
@@ -562,7 +575,11 @@ function App() {
           </Reveal>
         </section>
 
-        <section className="services-section section mx-auto max-w-[1400px]" id="services">
+        <section
+          className="services-section section mx-auto max-w-[1400px]"
+          id="services"
+          data-ambient-scene="3"
+        >
           <Reveal className="section-heading grid items-end">
             <div>
               <p className="section-kicker">HOW I CAN HELP</p>
@@ -609,7 +626,10 @@ function App() {
           </div>
         </section>
 
-        <section className="capabilities-section section mx-auto grid max-w-[1400px]">
+        <section
+          className="capabilities-section section mx-auto grid max-w-[1400px]"
+          data-ambient-scene="4"
+        >
           <Reveal className="capability-intro">
             <p className="section-kicker">BEHIND THE SCREEN</p>
             <h2>The interface is only the beginning.</h2>
@@ -639,7 +659,11 @@ function App() {
           </div>
         </section>
 
-        <section className="process-section section mx-auto max-w-[1400px]" id="process">
+        <section
+          className="process-section section mx-auto max-w-[1400px]"
+          id="process"
+          data-ambient-scene="5"
+        >
           <div
             className="process-intro-heading section-heading grid items-end"
             data-motion-active={reduceMotion || processIntroIsInView}
@@ -692,7 +716,10 @@ function App() {
           </div>
         </section>
 
-        <section className="fit-section section mx-auto grid max-w-[1400px]">
+        <section
+          className="fit-section section mx-auto grid max-w-[1400px]"
+          data-ambient-scene="6"
+        >
           <Reveal className="fit-content" delay={0.08}>
             <h2>For businesses that need more than a template.</h2>
             <p className="section-label fit-list-label">A GOOD FIT IF</p>
@@ -718,7 +745,10 @@ function App() {
           </Reveal>
         </section>
 
-        <section className="faq-section section mx-auto grid max-w-[1400px]">
+        <section
+          className="faq-section section mx-auto grid max-w-[1400px]"
+          data-ambient-scene="7"
+        >
           <Reveal className="faq-heading">
             <p className="section-kicker">COMMON QUESTIONS</p>
             <h2>A few things clients usually ask.</h2>
@@ -734,7 +764,11 @@ function App() {
           </div>
         </section>
 
-        <section className="contact-section section mx-auto grid max-w-[1400px]" id="contact">
+        <section
+          className="contact-section section mx-auto grid max-w-[1400px]"
+          id="contact"
+          data-ambient-scene="8"
+        >
           <Reveal className="contact-copy">
             <p className="section-kicker">START A CONVERSATION</p>
             <h2>Have a project in mind?</h2>
