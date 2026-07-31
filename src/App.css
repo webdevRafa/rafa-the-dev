@@ -1364,11 +1364,13 @@ summary:focus-visible {
 
 .footer-bottom {
   align-items: flex-start;
+  justify-content: flex-end;
   margin-top: 3rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--line);
   color: var(--muted-dark);
   font: 400 0.56rem/1.6 var(--mono);
+  text-align: right;
 }
 
 .footer-bottom p {
@@ -1748,6 +1750,10 @@ summary:focus-visible {
   .footer-bottom {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .footer-bottom {
+    text-align: left;
   }
 
   .footer-links {

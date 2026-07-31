@@ -199,14 +199,6 @@ function useMediaQuery(query: string) {
   return matches
 }
 
-function LogoMark() {
-  return (
-    <span className="logo-mark" aria-hidden="true">
-      R/
-    </span>
-  )
-}
-
 function RotatingHeroOutcome() {
   const reduceMotion = useReducedMotion()
   const [outcomeIndex, setOutcomeIndex] = useState(0)
@@ -476,7 +468,7 @@ function App() {
               },
             }}
           >
-            <span>Built with modern tools</span>
+            <span>My go-to stack</span>
             <div className="tech-list" aria-label="Core technologies">
               {['React', 'TypeScript', 'Firebase', 'Stripe', 'Vercel'].map((technology, index) => (
                 <motion.span
@@ -772,10 +764,7 @@ function App() {
             </p>
             <div className="contact-note flex items-start">
               <MessageSquare size={20} />
-              <span>
-                You’ll communicate directly with Rafa—not a sales team or account
-                manager.
-              </span>
+              <span>I’ll stay involved from our first conversation through launch.</span>
             </div>
           </Reveal>
 
@@ -917,7 +906,6 @@ function App() {
       >
         <div className="footer-top flex items-center justify-between">
           <a className="brand footer-brand inline-flex items-center no-underline" href="#top">
-            <LogoMark />
             <span className="brand-copy">
               <strong>RAFA THE DEV</strong>
               <small>CUSTOM SOFTWARE FOR REAL BUSINESSES</small>
@@ -934,9 +922,8 @@ function App() {
             </a>
           </div>
         </div>
-        <div className="footer-bottom flex items-start justify-between">
-          <p>© {new Date().getFullYear()} Rafa Castro. San Antonio, Texas.</p>
-          <p>Rafa the Dev is the personal brand of Rafa Castro. Development services are provided by Devnetiks LLC.</p>
+        <div className="footer-bottom flex items-start justify-end">
+          <p>Development services are provided by Devnetiks LLC.</p>
         </div>
       </motion.footer>
     </div>
