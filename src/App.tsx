@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import type { FormEvent, ReactNode } from 'react'
 import {
   AnimatePresence,
   motion,
-  useInView,
   useReducedMotion,
   useScroll,
   useSpring,
@@ -31,6 +30,8 @@ import { Link } from 'react-router-dom'
 import './App.css'
 import AmbientVectorField from './AmbientVectorField'
 import HeroCodeVisual from './HeroCodeVisual'
+
+const ScrollSplitText = lazy(() => import('./ScrollSplitText'))
 
 const services = [
   {
@@ -183,22 +184,6 @@ function Reveal({
   )
 }
 
-function useMediaQuery(query: string) {
-  const [matches, setMatches] = useState(false)
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia(query)
-    const updateMatch = () => setMatches(mediaQuery.matches)
-
-    updateMatch()
-    mediaQuery.addEventListener('change', updateMatch)
-
-    return () => mediaQuery.removeEventListener('change', updateMatch)
-  }, [query])
-
-  return matches
-}
-
 function LogoMark() {
   return (
     <span className="logo-mark" aria-hidden="true">
@@ -306,38 +291,16 @@ function App() {
   const [projectBrief, setProjectBrief] = useState('')
   const reduceMotion = useReducedMotion()
   const portraitRef = useRef<HTMLDivElement>(null)
-  const processIntroRef = useRef<HTMLDivElement>(null)
-  const compactProcessMotion = useMediaQuery('(max-width: 760px)')
-  const processIntroIsInView = useInView(processIntroRef, { amount: 0.01 })
   const { scrollYProgress } = useScroll()
   const { scrollYProgress: portraitScrollProgress } = useScroll({
     target: portraitRef,
     offset: ['start end', 'end start'],
-  })
-  const { scrollYProgress: processIntroScrollProgress } = useScroll({
-    target: processIntroRef,
-    offset: ['start 92%', 'end 8%'],
   })
   const smoothScrollProgress = useSpring(scrollYProgress, {
     stiffness: 180,
     damping: 28,
     restDelta: 0.001,
   })
-  const processIntroLeftX = useTransform(
-    processIntroScrollProgress,
-    [0, 0.5, 1],
-    ['-135%', '0%', '0%'],
-  )
-  const processIntroRightDesktopX = useTransform(
-    processIntroScrollProgress,
-    [0, 0.5, 1],
-    ['135%', '0%', '0%'],
-  )
-  const processIntroOpacity = useTransform(
-    processIntroScrollProgress,
-    [0, 0.5, 1],
-    [0, 1, 1],
-  )
   const portraitFrameScaleTarget = useTransform(
     portraitScrollProgress,
     [0, 0.2, 0.4, 0.6, 0.8, 1],
@@ -664,39 +627,27 @@ function App() {
           id="process"
           data-ambient-scene="5"
         >
-          <div
-            className="process-intro-heading section-heading grid items-end"
-            data-motion-active={reduceMotion || processIntroIsInView}
-            ref={processIntroRef}
+          <Suspense
+            fallback={
+              <div
+                className="scroll-split-text process-split-intro"
+                aria-hidden="true"
+              >
+                <div className="scroll-split-text__visual" />
+              </div>
+            }
           >
-            <motion.div
-              className="process-intro-motion process-intro-primary"
-              style={
-                reduceMotion
-                  ? undefined
-                  : { opacity: processIntroOpacity, x: processIntroLeftX }
-              }
-            >
-              <p className="section-kicker">HOW WE GET THERE</p>
-              <h2>A practical development process.</h2>
-            </motion.div>
-            <motion.p
-              className="process-intro-motion process-intro-support"
-              style={
-                reduceMotion
-                  ? undefined
-                  : {
-                      opacity: processIntroOpacity,
-                      x: compactProcessMotion
-                        ? processIntroLeftX
-                        : processIntroRightDesktopX,
-                    }
-              }
-            >
-              Good communication and thoughtful decisions keep us aligned and
-              help us build the right solution.
-            </motion.p>
-          </div>
+            <ScrollSplitText
+              className="process-split-intro"
+              text="A practical development process."
+              eyebrow="HOW WE GET THERE"
+              supportingText="Good communication and thoughtful decisions keep us aligned and help us build the right solution."
+              ending="reassemble"
+              distance={150}
+              rotation={15}
+              scrub={0.8}
+            />
+          </Suspense>
           <div className="process-grid grid sm:grid-cols-2 lg:grid-cols-4">
             {process.map((item, index) => (
               <motion.article
