@@ -604,7 +604,6 @@ function FreeWebsitePage() {
       >
         <div className="footer-top">
           <Link className="brand footer-brand" to="/#top">
-            <span className="logo-mark" aria-hidden="true">R/</span>
             <span className="brand-copy">
               <strong>RAFA THE DEV</strong>
               <small>CUSTOM SOFTWARE FOR REAL BUSINESSES</small>
@@ -621,11 +620,7 @@ function FreeWebsitePage() {
           </div>
         </div>
         <div className="footer-bottom">
-          <p>© {new Date().getFullYear()} Rafa Castro. San Antonio, Texas.</p>
-          <p>
-            Rafa the Dev is the personal brand of Rafa Castro. Development services are
-            provided by Devnetiks LLC.
-          </p>
+          <p>Development services are provided by Devnetiks LLC.</p>
         </div>
       </motion.footer>
     </div>
