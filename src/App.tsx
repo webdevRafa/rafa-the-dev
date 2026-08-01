@@ -31,6 +31,7 @@ import { Link } from 'react-router-dom'
 import './App.css'
 import AmbientVectorField from './AmbientVectorField'
 import HeroCodeVisual from './HeroCodeVisual'
+import { parseProjectBudget, PROJECT_BUDGET_OPTIONS } from './projectInquiryOptions'
 
 const services = [
   {
@@ -355,6 +356,7 @@ function App() {
     const form = new FormData(event.currentTarget)
     const getValue = (name: string) => String(form.get(name) ?? '')
     const capabilities = form.getAll('capabilities').map(String)
+    const budget = parseProjectBudget(getValue('budget'))
     const brief = [
       'PROJECT INQUIRY — RAFATHEDEV.COM',
       '',
@@ -363,7 +365,7 @@ function App() {
       `Business: ${getValue('business') || 'Not provided'}`,
       `Project type: ${capabilities.join(', ') || 'Not sure yet'}`,
       `Timing: ${getValue('timing') || 'Not provided'}`,
-      `Budget: ${getValue('budget') || 'Not provided'}`,
+      `Budget: ${budget || 'Not provided'}`,
       '',
       'What I want to build or improve:',
       getValue('message'),
@@ -383,7 +385,7 @@ function App() {
         capabilities,
         message: getValue('message'),
         timing: getValue('timing'),
-        budget: getValue('budget'),
+        budget,
       })
       setProjectBrief(brief)
       setBriefReady(true)
@@ -858,11 +860,9 @@ function App() {
                     Approximate budget
                     <select name="budget" defaultValue="">
                       <option value="" disabled>Select range</option>
-                      <option>Under $2,500</option>
-                      <option>$2,500–$5,000</option>
-                      <option>$5,000–$10,000</option>
-                      <option>$10,000+</option>
-                      <option>I need help estimating</option>
+                      {PROJECT_BUDGET_OPTIONS.map((budgetOption) => (
+                        <option key={budgetOption}>{budgetOption}</option>
+                      ))}
                     </select>
                   </label>
                 </div>

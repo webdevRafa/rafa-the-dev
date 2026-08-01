@@ -1,5 +1,6 @@
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { db } from './firebaseConfig'
+import type { ProjectBudget } from '../projectInquiryOptions'
 
 const SUBMISSIONS_COLLECTION = 'submissions'
 const SCHEMA_VERSION = 1
@@ -18,7 +19,7 @@ export type ProjectInquiryInput = {
   capabilities: string[]
   message: string
   timing: string
-  budget: string
+  budget: ProjectBudget | ''
 }
 
 export type FreeWebsiteApplicationInput = {
