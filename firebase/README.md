@@ -97,3 +97,17 @@ Remove-Item Env:\GOOGLE_APPLICATION_CREDENTIALS
 ```
 
 Never commit the service-account JSON. After seeding, deploy the updated rules and indexes with `firebase deploy --only firestore`, then sign out and sign back in at `/admin` so Firebase refreshes the ID token.
+
+### Seed the additional admin
+
+The additional-admin script targets the existing Firebase Authentication user with UID `AWkiCHBAwZPIPHTlsBGXIfLTaBs1`. It reads the account's email directly from Firebase Authentication, preserves any existing custom claims, assigns `admin: true`, and creates or updates `users/{uid}`.
+
+From PowerShell in the project root:
+
+```powershell
+$env:GOOGLE_APPLICATION_CREDENTIALS="C:\Users\Ralph\Downloads\rafa-the-dev-firebase-adminsdk-fbsvc-c2283bf813.json"
+npm run seed:uncle-admin
+Remove-Item Env:\GOOGLE_APPLICATION_CREDENTIALS
+```
+
+This script runs locally with the Admin SDK; it is not deployed as a Cloud Function. The new admin should sign out and back in before opening `/admin` if the account was already signed in when the claim was assigned.

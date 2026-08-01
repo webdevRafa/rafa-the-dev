@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "seed:admin": "node scripts/seed-admin.mjs"
+    "seed:admin": "node scripts/seed-admin.mjs",
+    "seed:uncle-admin": "node scripts/seed-uncle-admin.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
