@@ -1261,6 +1261,21 @@ summary:focus-visible {
   margin-top: 0.4rem;
 }
 
+.form-submit:disabled {
+  opacity: 0.62;
+  cursor: wait;
+  transform: none;
+}
+
+.form-error {
+  margin: -0.35rem 0 0;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(255, 126, 126, 0.45);
+  color: #ffb3b3;
+  background: rgba(255, 83, 83, 0.08);
+  font: 400 0.64rem/1.55 var(--mono);
+}
+
 .form-disclaimer {
   margin: -0.45rem 0 0;
   color: var(--muted-dark);

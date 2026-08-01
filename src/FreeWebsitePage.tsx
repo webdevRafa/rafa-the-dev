@@ -130,6 +130,8 @@ function RotatingGiveawayWord() {
 
 function FreeWebsitePage() {
   const [previewSubmitted, setPreviewSubmitted] = useState(false)
+  const [isSubmittingApplication, setIsSubmittingApplication] = useState(false)
+  const [applicationSubmitError, setApplicationSubmitError] = useState('')
   const reduceMotion = useReducedMotion()
   const { scrollYProgress } = useScroll()
   const smoothScrollProgress = useSpring(scrollYProgress, {
@@ -146,9 +148,46 @@ function FreeWebsitePage() {
     }
   }, [])
 
-  const handlePreviewSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handlePreviewSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    setPreviewSubmitted(true)
+    if (isSubmittingApplication) return
+
+    const form = new FormData(event.currentTarget)
+    const getValue = (name: string) => String(form.get(name) ?? '')
+
+    setIsSubmittingApplication(true)
+    setApplicationSubmitError('')
+
+    try {
+      const { submitFreeWebsiteApplication } = await import('./firebase/submissions')
+      await submitFreeWebsiteApplication({
+        name: getValue('name'),
+        email: getValue('email'),
+        phone: getValue('phone'),
+        location: getValue('location'),
+        projectName: getValue('projectName'),
+        instagram: getValue('instagram'),
+        projectType: getValue('projectType'),
+        currentPresence: getValue('currentPresence'),
+        story: getValue('story'),
+        impact: getValue('impact'),
+        audience: getValue('audience'),
+        scope: form.getAll('scope').map(String),
+        visitorAction: getValue('visitorAction'),
+        contentReadiness: getValue('contentReadiness'),
+        notes: getValue('notes'),
+        followsInstagram: form.get('followsInstagram') === 'on',
+        scopeAcknowledged: form.get('scopeAcknowledged') === 'on',
+      })
+      setPreviewSubmitted(true)
+    } catch (error) {
+      console.error('Unable to save free website application.', error)
+      setApplicationSubmitError(
+        'Your application could not be sent right now. Please check your connection and try again.',
+      )
+    } finally {
+      setIsSubmittingApplication(false)
+    }
   }
 
   return (
@@ -361,8 +400,8 @@ function FreeWebsitePage() {
             <div className="preview-notice" role="note">
               <Globe2 size={18} />
               <span>
-                <strong>Application preview</strong>
-                This page is static for now. Submissions are not being saved yet.
+                <strong>Secure application</strong>
+                Your answers will be saved after you submit this form.
               </span>
             </div>
             <AnimatePresence mode="wait" initial={false}>
@@ -370,6 +409,7 @@ function FreeWebsitePage() {
                 <motion.form
                   key="giveaway-form"
                   onSubmit={handlePreviewSubmit}
+                  aria-busy={isSubmittingApplication}
                   initial={reduceMotion ? false : { opacity: 0, x: -18 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={reduceMotion ? undefined : { opacity: 0, x: -18 }}
@@ -543,12 +583,21 @@ function FreeWebsitePage() {
                     </label>
                   </div>
 
-                  <button className="button button-primary form-submit" type="submit">
-                    Preview my submission
+                  <button
+                    className="button button-primary form-submit"
+                    type="submit"
+                    disabled={isSubmittingApplication}
+                  >
+                    {isSubmittingApplication ? 'Sending your application...' : 'Submit my application'}
                     <ArrowUpRight size={18} />
                   </button>
+                  {applicationSubmitError && (
+                    <p className="form-error" role="alert">
+                      {applicationSubmitError}
+                    </p>
+                  )}
                   <p className="form-disclaimer">
-                    Preview mode only. No information leaves your browser or is saved yet.
+                    Your application is securely submitted for giveaway consideration.
                   </p>
                 </motion.form>
               ) : (
@@ -564,11 +613,11 @@ function FreeWebsitePage() {
                   <div className="success-icon">
                     <Check size={27} />
                   </div>
-                  <p className="section-kicker">THE EXPERIENCE IS READY</p>
-                  <h3>Your story has a place to land.</h3>
+                  <p className="section-kicker">APPLICATION RECEIVED</p>
+                  <h3>Your story is in.</h3>
                   <p>
-                    This is the static confirmation experience. Once Firebase is connected,
-                    this step will securely save the submission and confirm that it was received.
+                    Your application was saved successfully. I will review your story, impact,
+                    and proposed scope as part of this promotion.
                   </p>
                   <div className="giveaway-preview-actions">
                     <button
@@ -576,7 +625,7 @@ function FreeWebsitePage() {
                       type="button"
                       onClick={() => setPreviewSubmitted(false)}
                     >
-                      Edit the preview
+                      Submit another application
                     </button>
                     <a
                       className="button button-primary"
