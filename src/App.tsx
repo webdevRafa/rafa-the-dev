@@ -87,7 +87,7 @@ const process = [
   {
     step: '02',
     title: 'Define the vision',
-    copy: 'We turn what we learned into a clear plan, prioritizing the features that matter most and setting the direction for the project.',
+    copy: 'We turn what we learned into a clear plan, defining the features, structure, and direction of the project.',
   },
   {
     step: '03',
@@ -97,7 +97,7 @@ const process = [
   {
     step: '04',
     title: 'Build, test & launch',
-    copy: 'I bring the plan to life, test the important details, launch with confidence, and refine the product with real feedback.',
+    copy: 'I bring the plan to life, test thoroughly, launch with confidence, and refine the product with real feedback.',
   },
 ]
 
