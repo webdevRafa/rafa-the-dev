@@ -64,9 +64,23 @@ leads/{submissionId}
   notes
   createdAt / createdBy
   updatedAt / updatedBy
+
+clients/{leadId}
+  leadId
+  submissionId
+  submissionType
+  status: active | completed | archived
+  websiteUrl
+  contact
+  source
+  notes
+  createdAt / createdBy
+  updatedAt / updatedBy
 ```
 
 Using the submission ID as the lead ID makes conversion idempotent. The dashboard creates the lead and marks the original submission as `lead` in one Firestore transaction.
+
+The same ID is reused when a lead becomes a client, so conversion remains idempotent and the full chain is easy to follow: submission -> lead -> client. A client conversion copies the operational contact/source snapshot into `clients`, moves the lead to `won`, and marks the original submission as `client` in one transaction. The original records stay in place as history. The client record owns the editable `websiteUrl` and its Active/Completed/Archived lifecycle.
 
 ### Seed the first admin
 

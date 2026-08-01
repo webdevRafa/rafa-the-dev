@@ -130,5 +130,9 @@ service cloud.firestore {
     match /leads/{leadId} {
       allow read, write: if isAdmin();
     }
+
+    match /clients/{clientId} {
+      allow read, write: if isAdmin();
+    }
   }
 }

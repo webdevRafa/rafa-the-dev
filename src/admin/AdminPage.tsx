@@ -25,11 +25,13 @@ import {
   BriefcaseBusiness,
   Check,
   CircleUserRound,
+  ExternalLink,
   Eye,
-  Gift,
+  Globe2,
   Inbox,
   LogOut,
   Mail,
+  Pencil,
   Search,
   ShieldCheck,
   Trophy,
@@ -42,9 +44,10 @@ import { auth, db } from '../firebase/firebaseConfig'
 import './AdminPage.css'
 
 type AccessState = 'checking' | 'signed-out' | 'authorized' | 'forbidden'
-type DashboardView = 'submissions' | 'leads'
+type DashboardView = 'submissions' | 'leads' | 'clients'
 type SubmissionFilter = 'all' | 'project_inquiry' | 'free_website_application'
 type LeadStage = 'new' | 'contacted' | 'qualified' | 'proposal' | 'won' | 'lost'
+type ClientStatus = 'active' | 'completed' | 'archived'
 
 type Contact = {
   name: string
@@ -88,6 +91,21 @@ type Lead = {
   updatedAt?: Timestamp
 }
 
+type Client = {
+  id: string
+  schemaVersion: number
+  leadId: string
+  submissionId: string
+  submissionType: Submission['submissionType']
+  status: ClientStatus
+  websiteUrl: string
+  contact: Contact
+  source: SubmissionSource
+  notes: string
+  createdAt?: Timestamp
+  updatedAt?: Timestamp
+}
+
 const leadStages: Array<{ value: LeadStage; label: string }> = [
   { value: 'new', label: 'New lead' },
   { value: 'contacted', label: 'Contacted' },
@@ -95,6 +113,12 @@ const leadStages: Array<{ value: LeadStage; label: string }> = [
   { value: 'proposal', label: 'Proposal sent' },
   { value: 'won', label: 'Won' },
   { value: 'lost', label: 'Lost' },
+]
+
+const clientStatuses: Array<{ value: ClientStatus; label: string }> = [
+  { value: 'active', label: 'Active' },
+  { value: 'completed', label: 'Completed' },
+  { value: 'archived', label: 'Archived' },
 ]
 
 function formatDate(value?: Timestamp) {
@@ -127,6 +151,25 @@ function submissionTypeLabel(type: Submission['submissionType']) {
 function submissionStatusLabel(submission: Submission) {
   if (submission.promotionOutcome === 'winner') return 'Winner'
   return formatLabel(submission.status)
+}
+
+function normalizeWebsiteUrl(value: string) {
+  const trimmedValue = value.trim()
+  if (!trimmedValue) return ''
+
+  const url = new URL(/^https?:\/\//i.test(trimmedValue) ? trimmedValue : `https://${trimmedValue}`)
+  if (!['http:', 'https:'].includes(url.protocol)) throw new Error('Unsupported website protocol')
+  return url.toString()
+}
+
+function websiteLabel(value: string) {
+  if (!value) return 'Website not added'
+
+  try {
+    return new URL(value).hostname.replace(/^www\./, '')
+  } catch {
+    return value
+  }
 }
 
 function ContactLinks({ contact }: { contact: Contact }) {
@@ -275,6 +318,115 @@ function SubmissionModal({
   )
 }
 
+function ClientWebsiteModal({
+  client,
+  isBusy,
+  onClose,
+  onSave,
+}: {
+  client: Client
+  isBusy: boolean
+  onClose: () => void
+  onSave: (clientId: string, websiteUrl: string) => Promise<boolean>
+}) {
+  const closeButtonReference = useRef<HTMLButtonElement>(null)
+  const [websiteUrl, setWebsiteUrl] = useState(client.websiteUrl ?? '')
+  const [websiteError, setWebsiteError] = useState('')
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && !isBusy) onClose()
+    }
+
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', handleEscape)
+    closeButtonReference.current?.focus()
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', handleEscape)
+    }
+  }, [isBusy, onClose])
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (isBusy) return
+
+    setWebsiteError('')
+
+    try {
+      const normalizedUrl = normalizeWebsiteUrl(websiteUrl)
+      const wasSaved = await onSave(client.id, normalizedUrl)
+      if (wasSaved) onClose()
+    } catch {
+      setWebsiteError('Enter a valid website address, such as example.com.')
+    }
+  }
+
+  return (
+    <div
+      className="admin-modal-backdrop"
+      role="presentation"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget && !isBusy) onClose()
+      }}
+    >
+      <section
+        className="admin-modal admin-website-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="website-modal-title"
+      >
+        <header className="admin-modal-header">
+          <div>
+            <span className="admin-status-badge is-client">Client website</span>
+          </div>
+          <button
+            ref={closeButtonReference}
+            className="admin-icon-button"
+            type="button"
+            aria-label="Close website editor"
+            disabled={isBusy}
+            onClick={onClose}
+          >
+            <X size={19} />
+          </button>
+        </header>
+
+        <form className="admin-website-form" onSubmit={handleSubmit}>
+          <div>
+            <p className="admin-modal-person">{client.contact.name}</p>
+            <h2 id="website-modal-title">{client.contact.business || client.contact.name}</h2>
+          </div>
+          <label>
+            Website URL
+            <input
+              type="text"
+              inputMode="url"
+              autoComplete="url"
+              placeholder="example.com"
+              value={websiteUrl}
+              onChange={(event) => setWebsiteUrl(event.target.value)}
+              autoFocus
+            />
+          </label>
+          <p className="admin-field-help">You can paste the domain without https://. Leave it blank to remove the saved URL.</p>
+          {websiteError && <p className="admin-form-message is-error" role="alert">{websiteError}</p>}
+          <div className="admin-website-form-actions">
+            <button className="admin-secondary-button" type="button" disabled={isBusy} onClick={onClose}>
+              Cancel
+            </button>
+            <button className="admin-primary-button" type="submit" disabled={isBusy}>
+              {isBusy ? 'Saving...' : 'Save website'}
+            </button>
+          </div>
+        </form>
+      </section>
+    </div>
+  )
+}
+
 function AdminPage() {
   const [accessState, setAccessState] = useState<AccessState>('checking')
   const [adminEmail, setAdminEmail] = useState('')
@@ -286,12 +438,14 @@ function AdminPage() {
   const [view, setView] = useState<DashboardView>('submissions')
   const [submissions, setSubmissions] = useState<Submission[]>([])
   const [leads, setLeads] = useState<Lead[]>([])
+  const [clients, setClients] = useState<Client[]>([])
   const [isLoadingData, setIsLoadingData] = useState(true)
   const [dataError, setDataError] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
   const [submissionFilter, setSubmissionFilter] = useState<SubmissionFilter>('all')
   const [busyRecordId, setBusyRecordId] = useState('')
   const [selectedSubmissionId, setSelectedSubmissionId] = useState('')
+  const [selectedClientId, setSelectedClientId] = useState('')
 
   useEffect(() => {
     const previousTitle = document.title
@@ -347,10 +501,14 @@ function AdminPage() {
       limit(250),
     )
     const leadsQuery = query(collection(db, 'leads'), orderBy('createdAt', 'desc'), limit(250))
+    const clientsQuery = query(collection(db, 'clients'), orderBy('createdAt', 'desc'), limit(250))
 
     let submissionsLoaded = false
     let leadsLoaded = false
-    const updateLoadingState = () => setIsLoadingData(!(submissionsLoaded && leadsLoaded))
+    let clientsLoaded = false
+    const updateLoadingState = () => (
+      setIsLoadingData(!(submissionsLoaded && leadsLoaded && clientsLoaded))
+    )
 
     const unsubscribeSubmissions = onSnapshot(
       submissionsQuery,
@@ -382,18 +540,45 @@ function AdminPage() {
       },
     )
 
+    const unsubscribeClients = onSnapshot(
+      clientsQuery,
+      (snapshot) => {
+        setClients(snapshot.docs.map((item) => ({ id: item.id, ...item.data() }) as Client))
+        clientsLoaded = true
+        updateLoadingState()
+      },
+      (error) => {
+        console.error('Unable to load clients.', error)
+        setDataError('Clients could not be loaded. Confirm that the latest Firestore rules are deployed.')
+        clientsLoaded = true
+        updateLoadingState()
+      },
+    )
+
     return () => {
       unsubscribeSubmissions()
       unsubscribeLeads()
+      unsubscribeClients()
     }
   }, [accessState])
 
   const leadIds = useMemo(() => new Set(leads.map((lead) => lead.submissionId)), [leads])
+  const clientIds = useMemo(() => new Set(clients.map((client) => client.leadId)), [clients])
   const selectedSubmission = useMemo(
     () => submissions.find((submission) => submission.id === selectedSubmissionId),
     [selectedSubmissionId, submissions],
   )
   const closeSubmission = useCallback(() => setSelectedSubmissionId(''), [])
+  const selectedClient = useMemo(
+    () => clients.find((client) => client.id === selectedClientId),
+    [clients, selectedClientId],
+  )
+  const closeClientWebsite = useCallback(() => setSelectedClientId(''), [])
+
+  const selectView = (nextView: DashboardView) => {
+    setView(nextView)
+    setSearchTerm('')
+  }
 
   const filteredSubmissions = useMemo(() => {
     const search = searchTerm.trim().toLowerCase()
@@ -427,6 +612,25 @@ function AdminPage() {
         .includes(search)
     ))
   }, [leads, searchTerm])
+
+  const filteredClients = useMemo(() => {
+    const search = searchTerm.trim().toLowerCase()
+    if (!search) return clients
+
+    return clients.filter((client) => (
+      [
+        client.contact.name,
+        client.contact.email,
+        client.contact.business,
+        client.contact.phone,
+        client.websiteUrl,
+        client.status,
+      ]
+        .join(' ')
+        .toLowerCase()
+        .includes(search)
+    ))
+  }, [clients, searchTerm])
 
   const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -467,8 +671,11 @@ function AdminPage() {
     await signOut(auth)
     setSubmissions([])
     setLeads([])
+    setClients([])
     setIsLoadingData(true)
     setDataError('')
+    setSelectedSubmissionId('')
+    setSelectedClientId('')
   }
 
   const addSubmissionAsLead = async (submission: Submission) => {
@@ -532,6 +739,109 @@ function AdminPage() {
     } catch (error) {
       console.error('Unable to update lead stage.', error)
       setDataError('The lead stage could not be updated. Please try again.')
+    } finally {
+      setBusyRecordId('')
+    }
+  }
+
+  const addLeadAsClient = async (lead: Lead) => {
+    const currentUser = auth.currentUser
+    if (!currentUser || busyRecordId) return
+
+    setBusyRecordId(lead.id)
+    setDataError('')
+
+    try {
+      const clientReference = doc(db, 'clients', lead.id)
+      const leadReference = doc(db, 'leads', lead.id)
+      const submissionReference = doc(db, 'submissions', lead.submissionId)
+
+      await runTransaction(db, async (transaction) => {
+        const existingClient = await transaction.get(clientReference)
+
+        if (!existingClient.exists()) {
+          transaction.set(clientReference, {
+            schemaVersion: 1,
+            leadId: lead.id,
+            submissionId: lead.submissionId,
+            submissionType: lead.submissionType,
+            status: 'active',
+            websiteUrl: '',
+            contact: lead.contact,
+            source: lead.source,
+            notes: lead.notes ?? '',
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+            createdBy: currentUser.uid,
+            updatedBy: currentUser.uid,
+          })
+        }
+
+        transaction.update(leadReference, {
+          stage: 'won',
+          clientId: lead.id,
+          convertedAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+          updatedBy: currentUser.uid,
+        })
+
+        transaction.update(submissionReference, {
+          status: 'client',
+          clientId: lead.id,
+          updatedAt: serverTimestamp(),
+          updatedBy: currentUser.uid,
+        })
+      })
+
+      setSelectedClientId(lead.id)
+      selectView('clients')
+    } catch (error) {
+      console.error('Unable to add client.', error)
+      setDataError('That lead could not be converted to a client. Please try again.')
+    } finally {
+      setBusyRecordId('')
+    }
+  }
+
+  const changeClientStatus = async (clientId: string, status: ClientStatus) => {
+    const currentUser = auth.currentUser
+    if (!currentUser || busyRecordId) return
+
+    setBusyRecordId(clientId)
+    setDataError('')
+
+    try {
+      await updateDoc(doc(db, 'clients', clientId), {
+        status,
+        updatedAt: serverTimestamp(),
+        updatedBy: currentUser.uid,
+      })
+    } catch (error) {
+      console.error('Unable to update client status.', error)
+      setDataError('The client status could not be updated. Please try again.')
+    } finally {
+      setBusyRecordId('')
+    }
+  }
+
+  const saveClientWebsite = async (clientId: string, websiteUrl: string) => {
+    const currentUser = auth.currentUser
+    if (!currentUser || busyRecordId) return false
+
+    setBusyRecordId(clientId)
+    setDataError('')
+
+    try {
+      await updateDoc(doc(db, 'clients', clientId), {
+        websiteUrl,
+        updatedAt: serverTimestamp(),
+        updatedBy: currentUser.uid,
+      })
+      return true
+    } catch (error) {
+      console.error('Unable to save client website.', error)
+      setDataError('The client website could not be saved. Please try again.')
+      return false
     } finally {
       setBusyRecordId('')
     }
@@ -669,22 +979,18 @@ function AdminPage() {
       <main className="admin-main" id="main">
         <section className="admin-stats" aria-label="Dashboard overview">
           <article>
-            <Inbox size={20} />
             <span>New submissions</span>
             <strong>{newSubmissionCount}</strong>
           </article>
           <article>
-            <Users size={20} />
             <span>Open leads</span>
             <strong>{openLeadCount}</strong>
           </article>
           <article>
-            <Gift size={20} />
             <span>Promotion entries</span>
             <strong>{promotionCount}</strong>
           </article>
           <article>
-            <Trophy size={20} />
             <span>Free site winners</span>
             <strong>{freeSiteWinnerCount}</strong>
           </article>
@@ -695,7 +1001,7 @@ function AdminPage() {
             <button
               className={view === 'submissions' ? 'is-active' : ''}
               type="button"
-              onClick={() => setView('submissions')}
+              onClick={() => selectView('submissions')}
             >
               <Inbox size={17} />
               Submissions
@@ -704,20 +1010,35 @@ function AdminPage() {
             <button
               className={view === 'leads' ? 'is-active' : ''}
               type="button"
-              onClick={() => setView('leads')}
+              onClick={() => selectView('leads')}
             >
               <BriefcaseBusiness size={17} />
               Leads
               <span>{leads.length}</span>
             </button>
+            <button
+              className={view === 'clients' ? 'is-active' : ''}
+              type="button"
+              onClick={() => selectView('clients')}
+            >
+              <Users size={17} />
+              Clients
+              <span>{clients.length}</span>
+            </button>
           </nav>
 
-          <div className="admin-controls">
+          <div className={`admin-controls ${view === 'submissions' ? 'has-filter' : ''}`}>
             <label className="admin-search">
               <Search size={17} />
               <input
                 type="search"
-                placeholder={view === 'submissions' ? 'Search submissions' : 'Search leads'}
+                placeholder={
+                  view === 'submissions'
+                    ? 'Search submissions'
+                    : view === 'leads'
+                      ? 'Search leads'
+                      : 'Search clients'
+                }
                 value={searchTerm}
                 onChange={(event) => setSearchTerm(event.target.value)}
               />
@@ -925,10 +1246,25 @@ function AdminPage() {
                             </td>
                             <td className="admin-table-date">{formatDate(lead.updatedAt)}</td>
                             <td>
-                              <a className="admin-row-button" href={`mailto:${lead.contact.email}`}>
-                                <Mail size={15} />
-                                Email
-                              </a>
+                              <div className="admin-row-actions">
+                                <a className="admin-row-button" href={`mailto:${lead.contact.email}`}>
+                                  <Mail size={15} />
+                                  Email
+                                </a>
+                                <button
+                                  className="admin-row-button is-primary"
+                                  type="button"
+                                  disabled={clientIds.has(lead.id) || busyRecordId === lead.id}
+                                  onClick={() => addLeadAsClient(lead)}
+                                >
+                                  {clientIds.has(lead.id) ? <Check size={15} /> : <UserPlus size={15} />}
+                                  {clientIds.has(lead.id)
+                                    ? 'Client'
+                                    : busyRecordId === lead.id
+                                      ? 'Converting...'
+                                      : 'Add client'}
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         ))}
@@ -970,6 +1306,171 @@ function AdminPage() {
                             <Mail size={15} />
                             Email
                           </a>
+                          <button
+                            className="admin-row-button is-primary"
+                            type="button"
+                            disabled={clientIds.has(lead.id) || busyRecordId === lead.id}
+                            onClick={() => addLeadAsClient(lead)}
+                          >
+                            {clientIds.has(lead.id) ? <Check size={15} /> : <UserPlus size={15} />}
+                            {clientIds.has(lead.id)
+                              ? 'Client'
+                              : busyRecordId === lead.id
+                                ? 'Converting...'
+                                : 'Add client'}
+                          </button>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </>
+              )}
+            </section>
+          )}
+
+          {!isLoadingData && view === 'clients' && (
+            <section className="admin-records-section" aria-label="Clients">
+              {filteredClients.length === 0 && (
+                <div className="admin-empty-state">
+                  <Globe2 size={28} />
+                  <h2>No clients found</h2>
+                  <p>Convert a lead when the project is confirmed, then save the client&apos;s website here.</p>
+                </div>
+              )}
+              {filteredClients.length > 0 && (
+                <>
+                  <div className="admin-table-shell admin-desktop-only">
+                    <table className="admin-data-table">
+                      <caption className="admin-sr-only">Clients</caption>
+                      <thead>
+                        <tr>
+                          <th scope="col">Contact</th>
+                          <th scope="col">Website</th>
+                          <th scope="col">Status</th>
+                          <th scope="col">Client since</th>
+                          <th scope="col"><span className="admin-sr-only">Actions</span></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredClients.map((client) => (
+                          <tr key={client.id}>
+                            <td>
+                              <div className="admin-table-contact">
+                                <strong>{client.contact.business || client.contact.name}</strong>
+                                {client.contact.business && <span>{client.contact.name}</span>}
+                                <a href={`mailto:${client.contact.email}`}>{client.contact.email}</a>
+                              </div>
+                            </td>
+                            <td>
+                              {client.websiteUrl ? (
+                                <a
+                                  className="admin-website-link"
+                                  href={client.websiteUrl}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  {websiteLabel(client.websiteUrl)}
+                                  <ExternalLink size={14} />
+                                </a>
+                              ) : (
+                                <span className="admin-website-missing">Website not added</span>
+                              )}
+                            </td>
+                            <td>
+                              <select
+                                className="admin-compact-select"
+                                aria-label={`Status for ${client.contact.business || client.contact.name}`}
+                                value={client.status}
+                                disabled={busyRecordId === client.id}
+                                onChange={(event) => (
+                                  changeClientStatus(client.id, event.target.value as ClientStatus)
+                                )}
+                              >
+                                {clientStatuses.map((status) => (
+                                  <option key={status.value} value={status.value}>{status.label}</option>
+                                ))}
+                              </select>
+                            </td>
+                            <td className="admin-table-date">{formatDate(client.createdAt)}</td>
+                            <td>
+                              <div className="admin-row-actions">
+                                <a className="admin-row-button" href={`mailto:${client.contact.email}`}>
+                                  <Mail size={15} />
+                                  Email
+                                </a>
+                                <button
+                                  className="admin-row-button is-primary"
+                                  type="button"
+                                  onClick={() => setSelectedClientId(client.id)}
+                                >
+                                  <Pencil size={15} />
+                                  {client.websiteUrl ? 'Edit site' : 'Add site'}
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="admin-mobile-list admin-mobile-only">
+                    {filteredClients.map((client) => (
+                      <article className="admin-mobile-record" key={client.id}>
+                        <div className="admin-mobile-record-topline">
+                          <span className={`admin-type-badge is-${client.submissionType}`}>
+                            {submissionTypeLabel(client.submissionType)}
+                          </span>
+                          <span className="admin-record-date">Client since {formatDate(client.createdAt)}</span>
+                        </div>
+                        <div className="admin-mobile-record-heading">
+                          <div>
+                            <h2>{client.contact.business || client.contact.name}</h2>
+                            {client.contact.business && <p>{client.contact.name}</p>}
+                          </div>
+                        </div>
+                        <a className="admin-mobile-email" href={`mailto:${client.contact.email}`}>
+                          {client.contact.email}
+                        </a>
+                        {client.websiteUrl ? (
+                          <a
+                            className="admin-website-link admin-mobile-website"
+                            href={client.websiteUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {websiteLabel(client.websiteUrl)}
+                            <ExternalLink size={14} />
+                          </a>
+                        ) : (
+                          <span className="admin-website-missing admin-mobile-website">Website not added</span>
+                        )}
+                        <div className="admin-mobile-actions">
+                          <select
+                            className="admin-compact-select"
+                            aria-label={`Status for ${client.contact.business || client.contact.name}`}
+                            value={client.status}
+                            disabled={busyRecordId === client.id}
+                            onChange={(event) => (
+                              changeClientStatus(client.id, event.target.value as ClientStatus)
+                            )}
+                          >
+                            {clientStatuses.map((status) => (
+                              <option key={status.value} value={status.value}>{status.label}</option>
+                            ))}
+                          </select>
+                          <a className="admin-row-button" href={`mailto:${client.contact.email}`}>
+                            <Mail size={15} />
+                            Email
+                          </a>
+                          <button
+                            className="admin-row-button is-primary"
+                            type="button"
+                            onClick={() => setSelectedClientId(client.id)}
+                          >
+                            <Pencil size={15} />
+                            {client.websiteUrl ? 'Edit site' : 'Add site'}
+                          </button>
                         </div>
                       </article>
                     ))}
@@ -989,6 +1490,15 @@ function AdminPage() {
           onClose={closeSubmission}
           onAddLead={addSubmissionAsLead}
           onToggleWinner={togglePromotionWinner}
+        />
+      )}
+
+      {selectedClient && (
+        <ClientWebsiteModal
+          client={selectedClient}
+          isBusy={busyRecordId === selectedClient.id}
+          onClose={closeClientWebsite}
+          onSave={saveClientWebsite}
         />
       )}
     </div>
