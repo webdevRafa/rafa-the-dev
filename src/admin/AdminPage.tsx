@@ -172,6 +172,10 @@ function websiteLabel(value: string) {
   }
 }
 
+function TabCount({ value }: { value: number }) {
+  return <span className={value === 0 ? 'is-empty' : ''}>{value}</span>
+}
+
 function ContactLinks({ contact }: { contact: Contact }) {
   return (
     <div className="admin-contact-links">
@@ -1005,7 +1009,7 @@ function AdminPage() {
             >
               <Inbox size={17} />
               Submissions
-              <span>{submissions.length}</span>
+              <TabCount value={submissions.length} />
             </button>
             <button
               className={view === 'leads' ? 'is-active' : ''}
@@ -1014,7 +1018,7 @@ function AdminPage() {
             >
               <BriefcaseBusiness size={17} />
               Leads
-              <span>{leads.length}</span>
+              <TabCount value={leads.length} />
             </button>
             <button
               className={view === 'clients' ? 'is-active' : ''}
@@ -1023,7 +1027,7 @@ function AdminPage() {
             >
               <Users size={17} />
               Clients
-              <span>{clients.length}</span>
+              <TabCount value={clients.length} />
             </button>
           </nav>
 

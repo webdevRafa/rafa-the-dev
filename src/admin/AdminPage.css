@@ -355,6 +355,14 @@
   font: 600 0.58rem/1 var(--mono, monospace);
 }
 
+.admin-tabs button > span.is-empty {
+  display: inline;
+  min-width: 0;
+  height: auto;
+  color: var(--muted-dark, #687068);
+  background: transparent;
+}
+
 .admin-controls {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -1222,8 +1230,20 @@
     grid-template-columns: 1fr;
   }
 
+  .admin-mobile-actions {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
   .admin-mobile-actions .admin-compact-select {
-    flex: 1 0 100%;
+    width: 135px;
+    min-width: 0;
+    max-width: 100%;
+    flex: 0 0 135px;
+  }
+
+  .admin-mobile-actions .admin-row-button {
+    flex: 1 1 auto;
   }
 
   .admin-website-modal {
