@@ -27,6 +27,7 @@ import {
   CircleUserRound,
   ExternalLink,
   Eye,
+  EyeOff,
   Globe2,
   Inbox,
   LogOut,
@@ -436,6 +437,7 @@ function AdminPage() {
   const [adminEmail, setAdminEmail] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const [loginError, setLoginError] = useState('')
   const [loginNotice, setLoginNotice] = useState('')
   const [isSigningIn, setIsSigningIn] = useState(false)
@@ -647,6 +649,7 @@ function AdminPage() {
     try {
       await signInWithEmailAndPassword(auth, email.trim(), password)
       setPassword('')
+      setIsPasswordVisible(false)
     } catch (error) {
       console.error('Admin sign-in failed.', error)
       setLoginError('Sign-in failed. Check your email, password, and admin access, then try again.')
@@ -908,16 +911,27 @@ function AdminPage() {
                 required
               />
             </label>
-            <label>
-              Password
-              <input
-                type="password"
-                autoComplete="current-password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                required
-              />
-            </label>
+            <div className="admin-login-field">
+              <label htmlFor="admin-password">Password</label>
+              <span className="admin-password-field">
+                <input
+                  id="admin-password"
+                  type={isPasswordVisible ? 'text' : 'password'}
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  aria-label={isPasswordVisible ? 'Hide password' : 'Show password'}
+                  aria-pressed={isPasswordVisible}
+                  onClick={() => setIsPasswordVisible((currentValue) => !currentValue)}
+                >
+                  {isPasswordVisible ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </span>
+            </div>
             {loginError && <p className="admin-form-message is-error" role="alert">{loginError}</p>}
             {loginNotice && <p className="admin-form-message is-success" role="status">{loginNotice}</p>}
             <button className="admin-primary-button" type="submit" disabled={isSigningIn}>

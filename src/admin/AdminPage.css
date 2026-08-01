@@ -97,6 +97,11 @@
   text-transform: uppercase;
 }
 
+.admin-login-field {
+  display: grid;
+  gap: 0.55rem;
+}
+
 .admin-login-form input,
 .admin-controls input,
 .admin-controls select,
@@ -114,6 +119,43 @@
   padding: 0.85rem 1rem;
   font: 400 0.82rem/1.4 'Manrope', sans-serif;
   text-transform: none;
+}
+
+.admin-password-field {
+  display: block;
+  position: relative;
+}
+
+.admin-password-field input {
+  padding-right: 3.5rem;
+}
+
+.admin-password-field button {
+  display: grid;
+  position: absolute;
+  top: 50%;
+  right: 0.25rem;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  transform: translateY(-50%);
+  place-items: center;
+  border: 1px solid var(--lime, #d8ff65);
+  color: var(--lime, #d8ff65);
+  background: rgba(216, 255, 101, 0.035);
+  cursor: pointer;
+  transition: color 150ms ease, background-color 150ms ease;
+}
+
+.admin-password-field button:hover,
+.admin-password-field button:focus-visible {
+  color: var(--ink, #0b0d0c);
+  background: var(--lime, #d8ff65);
+}
+
+.admin-password-field button:focus-visible {
+  outline: 2px solid var(--paper, #f2f1e9);
+  outline-offset: 2px;
 }
 
 .admin-login-form input:focus,
