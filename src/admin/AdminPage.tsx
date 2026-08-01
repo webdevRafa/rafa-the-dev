@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import {
   onAuthStateChanged,
@@ -8,6 +8,7 @@ import {
 } from 'firebase/auth'
 import {
   collection,
+  deleteField,
   doc,
   limit,
   onSnapshot,
@@ -24,14 +25,17 @@ import {
   BriefcaseBusiness,
   Check,
   CircleUserRound,
+  Eye,
   Gift,
   Inbox,
   LogOut,
   Mail,
   Search,
   ShieldCheck,
+  Trophy,
   UserPlus,
   Users,
+  X,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { auth, db } from '../firebase/firebaseConfig'
@@ -66,6 +70,7 @@ type Submission = {
   submittedAt?: Timestamp
   updatedAt?: Timestamp
   leadId?: string
+  promotionOutcome?: 'winner'
   contact: Contact
   source: SubmissionSource
   payload: Record<string, unknown>
@@ -119,6 +124,11 @@ function submissionTypeLabel(type: Submission['submissionType']) {
   return type === 'project_inquiry' ? 'Project inquiry' : 'Free website application'
 }
 
+function submissionStatusLabel(submission: Submission) {
+  if (submission.promotionOutcome === 'winner') return 'Winner'
+  return formatLabel(submission.status)
+}
+
 function ContactLinks({ contact }: { contact: Contact }) {
   return (
     <div className="admin-contact-links">
@@ -147,6 +157,124 @@ function SubmissionPayload({ payload }: { payload: Record<string, unknown> }) {
   )
 }
 
+function SubmissionModal({
+  submission,
+  isLead,
+  isBusy,
+  onClose,
+  onAddLead,
+  onToggleWinner,
+}: {
+  submission: Submission
+  isLead: boolean
+  isBusy: boolean
+  onClose: () => void
+  onAddLead: (submission: Submission) => void
+  onToggleWinner: (submission: Submission) => void
+}) {
+  const closeButtonReference = useRef<HTMLButtonElement>(null)
+  const isWinner = submission.promotionOutcome === 'winner'
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose()
+    }
+
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', handleEscape)
+    closeButtonReference.current?.focus()
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', handleEscape)
+    }
+  }, [onClose])
+
+  return (
+    <div
+      className="admin-modal-backdrop"
+      role="presentation"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose()
+      }}
+    >
+      <section
+        className="admin-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="submission-modal-title"
+      >
+        <header className="admin-modal-header">
+          <div>
+            <span className={`admin-type-badge is-${submission.submissionType}`}>
+              {submissionTypeLabel(submission.submissionType)}
+            </span>
+            <span className="admin-record-date">{formatDate(submission.submittedAt)}</span>
+          </div>
+          <button
+            ref={closeButtonReference}
+            className="admin-icon-button"
+            type="button"
+            aria-label="Close submission"
+            onClick={onClose}
+          >
+            <X size={19} />
+          </button>
+        </header>
+
+        <div className="admin-modal-body">
+          <div className="admin-modal-title-row">
+            <div>
+              <p className="admin-modal-person">{submission.contact.name}</p>
+              <h2 id="submission-modal-title">
+                {submission.contact.business || submission.contact.name}
+              </h2>
+            </div>
+            <span className={`admin-status-badge is-${isWinner ? 'winner' : submission.status}`}>
+              {submissionStatusLabel(submission)}
+            </span>
+          </div>
+
+          <ContactLinks contact={submission.contact} />
+          <SubmissionPayload payload={submission.payload} />
+        </div>
+
+        <footer
+          className={`admin-modal-actions ${
+            submission.submissionType === 'free_website_application' ? 'has-winner-action' : ''
+          }`}
+        >
+          <a className="admin-secondary-button" href={`mailto:${submission.contact.email}`}>
+            <Mail size={16} />
+            Email
+          </a>
+          {submission.submissionType === 'free_website_application' && (
+            <button
+              className={`admin-secondary-button ${isWinner ? 'is-winner' : ''}`}
+              type="button"
+              disabled={isBusy}
+              onClick={() => onToggleWinner(submission)}
+            >
+              <Trophy size={16} />
+              {isWinner ? 'Remove winner' : 'Mark winner'}
+            </button>
+          )}
+          <button
+            className="admin-primary-button"
+            type="button"
+            disabled={isLead || isBusy}
+            onClick={() => onAddLead(submission)}
+          >
+            {isLead ? <Check size={17} /> : <UserPlus size={17} />}
+            {isLead ? 'Added to leads' : isBusy ? 'Adding...' : 'Add to leads'}
+          </button>
+        </footer>
+      </section>
+    </div>
+  )
+}
+
 function AdminPage() {
   const [accessState, setAccessState] = useState<AccessState>('checking')
   const [adminEmail, setAdminEmail] = useState('')
@@ -163,6 +291,7 @@ function AdminPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [submissionFilter, setSubmissionFilter] = useState<SubmissionFilter>('all')
   const [busyRecordId, setBusyRecordId] = useState('')
+  const [selectedSubmissionId, setSelectedSubmissionId] = useState('')
 
   useEffect(() => {
     const previousTitle = document.title
@@ -260,6 +389,11 @@ function AdminPage() {
   }, [accessState])
 
   const leadIds = useMemo(() => new Set(leads.map((lead) => lead.submissionId)), [leads])
+  const selectedSubmission = useMemo(
+    () => submissions.find((submission) => submission.id === selectedSubmissionId),
+    [selectedSubmissionId, submissions],
+  )
+  const closeSubmission = useCallback(() => setSelectedSubmissionId(''), [])
 
   const filteredSubmissions = useMemo(() => {
     const search = searchTerm.trim().toLowerCase()
@@ -403,6 +537,27 @@ function AdminPage() {
     }
   }
 
+  const togglePromotionWinner = async (submission: Submission) => {
+    const currentUser = auth.currentUser
+    if (!currentUser || busyRecordId) return
+
+    setBusyRecordId(submission.id)
+    setDataError('')
+
+    try {
+      await updateDoc(doc(db, 'submissions', submission.id), {
+        promotionOutcome: submission.promotionOutcome === 'winner' ? deleteField() : 'winner',
+        updatedAt: serverTimestamp(),
+        updatedBy: currentUser.uid,
+      })
+    } catch (error) {
+      console.error('Unable to update promotion winner.', error)
+      setDataError('The winner status could not be updated. Please try again.')
+    } finally {
+      setBusyRecordId('')
+    }
+  }
+
   if (accessState === 'checking') {
     return (
       <main className="admin-auth-shell" id="main">
@@ -487,6 +642,13 @@ function AdminPage() {
   const promotionCount = submissions.filter(
     (submission) => submission.submissionType === 'free_website_application',
   ).length
+  const openLeadCount = leads.filter((lead) => !['won', 'lost'].includes(lead.stage)).length
+  const freeSiteWinnerCount = submissions.filter(
+    (submission) => (
+      submission.submissionType === 'free_website_application'
+      && submission.promotionOutcome === 'winner'
+    ),
+  ).length
 
   return (
     <div className="admin-shell">
@@ -505,14 +667,6 @@ function AdminPage() {
       </header>
 
       <main className="admin-main" id="main">
-        <section className="admin-heading">
-          <div>
-            <p className="admin-eyebrow">CLIENT PIPELINE</p>
-            <h1>Opportunity dashboard</h1>
-          </div>
-          <p>Review every form submission, identify the strongest opportunities, and keep each lead moving.</p>
-        </section>
-
         <section className="admin-stats" aria-label="Dashboard overview">
           <article>
             <Inbox size={20} />
@@ -521,8 +675,8 @@ function AdminPage() {
           </article>
           <article>
             <Users size={20} />
-            <span>Active leads</span>
-            <strong>{leads.filter((lead) => !['won', 'lost'].includes(lead.stage)).length}</strong>
+            <span>Open leads</span>
+            <strong>{openLeadCount}</strong>
           </article>
           <article>
             <Gift size={20} />
@@ -530,9 +684,9 @@ function AdminPage() {
             <strong>{promotionCount}</strong>
           </article>
           <article>
-            <Check size={20} />
-            <span>Won opportunities</span>
-            <strong>{leads.filter((lead) => lead.stage === 'won').length}</strong>
+            <Trophy size={20} />
+            <span>Free site winners</span>
+            <strong>{freeSiteWinnerCount}</strong>
           </article>
         </section>
 
@@ -585,7 +739,7 @@ function AdminPage() {
           {isLoadingData && <p className="admin-data-message">Loading your workspace...</p>}
 
           {!isLoadingData && view === 'submissions' && (
-            <section className="admin-card-list" aria-label="Client submissions">
+            <section className="admin-records-section" aria-label="Client submissions">
               {filteredSubmissions.length === 0 && (
                 <div className="admin-empty-state">
                   <Inbox size={28} />
@@ -593,51 +747,130 @@ function AdminPage() {
                   <p>New project inquiries and promotion applications will appear here.</p>
                 </div>
               )}
-              {filteredSubmissions.map((submission) => {
-                const isLead = leadIds.has(submission.id) || Boolean(submission.leadId)
-                return (
-                  <article className="admin-record-card" key={submission.id}>
-                    <div className="admin-record-topline">
-                      <span className={`admin-type-badge is-${submission.submissionType}`}>
-                        {submissionTypeLabel(submission.submissionType)}
-                      </span>
-                      <span className="admin-record-date">{formatDate(submission.submittedAt)}</span>
-                    </div>
-                    <div className="admin-record-heading">
-                      <div>
-                        <h2>{submission.contact.business || submission.contact.name}</h2>
-                        <p>{submission.contact.name}</p>
-                      </div>
-                      <span className={`admin-status-badge is-${submission.status}`}>{submission.status}</span>
-                    </div>
-                    <ContactLinks contact={submission.contact} />
-                    <details className="admin-details">
-                      <summary>Review full submission</summary>
-                      <SubmissionPayload payload={submission.payload} />
-                    </details>
-                    <div className="admin-record-actions">
-                      <a className="admin-secondary-button" href={`mailto:${submission.contact.email}`}>
-                        <Mail size={16} />
-                        Email client
-                      </a>
-                      <button
-                        className="admin-primary-button"
-                        type="button"
-                        disabled={isLead || busyRecordId === submission.id}
-                        onClick={() => addSubmissionAsLead(submission)}
-                      >
-                        {isLead ? <Check size={17} /> : <UserPlus size={17} />}
-                        {isLead ? 'Added to leads' : busyRecordId === submission.id ? 'Adding...' : 'Add to leads'}
-                      </button>
-                    </div>
-                  </article>
-                )
-              })}
+              {filteredSubmissions.length > 0 && (
+                <>
+                  <div className="admin-table-shell admin-desktop-only">
+                    <table className="admin-data-table">
+                      <caption className="admin-sr-only">Client form submissions</caption>
+                      <thead>
+                        <tr>
+                          <th scope="col">Contact</th>
+                          <th scope="col">Type</th>
+                          <th scope="col">Submitted</th>
+                          <th scope="col">Status</th>
+                          <th scope="col"><span className="admin-sr-only">Actions</span></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredSubmissions.map((submission) => {
+                          const isLead = leadIds.has(submission.id) || Boolean(submission.leadId)
+                          const isBusy = busyRecordId === submission.id
+                          const isWinner = submission.promotionOutcome === 'winner'
+
+                          return (
+                            <tr key={submission.id}>
+                              <td>
+                                <div className="admin-table-contact">
+                                  <strong>{submission.contact.business || submission.contact.name}</strong>
+                                  {submission.contact.business && <span>{submission.contact.name}</span>}
+                                  <a href={`mailto:${submission.contact.email}`}>{submission.contact.email}</a>
+                                </div>
+                              </td>
+                              <td>
+                                <span className={`admin-type-badge is-${submission.submissionType}`}>
+                                  {submissionTypeLabel(submission.submissionType)}
+                                </span>
+                              </td>
+                              <td className="admin-table-date">{formatDate(submission.submittedAt)}</td>
+                              <td>
+                                <span className={`admin-status-badge is-${isWinner ? 'winner' : submission.status}`}>
+                                  {submissionStatusLabel(submission)}
+                                </span>
+                              </td>
+                              <td>
+                                <div className="admin-row-actions">
+                                  <button
+                                    className="admin-row-button"
+                                    type="button"
+                                    onClick={() => setSelectedSubmissionId(submission.id)}
+                                  >
+                                    <Eye size={15} />
+                                    Review
+                                  </button>
+                                  <button
+                                    className="admin-row-button is-primary"
+                                    type="button"
+                                    disabled={isLead || isBusy}
+                                    onClick={() => addSubmissionAsLead(submission)}
+                                  >
+                                    {isLead ? <Check size={15} /> : <UserPlus size={15} />}
+                                    {isLead ? 'Added' : isBusy ? 'Adding...' : 'Add lead'}
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          )
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="admin-mobile-list admin-mobile-only">
+                    {filteredSubmissions.map((submission) => {
+                      const isLead = leadIds.has(submission.id) || Boolean(submission.leadId)
+                      const isBusy = busyRecordId === submission.id
+                      const isWinner = submission.promotionOutcome === 'winner'
+
+                      return (
+                        <article className="admin-mobile-record" key={submission.id}>
+                          <div className="admin-mobile-record-topline">
+                            <span className={`admin-type-badge is-${submission.submissionType}`}>
+                              {submissionTypeLabel(submission.submissionType)}
+                            </span>
+                            <span className="admin-record-date">{formatDate(submission.submittedAt)}</span>
+                          </div>
+                          <div className="admin-mobile-record-heading">
+                            <div>
+                              <h2>{submission.contact.business || submission.contact.name}</h2>
+                              {submission.contact.business && <p>{submission.contact.name}</p>}
+                            </div>
+                            <span className={`admin-status-badge is-${isWinner ? 'winner' : submission.status}`}>
+                              {submissionStatusLabel(submission)}
+                            </span>
+                          </div>
+                          <a className="admin-mobile-email" href={`mailto:${submission.contact.email}`}>
+                            {submission.contact.email}
+                          </a>
+                          <div className="admin-mobile-actions">
+                            <button
+                              className="admin-row-button"
+                              type="button"
+                              onClick={() => setSelectedSubmissionId(submission.id)}
+                            >
+                              <Eye size={15} />
+                              Review
+                            </button>
+                            <button
+                              className="admin-row-button is-primary"
+                              type="button"
+                              disabled={isLead || isBusy}
+                              onClick={() => addSubmissionAsLead(submission)}
+                            >
+                              {isLead ? <Check size={15} /> : <UserPlus size={15} />}
+                              {isLead ? 'Added' : isBusy ? 'Adding...' : 'Add lead'}
+                            </button>
+                          </div>
+                        </article>
+                      )
+                    })}
+                  </div>
+                </>
+              )}
             </section>
           )}
 
           {!isLoadingData && view === 'leads' && (
-            <section className="admin-card-list" aria-label="Lead pipeline">
+            <section className="admin-records-section" aria-label="Lead pipeline">
               {filteredLeads.length === 0 && (
                 <div className="admin-empty-state">
                   <BriefcaseBusiness size={28} />
@@ -645,50 +878,119 @@ function AdminPage() {
                   <p>Add a qualified submission to begin building your pipeline.</p>
                 </div>
               )}
-              {filteredLeads.map((lead) => (
-                <article className="admin-record-card admin-lead-card" key={lead.id}>
-                  <div className="admin-record-topline">
-                    <span className={`admin-type-badge is-${lead.submissionType}`}>
-                      {submissionTypeLabel(lead.submissionType)}
-                    </span>
-                    <span className="admin-record-date">Added {formatDate(lead.createdAt)}</span>
-                  </div>
-                  <div className="admin-record-heading">
-                    <div>
-                      <h2>{lead.contact.business || lead.contact.name}</h2>
-                      <p>{lead.contact.name}</p>
-                    </div>
-                    <label className="admin-stage-select">
-                      <span>Pipeline stage</span>
-                      <select
-                        value={lead.stage}
-                        disabled={busyRecordId === lead.id}
-                        onChange={(event) => changeLeadStage(lead.id, event.target.value as LeadStage)}
-                      >
-                        {leadStages.map((stage) => (
-                          <option key={stage.value} value={stage.value}>{stage.label}</option>
+              {filteredLeads.length > 0 && (
+                <>
+                  <div className="admin-table-shell admin-desktop-only">
+                    <table className="admin-data-table">
+                      <caption className="admin-sr-only">Lead pipeline</caption>
+                      <thead>
+                        <tr>
+                          <th scope="col">Contact</th>
+                          <th scope="col">Source</th>
+                          <th scope="col">Stage</th>
+                          <th scope="col">Updated</th>
+                          <th scope="col"><span className="admin-sr-only">Actions</span></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredLeads.map((lead) => (
+                          <tr key={lead.id}>
+                            <td>
+                              <div className="admin-table-contact">
+                                <strong>{lead.contact.business || lead.contact.name}</strong>
+                                {lead.contact.business && <span>{lead.contact.name}</span>}
+                                <a href={`mailto:${lead.contact.email}`}>{lead.contact.email}</a>
+                              </div>
+                            </td>
+                            <td>
+                              <span className={`admin-type-badge is-${lead.submissionType}`}>
+                                {submissionTypeLabel(lead.submissionType)}
+                              </span>
+                              {lead.source.campaignId && (
+                                <span className="admin-table-campaign">{lead.source.campaignId}</span>
+                              )}
+                            </td>
+                            <td>
+                              <select
+                                className="admin-compact-select"
+                                aria-label={`Pipeline stage for ${lead.contact.business || lead.contact.name}`}
+                                value={lead.stage}
+                                disabled={busyRecordId === lead.id}
+                                onChange={(event) => changeLeadStage(lead.id, event.target.value as LeadStage)}
+                              >
+                                {leadStages.map((stage) => (
+                                  <option key={stage.value} value={stage.value}>{stage.label}</option>
+                                ))}
+                              </select>
+                            </td>
+                            <td className="admin-table-date">{formatDate(lead.updatedAt)}</td>
+                            <td>
+                              <a className="admin-row-button" href={`mailto:${lead.contact.email}`}>
+                                <Mail size={15} />
+                                Email
+                              </a>
+                            </td>
+                          </tr>
                         ))}
-                      </select>
-                    </label>
+                      </tbody>
+                    </table>
                   </div>
-                  <ContactLinks contact={lead.contact} />
-                  <div className="admin-lead-meta">
-                    <span>Submission: {lead.submissionId}</span>
-                    {lead.source.campaignId && <span>Campaign: {lead.source.campaignId}</span>}
-                    <span>Updated: {formatDate(lead.updatedAt)}</span>
+
+                  <div className="admin-mobile-list admin-mobile-only">
+                    {filteredLeads.map((lead) => (
+                      <article className="admin-mobile-record" key={lead.id}>
+                        <div className="admin-mobile-record-topline">
+                          <span className={`admin-type-badge is-${lead.submissionType}`}>
+                            {submissionTypeLabel(lead.submissionType)}
+                          </span>
+                          <span className="admin-record-date">{formatDate(lead.updatedAt)}</span>
+                        </div>
+                        <div className="admin-mobile-record-heading">
+                          <div>
+                            <h2>{lead.contact.business || lead.contact.name}</h2>
+                            {lead.contact.business && <p>{lead.contact.name}</p>}
+                          </div>
+                        </div>
+                        <a className="admin-mobile-email" href={`mailto:${lead.contact.email}`}>
+                          {lead.contact.email}
+                        </a>
+                        <div className="admin-mobile-actions">
+                          <select
+                            className="admin-compact-select"
+                            aria-label={`Pipeline stage for ${lead.contact.business || lead.contact.name}`}
+                            value={lead.stage}
+                            disabled={busyRecordId === lead.id}
+                            onChange={(event) => changeLeadStage(lead.id, event.target.value as LeadStage)}
+                          >
+                            {leadStages.map((stage) => (
+                              <option key={stage.value} value={stage.value}>{stage.label}</option>
+                            ))}
+                          </select>
+                          <a className="admin-row-button" href={`mailto:${lead.contact.email}`}>
+                            <Mail size={15} />
+                            Email
+                          </a>
+                        </div>
+                      </article>
+                    ))}
                   </div>
-                  <div className="admin-record-actions">
-                    <a className="admin-primary-button" href={`mailto:${lead.contact.email}`}>
-                      <Mail size={16} />
-                      Contact lead
-                    </a>
-                  </div>
-                </article>
-              ))}
+                </>
+              )}
             </section>
           )}
         </div>
       </main>
+
+      {selectedSubmission && (
+        <SubmissionModal
+          submission={selectedSubmission}
+          isLead={leadIds.has(selectedSubmission.id) || Boolean(selectedSubmission.leadId)}
+          isBusy={busyRecordId === selectedSubmission.id}
+          onClose={closeSubmission}
+          onAddLead={addSubmissionAsLead}
+          onToggleWinner={togglePromotionWinner}
+        />
+      )}
     </div>
   )
 }
