@@ -121,5 +121,14 @@ service cloud.firestore {
 
       allow read, update, delete: if isAdmin();
     }
+
+    match /users/{userId} {
+      allow get: if isAdmin() || (request.auth != null && request.auth.uid == userId);
+      allow list, create, update, delete: if isAdmin();
+    }
+
+    match /leads/{leadId} {
+      allow read, write: if isAdmin();
+    }
   }
 }
