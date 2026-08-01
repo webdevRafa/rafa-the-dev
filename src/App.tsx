@@ -21,7 +21,6 @@ import {
   Copy,
   Database,
   Gauge,
-  MessageSquare,
   ShieldCheck,
   Users,
   Workflow,
@@ -791,10 +790,6 @@ function App() {
               You do not need a finished technical plan. We can start with the
               problem and define the right first version together.
             </p>
-            <div className="contact-note flex items-start">
-              <MessageSquare size={20} />
-              <span>I’ll stay involved from our first conversation through launch.</span>
-            </div>
           </Reveal>
 
           <Reveal className="inquiry-panel" delay={0.1}>
