@@ -1,0 +1,138 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null && request.auth.token.admin == true;
+    }
+
+    function hasExactFields(data, fields) {
+      return data.keys().hasAll(fields) && data.keys().hasOnly(fields);
+    }
+
+    function isShortString(value, maximumLength) {
+      return value is string && value.size() <= maximumLength;
+    }
+
+    function hasValidBaseFields() {
+      let data = request.resource.data;
+      return hasExactFields(
+          data,
+          ['schemaVersion', 'submissionType', 'status', 'submittedAt', 'source', 'contact', 'payload']
+        )
+        && data.schemaVersion == 1
+        && data.submissionType in ['project_inquiry', 'free_website_application']
+        && data.status == 'new'
+        && data.submittedAt == request.time
+        && data.source is map
+        && data.contact is map
+        && data.payload is map;
+    }
+
+    function hasValidSource() {
+      let source = request.resource.data.source;
+      return hasExactFields(source, ['site', 'route', 'formId', 'campaignId'])
+        && source.site == 'rafa-the-dev'
+        && source.route in ['/', '/free-website']
+        && source.formId in ['homepage-project-inquiry', 'free-website-application']
+        && isShortString(source.campaignId, 100);
+    }
+
+    function hasValidContact() {
+      let contact = request.resource.data.contact;
+      return hasExactFields(contact, ['name', 'email', 'business', 'phone', 'location', 'instagram'])
+        && isShortString(contact.name, 120)
+        && contact.name.size() > 0
+        && isShortString(contact.email, 254)
+        && contact.email.size() > 3
+        && isShortString(contact.business, 160)
+        && isShortString(contact.phone, 40)
+        && isShortString(contact.location, 160)
+        && isShortString(contact.instagram, 80);
+    }
+
+    function hasValidProjectInquiry() {
+      let data = request.resource.data;
+      let payload = data.payload;
+      return data.submissionType == 'project_inquiry'
+        && data.source.route == '/'
+        && data.source.formId == 'homepage-project-inquiry'
+        && data.source.campaignId == ''
+        && hasExactFields(payload, ['capabilities', 'message', 'timing', 'budget'])
+        && payload.capabilities is list
+        && payload.capabilities.size() <= 9
+        && isShortString(payload.message, 5000)
+        && payload.message.size() > 0
+        && isShortString(payload.timing, 80)
+        && isShortString(payload.budget, 80);
+    }
+
+    function hasValidFreeWebsiteApplication() {
+      let data = request.resource.data;
+      let payload = data.payload;
+      return data.submissionType == 'free_website_application'
+        && data.source.route == '/free-website'
+        && data.source.formId == 'free-website-application'
+        && data.source.campaignId.size() > 0
+        && data.contact.business.size() > 0
+        && data.contact.location.size() > 0
+        && data.contact.instagram.size() > 0
+        && hasExactFields(
+          payload,
+          [
+            'projectType',
+            'currentPresence',
+            'story',
+            'impact',
+            'audience',
+            'scope',
+            'visitorAction',
+            'contentReadiness',
+            'notes',
+            'followsInstagram',
+            'scopeAcknowledged'
+          ]
+        )
+        && isShortString(payload.projectType, 100)
+        && payload.projectType.size() > 0
+        && isShortString(payload.currentPresence, 500)
+        && isShortString(payload.story, 8000)
+        && payload.story.size() > 0
+        && isShortString(payload.impact, 5000)
+        && payload.impact.size() > 0
+        && isShortString(payload.audience, 5000)
+        && payload.audience.size() > 0
+        && payload.scope is list
+        && payload.scope.size() <= 8
+        && isShortString(payload.visitorAction, 100)
+        && payload.visitorAction.size() > 0
+        && isShortString(payload.contentReadiness, 100)
+        && payload.contentReadiness.size() > 0
+        && isShortString(payload.notes, 5000)
+        && payload.followsInstagram == true
+        && payload.scopeAcknowledged == true;
+    }
+
+    match /submissions/{submissionId} {
+      allow create: if hasValidBaseFields()
+        && hasValidSource()
+        && hasValidContact()
+        && (hasValidProjectInquiry() || hasValidFreeWebsiteApplication());
+
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /users/{userId} {
+      allow get: if isAdmin() || (request.auth != null && request.auth.uid == userId);
+      allow list, create, update, delete: if isAdmin();
+    }
+
+    match /leads/{leadId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /clients/{clientId} {
+      allow read, write: if isAdmin();
+    }
+  }
+}

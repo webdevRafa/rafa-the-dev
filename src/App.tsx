@@ -296,6 +296,8 @@ function App() {
   const [briefReady, setBriefReady] = useState(false)
   const [briefCopied, setBriefCopied] = useState(false)
   const [projectBrief, setProjectBrief] = useState('')
+  const [isSubmittingBrief, setIsSubmittingBrief] = useState(false)
+  const [briefSubmitError, setBriefSubmitError] = useState('')
   const reduceMotion = useReducedMotion()
   const portraitRef = useRef<HTMLDivElement>(null)
   const processIntroRef = useRef<HTMLDivElement>(null)
@@ -346,29 +348,54 @@ function App() {
     mass: 0.35,
   })
 
-  const buildBrief = (event: FormEvent<HTMLFormElement>) => {
+  const buildBrief = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (isSubmittingBrief) return
+
     const form = new FormData(event.currentTarget)
-    const capabilities = form.getAll('capabilities').join(', ')
+    const getValue = (name: string) => String(form.get(name) ?? '')
+    const capabilities = form.getAll('capabilities').map(String)
     const brief = [
       'PROJECT INQUIRY — RAFATHEDEV.COM',
       '',
-      `Name: ${form.get('name')}`,
-      `Email: ${form.get('email')}`,
-      `Business: ${form.get('business') || 'Not provided'}`,
-      `Project type: ${capabilities || 'Not sure yet'}`,
-      `Timing: ${form.get('timing')}`,
-      `Budget: ${form.get('budget')}`,
+      `Name: ${getValue('name')}`,
+      `Email: ${getValue('email')}`,
+      `Business: ${getValue('business') || 'Not provided'}`,
+      `Project type: ${capabilities.join(', ') || 'Not sure yet'}`,
+      `Timing: ${getValue('timing') || 'Not provided'}`,
+      `Budget: ${getValue('budget') || 'Not provided'}`,
       '',
       'What I want to build or improve:',
-      String(form.get('message')),
+      getValue('message'),
       '',
       'Lead source: rafathedev',
     ].join('\n')
 
-    setProjectBrief(brief)
-    setBriefReady(true)
-    setBriefCopied(false)
+    setIsSubmittingBrief(true)
+    setBriefSubmitError('')
+
+    try {
+      const { submitProjectInquiry } = await import('./firebase/submissions')
+      await submitProjectInquiry({
+        name: getValue('name'),
+        email: getValue('email'),
+        business: getValue('business'),
+        capabilities,
+        message: getValue('message'),
+        timing: getValue('timing'),
+        budget: getValue('budget'),
+      })
+      setProjectBrief(brief)
+      setBriefReady(true)
+      setBriefCopied(false)
+    } catch (error) {
+      console.error('Unable to save project inquiry.', error)
+      setBriefSubmitError(
+        'Your project could not be sent right now. Please check your connection and try again.',
+      )
+    } finally {
+      setIsSubmittingBrief(false)
+    }
   }
 
   const copyBrief = async () => {
@@ -775,6 +802,7 @@ function App() {
                 key="inquiry-form"
                 className="flex flex-col"
                 onSubmit={buildBrief}
+                aria-busy={isSubmittingBrief}
                 initial={reduceMotion ? false : { opacity: 0, x: -18 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={reduceMotion ? undefined : { opacity: 0, x: -18 }}
@@ -838,13 +866,21 @@ function App() {
                     </select>
                   </label>
                 </div>
-                <button className="button button-primary form-submit" type="submit">
-                  Prepare my project brief
+                <button
+                  className="button button-primary form-submit"
+                  type="submit"
+                  disabled={isSubmittingBrief}
+                >
+                  {isSubmittingBrief ? 'Sending your project...' : 'Send my project inquiry'}
                   <ArrowUpRight size={18} />
                 </button>
+                {briefSubmitError && (
+                  <p className="form-error" role="alert">
+                    {briefSubmitError}
+                  </p>
+                )}
                 <p className="form-disclaimer">
-                  No account required. Your details stay in your browser until you
-                  choose how to send them.
+                  No account required. Your details are securely submitted so I can follow up.
                 </p>
               </motion.form>
             ) : (
@@ -865,11 +901,12 @@ function App() {
                 >
                   <Check size={27} />
                 </motion.div>
-                <p className="section-kicker">YOUR BRIEF IS READY</p>
-                <h3>Let’s continue on Instagram.</h3>
+                <p className="section-kicker">YOUR PROJECT WAS RECEIVED</p>
+                <h3>Thanks for sharing your idea.</h3>
                 <p>
-                  Copy your structured project brief, then open Instagram and paste it
-                  into a message to <strong>@rafathedev</strong>.
+                  Your project details are saved and ready for review. If you would also like
+                  to introduce yourself on Instagram, copy the brief and message
+                  <strong> @rafathedev</strong>.
                 </p>
                 <textarea value={projectBrief} readOnly rows={10} aria-label="Generated project brief" />
                 <div className="brief-actions flex">
@@ -888,7 +925,7 @@ function App() {
                   </a>
                 </div>
                 <button className="start-over" type="button" onClick={() => setBriefReady(false)}>
-                  Edit my answers
+                  Submit another project
                 </button>
               </motion.div>
             )}
