@@ -2,6 +2,8 @@
 
 Both public forms write to a single top-level `submissions` collection. A shared collection creates one operational inbox and makes it straightforward to query all new leads by status and submission time. Each document is discriminated by `submissionType`, while form-specific fields stay isolated inside `payload`.
 
+New submissions also trigger the Resend confirmation-email function. Setup and deployment instructions are in [`functions/README.md`](../functions/README.md). The function appends `emailDelivery.confirmation` metadata after creation; this server-owned operational data does not change the public create schema below.
+
 ```text
 submissions/{autoId}
   schemaVersion: 1

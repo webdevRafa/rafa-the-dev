@@ -8,6 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "functions:build": "npm --prefix functions run build",
+    "functions:test": "npm --prefix functions test",
     "seed:admin": "node scripts/seed-admin.mjs",
     "seed:uncle-admin": "node scripts/seed-uncle-admin.mjs"
   },
