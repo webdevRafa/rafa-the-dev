@@ -1428,15 +1428,32 @@ summary:focus-visible {
     inset: 68px 0 auto;
     display: flex;
     visibility: hidden;
-    min-height: calc(100svh - 68px);
+    height: calc(100vh - 68px);
+    height: calc(100dvh - 68px);
     flex-direction: column;
     align-items: stretch;
     gap: 0;
-    padding: 2rem 1.3rem;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    padding: 2rem 1.3rem calc(2rem + env(safe-area-inset-bottom));
     background: rgba(11, 13, 12, 0.98);
     opacity: 0;
     transform: translateY(-10px);
     transition: opacity 180ms ease, transform 180ms ease, visibility 180ms;
+  }
+
+  html.mobile-menu-open,
+  body.mobile-menu-open {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  body.mobile-menu-open {
+    position: fixed;
+    top: var(--mobile-menu-scroll-offset, 0);
+    right: 0;
+    left: 0;
+    width: 100%;
   }
 
   .nav-links.is-open {

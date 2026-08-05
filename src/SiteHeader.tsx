@@ -150,6 +150,25 @@ function SiteHeader() {
     return () => window.removeEventListener('keydown', closeOnEscape)
   }, [])
 
+  useEffect(() => {
+    if (!menuOpen) return
+
+    const root = document.documentElement
+    const body = document.body
+    const scrollPosition = window.scrollY
+
+    root.classList.add('mobile-menu-open')
+    body.classList.add('mobile-menu-open')
+    body.style.setProperty('--mobile-menu-scroll-offset', `-${scrollPosition}px`)
+
+    return () => {
+      root.classList.remove('mobile-menu-open')
+      body.classList.remove('mobile-menu-open')
+      body.style.removeProperty('--mobile-menu-scroll-offset')
+      window.scrollTo(0, scrollPosition)
+    }
+  }, [menuOpen])
+
   const closeMenu = () => setMenuOpen(false)
 
   return (
