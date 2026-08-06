@@ -266,42 +266,95 @@ function FreeWebsitePage() {
             </motion.div>
           </motion.div>
 
-          <motion.aside
-            className="giveaway-brief"
-            aria-label="Giveaway summary"
+          <motion.div
+            className="story-build-visual"
+            role="img"
+            aria-label="An original story being shaped into a custom website"
             initial={reduceMotion ? false : { opacity: 0, x: 38, filter: 'blur(7px)' }}
             animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
             transition={{ duration: 0.8, delay: 0.35, ease: revealEase }}
           >
-            <div className="giveaway-brief-body">
-              <p>ONE WINNER</p>
-              <strong>FULLY CUSTOM WEBSITE</strong>
-              <span>
-                Built from scratch around your story, your goals, and what you need.
-              </span>
-            </div>
-            <div className="giveaway-brief-grid">
-              <div>
-                <span>PRICE</span>
-                <strong>$0</strong>
-              </div>
-              <div>
-                <span>DELIVERABLE</span>
-                <strong>RESPONSIVE WEBSITE</strong>
-              </div>
-              <div>
-                <span>SELECTION BASED ON</span>
-                <strong>STORY + IMPACT</strong>
-              </div>
-              <div>
-                <span>MUST FOLLOW</span>
-                <strong className="giveaway-brief-instagram">
-                  <FaInstagram size={13} aria-hidden="true" />
-                  @RAFATHEDEV
-                </strong>
+            <motion.svg
+              className="story-build-path"
+              viewBox="0 0 600 580"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+            >
+              <motion.path
+                d="M44 124 C 144 40, 225 82, 276 170 S 420 250, 540 212 S 520 410, 470 506"
+                initial={reduceMotion ? false : { pathLength: 0, opacity: 0 }}
+                animate={{ pathLength: 1, opacity: 1 }}
+                transition={{ duration: 1.5, delay: 0.7, ease: revealEase }}
+              />
+              <circle cx="44" cy="124" r="4" />
+              <circle cx="276" cy="170" r="4" />
+              <circle cx="470" cy="506" r="5" />
+            </motion.svg>
+
+            <div className="story-fragment story-fragment-note" aria-hidden="true">
+              <span className="story-fragment-label">YOUR STORY</span>
+              <strong>SOMETHING WORTH BUILDING AROUND.</strong>
+              <div className="story-note-lines">
+                <i />
+                <i />
+                <i />
               </div>
             </div>
-          </motion.aside>
+
+            <div className="story-fragment story-fragment-structure" aria-hidden="true">
+              <span className="story-fragment-label">SHAPED AROUND YOU</span>
+              <div className="story-structure-layout">
+                <i className="story-structure-nav" />
+                <i className="story-structure-heading" />
+                <i className="story-structure-copy" />
+                <i className="story-structure-media" />
+                <i className="story-structure-action" />
+              </div>
+            </div>
+
+            <div className="story-site-preview" aria-hidden="true">
+              <div className="story-site-nav">
+                <span className="story-site-brand">YOUR NAME</span>
+                <span className="story-site-nav-links">
+                  <i />
+                  <i />
+                  <i />
+                </span>
+              </div>
+              <div className="story-site-main">
+                <div className="story-site-copy">
+                  <span>BUILT FROM SCRATCH</span>
+                  <strong>MADE TO MEAN SOMETHING.</strong>
+                  <div className="story-site-copy-lines">
+                    <i />
+                    <i />
+                    <i />
+                  </div>
+                  <span className="story-site-action">
+                    START HERE
+                    <ArrowUpRight size={13} />
+                  </span>
+                </div>
+                <div className="story-site-art">
+                  <i className="story-site-orbit story-site-orbit-large" />
+                  <i className="story-site-orbit story-site-orbit-small" />
+                  <i className="story-site-core" />
+                  <i className="story-site-spark story-site-spark-one" />
+                  <i className="story-site-spark story-site-spark-two" />
+                </div>
+              </div>
+              <div className="story-site-footer">
+                <span>RESPONSIVE</span>
+                <span>ACCESSIBLE</span>
+                <span>UNIQUELY YOURS</span>
+              </div>
+            </div>
+
+            <div className="story-build-caption" aria-hidden="true">
+              <i />
+              YOUR IDEA, MADE REAL
+            </div>
+          </motion.div>
         </section>
 
         <section className="free-section free-process mx-auto max-w-[1400px]" id="how-it-works">
