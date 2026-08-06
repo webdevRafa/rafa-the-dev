@@ -24,7 +24,7 @@
   max-width: 760px;
   margin: 0;
   font-family: var(--headline);
-  font-size: clamp(3.7rem, 4.45vw, 5.35rem);
+  font-size: var(--type-hero-feature);
   font-weight: 800;
   line-height: 0.92;
   letter-spacing: 0;
@@ -233,7 +233,7 @@
   max-width: 760px;
   margin: 0;
   font-family: var(--headline);
-  font-size: clamp(3.2rem, 4.7vw, 5.2rem);
+  font-size: var(--type-heading-display);
   font-weight: 800;
   line-height: 0.95;
   letter-spacing: -0.005em;
@@ -519,7 +519,7 @@
   max-width: 620px;
   margin: 0;
   font-family: var(--headline);
-  font-size: clamp(3rem, 4vw, 4.6rem);
+  font-size: clamp(2.7rem, 3.6vw, 4.1rem);
   font-weight: 800;
   line-height: 0.95;
   text-transform: uppercase;
@@ -555,7 +555,6 @@
 
   .free-hero-copy h1 {
     max-width: 900px;
-    font-size: clamp(3.7rem, 5.35vw, 6rem);
   }
 
   .giveaway-brief {
@@ -591,10 +590,6 @@
   .free-hero {
     padding-top: 7.5rem;
     padding-bottom: 4rem;
-  }
-
-  .free-hero-copy h1 {
-    font-size: clamp(3.25rem, 13.75vw, 3.75rem);
   }
 
   .free-hero-intro {
@@ -635,10 +630,6 @@
 
   .free-section-heading .section-kicker {
     margin-bottom: 0;
-  }
-
-  .free-section h2 {
-    font-size: clamp(3rem, 12.8vw, 4rem);
   }
 
   .giveaway-steps {

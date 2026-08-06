@@ -16,6 +16,9 @@
   --display: 'Oswald', Impact, sans-serif;
   --headline: 'ballinger-condensed', 'Oswald', Impact, sans-serif;
   --content-width: 1400px;
+  --type-hero-home: clamp(3.15rem, 4.5vw, 5.05rem);
+  --type-hero-feature: clamp(3.1rem, 4vw, 4.85rem);
+  --type-heading-display: clamp(2.65rem, 4.25vw, 4.65rem);
 }
 
 .site-shell {
@@ -450,7 +453,7 @@ summary:focus-visible {
   max-width: 780px;
   margin: 0;
   font-family: var(--headline);
-  font-size: clamp(3.45rem, 5vw, 5.65rem);
+  font-size: var(--type-hero-home);
   font-weight: 800;
   line-height: 0.92;
   letter-spacing: 0;
@@ -739,7 +742,7 @@ summary:focus-visible {
 .contact-copy h2 {
   margin: 0;
   font-family: var(--headline);
-  font-size: clamp(2.8rem, 4.7vw, 5rem);
+  font-size: var(--type-heading-display);
   font-weight: 800;
   line-height: 0.96;
   letter-spacing: -0.005em;
@@ -1287,7 +1290,7 @@ summary:focus-visible {
 .brief-ready h3 {
   margin: 0;
   font-family: var(--display);
-  font-size: clamp(2.5rem, 4vw, 4rem);
+  font-size: clamp(2.25rem, 3.6vw, 3.6rem);
   font-weight: 500;
   line-height: 1;
   text-transform: uppercase;
@@ -1376,8 +1379,8 @@ summary:focus-visible {
 }
 
 @media (min-width: 1081px) {
-  .hero-copy h1 {
-    font-size: clamp(3.45rem, 4.15vw, 5rem);
+  :root {
+    --type-hero-home: clamp(3.15rem, 3.75vw, 4.55rem);
   }
 }
 
@@ -1418,6 +1421,10 @@ summary:focus-visible {
 }
 
 @media (max-width: 1080px) {
+  :root {
+    --type-hero-feature: clamp(3.1rem, 4.6vw, 5rem);
+  }
+
   .site-header {
     height: 68px;
     padding-inline: 1.3rem;
@@ -1565,6 +1572,12 @@ summary:focus-visible {
 }
 
 @media (max-width: 760px) {
+  :root {
+    --type-hero-home: clamp(2.45rem, 11.2vw, 3.05rem);
+    --type-hero-feature: clamp(2.65rem, 11vw, 3.1rem);
+    --type-heading-display: clamp(2.35rem, 10.5vw, 2.65rem);
+  }
+
   .ambient-vector-field {
     opacity: 0.48;
   }
@@ -1609,10 +1622,6 @@ summary:focus-visible {
   .hero-grid {
     min-height: auto;
     padding: 5rem 0 2.7rem;
-  }
-
-  .hero-copy h1 {
-    font-size: clamp(2.9rem, 12.8vw, 3.5rem);
   }
 
   .hero-outcome {
@@ -1693,16 +1702,6 @@ summary:focus-visible {
 
   .fit-content {
     grid-column: auto;
-  }
-
-  .statement-copy h2,
-  .section-heading h2,
-  .capability-intro h2,
-  .about-copy h2,
-  .fit-content h2,
-  .faq-heading h2,
-  .contact-copy h2 {
-    font-size: clamp(2.8rem, 13.2vw, 4rem);
   }
 
   .statement-copy > p {
