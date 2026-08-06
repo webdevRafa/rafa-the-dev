@@ -6,7 +6,6 @@ import {
   ArrowUpRight,
   Check,
   ClipboardList,
-  Gift,
   Globe2,
   HeartHandshake,
   MessageSquareText,
@@ -274,10 +273,6 @@ function FreeWebsitePage() {
             animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
             transition={{ duration: 0.8, delay: 0.35, ease: revealEase }}
           >
-            <div className="giveaway-brief-top">
-              <span>GIVEAWAY / 001</span>
-              <Gift size={18} />
-            </div>
             <div className="giveaway-brief-body">
               <p>ONE WINNER</p>
               <strong>FULLY CUSTOM WEBSITE</strong>

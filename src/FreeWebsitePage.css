@@ -100,22 +100,6 @@
     rgba(17, 20, 18, 0.92);
 }
 
-.giveaway-brief-top {
-  display: flex;
-  min-height: 60px;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 1.35rem;
-  border-bottom: 1px solid var(--line);
-  color: #c4d1c6;
-  font: 500 0.61rem/1 var(--mono);
-  letter-spacing: 0.09em;
-}
-
-.giveaway-brief-top svg {
-  color: var(--lime);
-}
-
 .giveaway-brief-body {
   display: flex;
   min-height: 300px;
