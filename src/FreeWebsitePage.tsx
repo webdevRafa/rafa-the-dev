@@ -61,6 +61,15 @@ const scopeOptions = [
   'Not sure yet',
 ]
 
+const giveawayHeroWords = [
+  'STORY.',
+  'IDEA.',
+  'VISION.',
+  'MISSION.',
+  'PROBLEM.',
+  'DREAM.',
+] as const
+
 function PageReveal({
   children,
   className,
@@ -82,6 +91,39 @@ function PageReveal({
     >
       {children}
     </motion.div>
+  )
+}
+
+function RotatingGiveawayWord() {
+  const reduceMotion = useReducedMotion()
+  const [wordIndex, setWordIndex] = useState(0)
+  const activeWordIndex = reduceMotion ? 0 : wordIndex
+
+  useEffect(() => {
+    if (reduceMotion) return
+
+    const timer = window.setTimeout(() => {
+      setWordIndex((current) => (current + 1) % giveawayHeroWords.length)
+    }, 3600)
+
+    return () => window.clearTimeout(timer)
+  }, [reduceMotion, wordIndex])
+
+  return (
+    <span className="free-hero-word-window" aria-hidden="true">
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.em
+          className="free-hero-word"
+          key={giveawayHeroWords[activeWordIndex]}
+          initial={reduceMotion ? false : { opacity: 0, y: '90%', filter: 'blur(5px)' }}
+          animate={{ opacity: 1, y: '0%', filter: 'blur(0px)' }}
+          exit={reduceMotion ? undefined : { opacity: 0, y: '-90%', filter: 'blur(5px)' }}
+          transition={{ duration: 0.48, ease: revealEase }}
+        >
+          {giveawayHeroWords[activeWordIndex]}
+        </motion.em>
+      </AnimatePresence>
+    </span>
   )
 }
 
@@ -157,22 +199,12 @@ function FreeWebsitePage() {
         />
       )}
       <main id="main">
-        <section className="free-hero" id="top">
-          <motion.div
-            className="free-hero-meta"
-            initial={reduceMotion ? false : { opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.12, ease: revealEase }}
-          >
-            <span>OPEN CALL / 2026</span>
-            <span>ONE WEBSITE / NO FEE</span>
-          </motion.div>
-
+        <section className="free-hero mx-auto max-w-[1400px]" id="top">
           <motion.div
             className="free-hero-copy"
             initial={reduceMotion ? false : 'hidden'}
             animate="visible"
-            variants={{ visible: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } } }}
+            variants={{ visible: { transition: { staggerChildren: 0.1, delayChildren: 0.18 } } }}
           >
             <motion.p
               className="section-kicker"
@@ -184,7 +216,7 @@ function FreeWebsitePage() {
               FREE WEBSITE GIVEAWAY
             </motion.p>
             <motion.h1
-              aria-label="One useful website. Built free."
+              aria-label="You bring the story. I'll build the solution."
               variants={{
                 hidden: { opacity: 0, y: 28, filter: 'blur(7px)' },
                 visible: {
@@ -195,62 +227,132 @@ function FreeWebsitePage() {
                 },
               }}
             >
-              <span>One useful</span>
-              <em>website.</em>
-              <span>Built free.</span>
+              <span className="free-hero-static-line">You bring the</span>
+              <RotatingGiveawayWord />
+              <span className="free-hero-static-line">I&apos;ll build the solution.</span>
             </motion.h1>
-            <motion.div
-              className="free-hero-lower"
+            <motion.p
+              className="free-hero-intro"
               variants={{
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0, transition: { duration: 0.62, ease: revealEase } },
               }}
             >
-              <p className="free-hero-intro">
-                I&apos;m choosing one person, small business, creator, or community organization
-                and building a focused website at no cost. You bring the work. I&apos;ll handle
-                the structure, design, and build.
-              </p>
-              <div className="free-hero-actions">
-                <a className="button button-primary" href="#application">
-                  Submit your project
-                  <ArrowDown size={18} />
-                </a>
-                <a
-                  className="free-instagram-rule"
-                  href="https://www.instagram.com/rafathedev/"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <FaInstagram size={18} aria-hidden="true" />
-                  Follow @rafathedev to enter
-                  <ArrowUpRight size={15} />
-                </a>
-              </div>
+              I am choosing one person, small business, creator, or community organization
+              and building their website for free. Tell me what you are working toward and
+              why this website would matter.
+            </motion.p>
+            <motion.div
+              className="free-hero-actions"
+              variants={{
+                hidden: { opacity: 0, y: 18 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.58, ease: revealEase } },
+              }}
+            >
+              <a className="button button-primary" href="#application">
+                Share your story
+                <ArrowDown size={18} />
+              </a>
+              <a
+                className="free-instagram-rule"
+                href="https://www.instagram.com/rafathedev/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <FaInstagram size={18} aria-hidden="true" />
+                Must follow @rafathedev to enter
+                <ArrowUpRight size={15} />
+              </a>
             </motion.div>
           </motion.div>
 
           <motion.div
-            className="free-hero-landscape"
+            className="story-build-visual"
             role="img"
-            aria-label="An abstract architectural landscape in sage, terracotta, sand, and forest green"
-            initial={reduceMotion ? false : { opacity: 0, y: 46, filter: 'blur(6px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            transition={{ duration: 0.82, delay: 0.4, ease: revealEase }}
+            aria-label="An original story being shaped into a custom website"
+            initial={reduceMotion ? false : { opacity: 0, x: 38, filter: 'blur(7px)' }}
+            animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+            transition={{ duration: 0.8, delay: 0.35, ease: revealEase }}
           >
-            <div className="free-landscape-brief">
-              <span>THE BRIEF</span>
-              <strong>A clear, responsive home for the work you already do.</strong>
-              <small>STRATEGY / DESIGN / BUILD / LAUNCH</small>
+            <motion.svg
+              className="story-build-path"
+              viewBox="0 0 600 580"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+            >
+              <motion.path
+                d="M44 124 C 144 40, 225 82, 276 170 S 420 250, 540 212 S 520 410, 470 506"
+                initial={reduceMotion ? false : { pathLength: 0, opacity: 0 }}
+                animate={{ pathLength: 1, opacity: 1 }}
+                transition={{ duration: 1.5, delay: 0.7, ease: revealEase }}
+              />
+              <circle cx="44" cy="124" r="4" />
+              <circle cx="276" cy="170" r="4" />
+              <circle cx="470" cy="506" r="5" />
+            </motion.svg>
+
+            <div className="story-fragment story-fragment-note" aria-hidden="true">
+              <span className="story-fragment-label">YOUR STORY</span>
+              <strong>SOMETHING WORTH BUILDING AROUND.</strong>
+              <div className="story-note-lines">
+                <i />
+                <i />
+                <i />
+              </div>
             </div>
-            <div className="free-landscape-scene" aria-hidden="true">
-              <i className="free-landscape-sun" />
-              <i className="free-landscape-wall" />
-              <i className="free-landscape-ground" />
-              <i className="free-landscape-path" />
-              <span className="free-landscape-plant free-landscape-plant-one"><i /><i /><i /></span>
-              <span className="free-landscape-plant free-landscape-plant-two"><i /><i /><i /></span>
-              <small>SAN ANTONIO / OPEN TO ALL INDUSTRIES</small>
+
+            <div className="story-fragment story-fragment-structure" aria-hidden="true">
+              <span className="story-fragment-label">SHAPED AROUND YOU</span>
+              <div className="story-structure-layout">
+                <i className="story-structure-nav" />
+                <i className="story-structure-heading" />
+                <i className="story-structure-copy" />
+                <i className="story-structure-media" />
+                <i className="story-structure-action" />
+              </div>
+            </div>
+
+            <div className="story-site-preview" aria-hidden="true">
+              <div className="story-site-nav">
+                <span className="story-site-brand">YOUR NAME</span>
+                <span className="story-site-nav-links">
+                  <i />
+                  <i />
+                  <i />
+                </span>
+              </div>
+              <div className="story-site-main">
+                <div className="story-site-copy">
+                  <span>BUILT FROM SCRATCH</span>
+                  <strong>MADE TO MEAN SOMETHING.</strong>
+                  <div className="story-site-copy-lines">
+                    <i />
+                    <i />
+                    <i />
+                  </div>
+                  <span className="story-site-action">
+                    START HERE
+                    <ArrowUpRight size={13} />
+                  </span>
+                </div>
+                <div className="story-site-art">
+                  <i className="story-site-orbit story-site-orbit-large" />
+                  <i className="story-site-orbit story-site-orbit-small" />
+                  <i className="story-site-core" />
+                  <i className="story-site-spark story-site-spark-one" />
+                  <i className="story-site-spark story-site-spark-two" />
+                </div>
+              </div>
+              <div className="story-site-footer">
+                <span>RESPONSIVE</span>
+                <span>ACCESSIBLE</span>
+                <span>UNIQUELY YOURS</span>
+              </div>
+            </div>
+
+            <div className="story-build-caption" aria-hidden="true">
+              <i />
+              YOUR IDEA, MADE REAL
             </div>
           </motion.div>
         </section>
@@ -258,10 +360,10 @@ function FreeWebsitePage() {
         <section className="free-section free-process mx-auto max-w-[1400px]" id="how-it-works">
           <PageReveal className="free-section-heading free-process-heading">
             <p className="section-kicker">HOW IT WORKS</p>
-            <h2>Three steps. One clear outcome.</h2>
             <p>
-              No technical brief or polished pitch required. A clear explanation of what you
-              do, who it serves, and what the website needs to accomplish is enough.
+              You do not need technical language or a polished pitch. The best submission
+              will help me understand the person, the need, and the difference this project
+              could make.
             </p>
           </PageReveal>
           <div className="giveaway-steps">
@@ -281,14 +383,14 @@ function FreeWebsitePage() {
           </div>
         </section>
 
-        <section className="free-section free-scope mx-auto max-w-[1400px]" id="scope">
+        <section className="free-section free-scope mx-auto max-w-[1400px]">
           <PageReveal className="free-scope-copy">
             <p className="section-kicker">WHAT THE WINNER RECEIVES</p>
-            <h2>Everything needed for a strong first version.</h2>
+            <h2>A focused website built to be useful.</h2>
             <p>
-              The result will be a professional public-facing website, not a rushed template.
-              I&apos;ll shape the structure, design the experience, build it responsively, and
-              help launch it.
+              The goal is a professional public-facing website—not a rushed template. I will
+              shape the structure, design the experience, build it responsively, and help
+              launch a clear first version.
             </p>
             <div className="free-scope-note">
               <Sparkles size={21} />
@@ -312,10 +414,10 @@ function FreeWebsitePage() {
         <section className="free-section free-application mx-auto max-w-[1400px]" id="application">
           <PageReveal className="free-application-copy">
             <p className="section-kicker">TELL ME YOUR STORY</p>
-            <h2>Tell me what the site needs to do.</h2>
+            <h2>Help me understand what this could unlock.</h2>
             <p>
-              Specific details make it easier to compare submissions fairly. Share the real
-              situation, the people you serve, and the outcome the website should support.
+              Specific details help me compare submissions fairly. Share the real situation,
+              the people you serve, and what you hope becomes possible with the right website.
             </p>
             <div className="application-signals">
               <div>
@@ -601,14 +703,14 @@ function FreeWebsitePage() {
           <Link className="brand footer-brand" to="/#top">
             <span className="brand-copy">
               <strong>RAFA THE DEV</strong>
-              <small>ONE WEBSITE / DESIGNED AND BUILT AT NO COST</small>
+              <small>CUSTOM SOFTWARE FOR REAL BUSINESSES</small>
             </span>
           </Link>
           <div className="footer-links">
-            <a href="#how-it-works">Process</a>
-            <a href="#scope">What&apos;s included</a>
-            <a href="#application">Apply</a>
-            <Link to="/">Rafa the Dev</Link>
+            <Link to="/#services">Services</Link>
+            <Link to="/#process">The Process</Link>
+            <Link to="/#about">About Me</Link>
+            <Link to="/free-website" aria-current="page">Free Website</Link>
             <a href="https://www.instagram.com/rafathedev/" target="_blank" rel="noreferrer">
               Instagram <ArrowUpRight size={14} />
             </a>

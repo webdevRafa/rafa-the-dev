@@ -17,7 +17,7 @@ function RouteShell() {
       <a className="skip-link" href="#main">
         Skip to content
       </a>
-      {!isAdminRoute && <SiteHeader key={pathname === '/free-website' ? 'free-website' : 'main-site'} />}
+      {!isAdminRoute && <SiteHeader />}
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/free-website" element={<FreeWebsitePage />} />
