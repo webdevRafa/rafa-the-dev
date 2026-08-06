@@ -267,92 +267,106 @@ function FreeWebsitePage() {
           </motion.div>
 
           <motion.div
-            className="story-build-visual"
+            className="website-specimen"
             role="img"
-            aria-label="An original story being shaped into a custom website"
+            aria-label="A responsive fictional Mesa Gardens business homepage shown on desktop and mobile"
             initial={reduceMotion ? false : { opacity: 0, x: 38, filter: 'blur(7px)' }}
             animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
             transition={{ duration: 0.8, delay: 0.35, ease: revealEase }}
           >
-            <motion.svg
-              className="story-build-path"
-              viewBox="0 0 600 580"
-              preserveAspectRatio="none"
-              aria-hidden="true"
-            >
-              <motion.path
-                d="M44 124 C 144 40, 225 82, 276 170 S 420 250, 540 212 S 520 410, 470 506"
-                initial={reduceMotion ? false : { pathLength: 0, opacity: 0 }}
-                animate={{ pathLength: 1, opacity: 1 }}
-                transition={{ duration: 1.5, delay: 0.7, ease: revealEase }}
-              />
-              <circle cx="44" cy="124" r="4" />
-              <circle cx="276" cy="170" r="4" />
-              <circle cx="470" cy="506" r="5" />
-            </motion.svg>
-
-            <div className="story-fragment story-fragment-note" aria-hidden="true">
-              <span className="story-fragment-label">YOUR STORY</span>
-              <strong>SOMETHING WORTH BUILDING AROUND.</strong>
-              <div className="story-note-lines">
-                <i />
-                <i />
-                <i />
-              </div>
-            </div>
-
-            <div className="story-fragment story-fragment-structure" aria-hidden="true">
-              <span className="story-fragment-label">SHAPED AROUND YOU</span>
-              <div className="story-structure-layout">
-                <i className="story-structure-nav" />
-                <i className="story-structure-heading" />
-                <i className="story-structure-copy" />
-                <i className="story-structure-media" />
-                <i className="story-structure-action" />
-              </div>
-            </div>
-
-            <div className="story-site-preview" aria-hidden="true">
-              <div className="story-site-nav">
-                <span className="story-site-brand">YOUR NAME</span>
-                <span className="story-site-nav-links">
+            <div className="specimen-desktop" aria-hidden="true">
+              <div className="specimen-browser-bar">
+                <span className="specimen-browser-dots">
                   <i />
                   <i />
                   <i />
                 </span>
+                <span>mesagardens.co</span>
               </div>
-              <div className="story-site-main">
-                <div className="story-site-copy">
-                  <span>BUILT FROM SCRATCH</span>
-                  <strong>MADE TO MEAN SOMETHING.</strong>
-                  <div className="story-site-copy-lines">
-                    <i />
-                    <i />
-                    <i />
+              <div className="mesa-desktop-site">
+                <header className="mesa-site-header">
+                  <strong>MESA GARDENS</strong>
+                  <nav>
+                    <span>WORK</span>
+                    <span>SERVICES</span>
+                    <span>ABOUT</span>
+                  </nav>
+                  <span className="mesa-header-cta">START A PROJECT</span>
+                </header>
+                <div className="mesa-site-hero">
+                  <div className="mesa-site-copy">
+                    <span className="mesa-eyebrow">LANDSCAPE DESIGN / SAN ANTONIO</span>
+                    <strong>
+                      OUTDOOR SPACES,
+                      <em> MADE FOR TEXAS.</em>
+                    </strong>
+                    <p>Drought-smart landscapes designed for everyday living.</p>
+                    <span className="mesa-site-cta">
+                      VIEW OUR WORK
+                      <ArrowUpRight size={11} />
+                    </span>
                   </div>
-                  <span className="story-site-action">
-                    START HERE
-                    <ArrowUpRight size={13} />
+                  <div className="mesa-scene">
+                    <i className="mesa-scene-sun" />
+                    <i className="mesa-scene-wall" />
+                    <i className="mesa-scene-ground" />
+                    <i className="mesa-scene-path" />
+                    <span className="mesa-plant mesa-plant-one">
+                      <i />
+                      <i />
+                      <i />
+                    </span>
+                    <span className="mesa-plant mesa-plant-two">
+                      <i />
+                      <i />
+                      <i />
+                    </span>
+                    <span className="mesa-scene-caption">01 / ALAMO HEIGHTS</span>
+                  </div>
+                </div>
+                <div className="mesa-site-strip">
+                  <span>
+                    <small>SERVICES</small>
+                    DESIGN + INSTALLATION
+                  </span>
+                  <span>
+                    <small>FOCUS</small>
+                    WATER-WISE PLANTING
+                  </span>
+                  <span>
+                    <small>BOOKING</small>
+                    FALL CONSULTATIONS OPEN
                   </span>
                 </div>
-                <div className="story-site-art">
-                  <i className="story-site-orbit story-site-orbit-large" />
-                  <i className="story-site-orbit story-site-orbit-small" />
-                  <i className="story-site-core" />
-                  <i className="story-site-spark story-site-spark-one" />
-                  <i className="story-site-spark story-site-spark-two" />
-                </div>
-              </div>
-              <div className="story-site-footer">
-                <span>RESPONSIVE</span>
-                <span>ACCESSIBLE</span>
-                <span>UNIQUELY YOURS</span>
               </div>
             </div>
 
-            <div className="story-build-caption" aria-hidden="true">
-              <i />
-              YOUR IDEA, MADE REAL
+            <div className="specimen-phone" aria-hidden="true">
+              <div className="specimen-phone-speaker" />
+              <div className="mesa-mobile-site">
+                <header>
+                  <strong>MESA</strong>
+                  <span>
+                    <i />
+                    <i />
+                  </span>
+                </header>
+                <div className="mesa-mobile-scene">
+                  <i className="mesa-mobile-sun" />
+                  <i className="mesa-mobile-wall" />
+                  <i className="mesa-mobile-ground" />
+                  <span className="mesa-mobile-plant">
+                    <i />
+                    <i />
+                    <i />
+                  </span>
+                </div>
+                <div className="mesa-mobile-copy">
+                  <span>LANDSCAPE DESIGN / SATX</span>
+                  <strong>OUTDOOR SPACES, MADE FOR TEXAS.</strong>
+                  <span className="mesa-mobile-cta">VIEW WORK</span>
+                </div>
+              </div>
             </div>
           </motion.div>
         </section>
