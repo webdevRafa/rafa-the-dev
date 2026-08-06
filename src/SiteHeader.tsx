@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
 import { FaInstagram } from 'react-icons/fa6'
@@ -138,9 +138,44 @@ function RotatingBrandLabel() {
 
 function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [headerVisible, setHeaderVisible] = useState(true)
+  const lastScrollY = useRef(0)
   const reduceMotion = useReducedMotion()
   const { pathname } = useLocation()
   const freeWebsiteActive = pathname === '/free-website'
+
+  useEffect(() => {
+    if (!freeWebsiteActive) return
+
+    lastScrollY.current = window.scrollY
+    let animationFrame = 0
+
+    const updateHeader = () => {
+      const currentScrollY = Math.max(window.scrollY, 0)
+      const scrollDelta = currentScrollY - lastScrollY.current
+
+      if (menuOpen || currentScrollY < 32) {
+        setHeaderVisible(true)
+      } else if (scrollDelta > 6 && currentScrollY > 88) {
+        setHeaderVisible(false)
+      } else if (scrollDelta < -4) {
+        setHeaderVisible(true)
+      }
+
+      lastScrollY.current = currentScrollY
+      animationFrame = 0
+    }
+
+    const handleScroll = () => {
+      if (!animationFrame) animationFrame = window.requestAnimationFrame(updateHeader)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      if (animationFrame) window.cancelAnimationFrame(animationFrame)
+    }
+  }, [freeWebsiteActive, menuOpen])
 
   useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {
@@ -173,10 +208,16 @@ function SiteHeader() {
 
   return (
     <motion.header
-      className="site-header fixed inset-x-0 top-0 z-50 flex items-center justify-between"
+      className={`site-header fixed inset-x-0 top-0 z-50 flex items-center justify-between ${
+        freeWebsiteActive ? 'free-route-header' : ''
+      }`}
       initial={reduceMotion ? false : { opacity: 0, y: -18 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: revealEase }}
+      animate={{ opacity: 1, y: freeWebsiteActive && !headerVisible ? '-110%' : 0 }}
+      transition={
+        reduceMotion
+          ? { duration: 0 }
+          : { duration: headerVisible ? 0.38 : 0.3, ease: revealEase }
+      }
     >
       <MotionLink
         className="brand header-brand inline-flex items-center no-underline"
@@ -186,65 +227,115 @@ function SiteHeader() {
         whileTap={reduceMotion ? undefined : { scale: 0.98 }}
       >
         <span className="brand-copy">
-          <strong>RAFA THE DEV</strong>
-          <RotatingBrandLabel />
+          <strong>{freeWebsiteActive ? 'RAFA / OPEN STUDIO' : 'RAFA THE DEV'}</strong>
+          {freeWebsiteActive ? (
+            <small className="free-route-brand-label">COMMUNITY WEBSITE / 2026</small>
+          ) : (
+            <RotatingBrandLabel />
+          )}
         </span>
       </MotionLink>
 
-      <motion.nav
-        className={`nav-links items-center ${menuOpen ? 'is-open' : ''}`}
-        aria-label="Main navigation"
-        initial={reduceMotion ? false : 'hidden'}
-        animate="visible"
-      >
-        <MotionLink custom={0} variants={navigationItemVariants} to="/#services" onClick={closeMenu}>
-          Services
-        </MotionLink>
-        <MotionLink custom={1} variants={navigationItemVariants} to="/#process" onClick={closeMenu}>
-          The Process
-        </MotionLink>
-        <MotionLink custom={2} variants={navigationItemVariants} to="/#about" onClick={closeMenu}>
-          About Me
-        </MotionLink>
-        <MotionLink
-          className={`nav-feature-link ${freeWebsiteActive ? 'is-active' : ''}`}
-          custom={3}
-          variants={navigationItemVariants}
-          to="/free-website"
-          aria-current={freeWebsiteActive ? 'page' : undefined}
-          onClick={closeMenu}
+      {freeWebsiteActive ? (
+        <motion.nav
+          className={`nav-links free-route-nav items-center ${menuOpen ? 'is-open' : ''}`}
+          aria-label="Free website navigation"
+          initial={reduceMotion ? false : 'hidden'}
+          animate="visible"
         >
-          Free Website
-        </MotionLink>
-        <motion.a
-          className="instagram-link mobile-instagram"
-          custom={4}
-          variants={navigationItemVariants}
-          href="https://www.instagram.com/rafathedev/"
-          target="_blank"
-          rel="noreferrer"
-          onClick={closeMenu}
+          <motion.a custom={0} variants={navigationItemVariants} href="#how-it-works" onClick={closeMenu}>
+            Process
+          </motion.a>
+          <motion.a custom={1} variants={navigationItemVariants} href="#scope" onClick={closeMenu}>
+            What&apos;s included
+          </motion.a>
+          <MotionLink custom={2} variants={navigationItemVariants} to="/" onClick={closeMenu}>
+            Rafa the Dev
+          </MotionLink>
+          <motion.a
+            className="instagram-link mobile-instagram"
+            custom={3}
+            variants={navigationItemVariants}
+            href="https://www.instagram.com/rafathedev/"
+            target="_blank"
+            rel="noreferrer"
+            onClick={closeMenu}
+          >
+            <FaInstagram size={17} aria-hidden="true" />
+            @rafathedev
+          </motion.a>
+          <motion.a
+            className="button button-small nav-cta"
+            custom={4}
+            variants={navigationCtaVariants}
+            href="#application"
+            onClick={closeMenu}
+            whileHover={
+              reduceMotion
+                ? undefined
+                : { y: -2, transition: { duration: 0.18, ease: 'easeOut' } }
+            }
+            whileTap={reduceMotion ? undefined : { scale: 0.98 }}
+          >
+            Apply now
+            <ArrowUpRight size={16} />
+          </motion.a>
+        </motion.nav>
+      ) : (
+        <motion.nav
+          className={`nav-links items-center ${menuOpen ? 'is-open' : ''}`}
+          aria-label="Main navigation"
+          initial={reduceMotion ? false : 'hidden'}
+          animate="visible"
         >
-          <FaInstagram size={17} aria-hidden="true" />
-          @rafathedev
-        </motion.a>
-        <MotionLink
-          className="button button-small nav-cta"
-          custom={4}
-          variants={navigationCtaVariants}
-          to="/#contact"
-          onClick={closeMenu}
-          whileHover={
-            reduceMotion
-              ? undefined
-              : { y: -2, transition: { duration: 0.18, ease: 'easeOut' } }
-          }
-          whileTap={reduceMotion ? undefined : { scale: 0.98 }}
-        >
-          Start a project
-          <ArrowUpRight size={16} />
-        </MotionLink>
-      </motion.nav>
+          <MotionLink custom={0} variants={navigationItemVariants} to="/#services" onClick={closeMenu}>
+            Services
+          </MotionLink>
+          <MotionLink custom={1} variants={navigationItemVariants} to="/#process" onClick={closeMenu}>
+            The Process
+          </MotionLink>
+          <MotionLink custom={2} variants={navigationItemVariants} to="/#about" onClick={closeMenu}>
+            About Me
+          </MotionLink>
+          <MotionLink
+            className="nav-feature-link"
+            custom={3}
+            variants={navigationItemVariants}
+            to="/free-website"
+            onClick={closeMenu}
+          >
+            Free Website
+          </MotionLink>
+          <motion.a
+            className="instagram-link mobile-instagram"
+            custom={4}
+            variants={navigationItemVariants}
+            href="https://www.instagram.com/rafathedev/"
+            target="_blank"
+            rel="noreferrer"
+            onClick={closeMenu}
+          >
+            <FaInstagram size={17} aria-hidden="true" />
+            @rafathedev
+          </motion.a>
+          <MotionLink
+            className="button button-small nav-cta"
+            custom={4}
+            variants={navigationCtaVariants}
+            to="/#contact"
+            onClick={closeMenu}
+            whileHover={
+              reduceMotion
+                ? undefined
+                : { y: -2, transition: { duration: 0.18, ease: 'easeOut' } }
+            }
+            whileTap={reduceMotion ? undefined : { scale: 0.98 }}
+          >
+            Start a project
+            <ArrowUpRight size={16} />
+          </MotionLink>
+        </motion.nav>
+      )}
 
       <div className="header-actions">
         <a

@@ -61,15 +61,6 @@ const scopeOptions = [
   'Not sure yet',
 ]
 
-const giveawayHeroWords = [
-  'STORY.',
-  'IDEA.',
-  'VISION.',
-  'MISSION.',
-  'PROBLEM.',
-  'DREAM.',
-] as const
-
 function PageReveal({
   children,
   className,
@@ -91,39 +82,6 @@ function PageReveal({
     >
       {children}
     </motion.div>
-  )
-}
-
-function RotatingGiveawayWord() {
-  const reduceMotion = useReducedMotion()
-  const [wordIndex, setWordIndex] = useState(0)
-  const activeWordIndex = reduceMotion ? 0 : wordIndex
-
-  useEffect(() => {
-    if (reduceMotion) return
-
-    const timer = window.setTimeout(() => {
-      setWordIndex((current) => (current + 1) % giveawayHeroWords.length)
-    }, 3600)
-
-    return () => window.clearTimeout(timer)
-  }, [reduceMotion, wordIndex])
-
-  return (
-    <span className="free-hero-word-window" aria-hidden="true">
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.em
-          className="free-hero-word"
-          key={giveawayHeroWords[activeWordIndex]}
-          initial={reduceMotion ? false : { opacity: 0, y: '90%', filter: 'blur(5px)' }}
-          animate={{ opacity: 1, y: '0%', filter: 'blur(0px)' }}
-          exit={reduceMotion ? undefined : { opacity: 0, y: '-90%', filter: 'blur(5px)' }}
-          transition={{ duration: 0.48, ease: revealEase }}
-        >
-          {giveawayHeroWords[activeWordIndex]}
-        </motion.em>
-      </AnimatePresence>
-    </span>
   )
 }
 
@@ -199,12 +157,22 @@ function FreeWebsitePage() {
         />
       )}
       <main id="main">
-        <section className="free-hero mx-auto max-w-[1400px]" id="top">
+        <section className="free-hero" id="top">
+          <motion.div
+            className="free-hero-meta"
+            initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.12, ease: revealEase }}
+          >
+            <span>OPEN CALL / 2026</span>
+            <span>ONE WEBSITE / NO FEE</span>
+          </motion.div>
+
           <motion.div
             className="free-hero-copy"
             initial={reduceMotion ? false : 'hidden'}
             animate="visible"
-            variants={{ visible: { transition: { staggerChildren: 0.1, delayChildren: 0.18 } } }}
+            variants={{ visible: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } } }}
           >
             <motion.p
               className="section-kicker"
@@ -216,7 +184,7 @@ function FreeWebsitePage() {
               FREE WEBSITE GIVEAWAY
             </motion.p>
             <motion.h1
-              aria-label="You bring the story. I'll build the solution."
+              aria-label="One useful website. Built free."
               variants={{
                 hidden: { opacity: 0, y: 28, filter: 'blur(7px)' },
                 visible: {
@@ -227,146 +195,62 @@ function FreeWebsitePage() {
                 },
               }}
             >
-              <span className="free-hero-static-line">You bring the</span>
-              <RotatingGiveawayWord />
-              <span className="free-hero-static-line">I&apos;ll build the solution.</span>
+              <span>One useful</span>
+              <em>website.</em>
+              <span>Built free.</span>
             </motion.h1>
-            <motion.p
-              className="free-hero-intro"
+            <motion.div
+              className="free-hero-lower"
               variants={{
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0, transition: { duration: 0.62, ease: revealEase } },
               }}
             >
-              I am choosing one person, small business, creator, or community organization
-              and building their website for free. Tell me what you are working toward and
-              why this website would matter.
-            </motion.p>
-            <motion.div
-              className="free-hero-actions"
-              variants={{
-                hidden: { opacity: 0, y: 18 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.58, ease: revealEase } },
-              }}
-            >
-              <a className="button button-primary" href="#application">
-                Share your story
-                <ArrowDown size={18} />
-              </a>
-              <a
-                className="free-instagram-rule"
-                href="https://www.instagram.com/rafathedev/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <FaInstagram size={18} aria-hidden="true" />
-                Must follow @rafathedev to enter
-                <ArrowUpRight size={15} />
-              </a>
+              <p className="free-hero-intro">
+                I&apos;m choosing one person, small business, creator, or community organization
+                and building a focused website at no cost. You bring the work. I&apos;ll handle
+                the structure, design, and build.
+              </p>
+              <div className="free-hero-actions">
+                <a className="button button-primary" href="#application">
+                  Submit your project
+                  <ArrowDown size={18} />
+                </a>
+                <a
+                  className="free-instagram-rule"
+                  href="https://www.instagram.com/rafathedev/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <FaInstagram size={18} aria-hidden="true" />
+                  Follow @rafathedev to enter
+                  <ArrowUpRight size={15} />
+                </a>
+              </div>
             </motion.div>
           </motion.div>
 
           <motion.div
-            className="website-specimen"
+            className="free-hero-landscape"
             role="img"
-            aria-label="A responsive fictional Mesa Gardens business homepage shown on desktop and mobile"
-            initial={reduceMotion ? false : { opacity: 0, x: 38, filter: 'blur(7px)' }}
-            animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
-            transition={{ duration: 0.8, delay: 0.35, ease: revealEase }}
+            aria-label="An abstract architectural landscape in sage, terracotta, sand, and forest green"
+            initial={reduceMotion ? false : { opacity: 0, y: 46, filter: 'blur(6px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ duration: 0.82, delay: 0.4, ease: revealEase }}
           >
-            <div className="specimen-desktop" aria-hidden="true">
-              <div className="specimen-browser-bar">
-                <span className="specimen-browser-dots">
-                  <i />
-                  <i />
-                  <i />
-                </span>
-                <span>mesagardens.co</span>
-              </div>
-              <div className="mesa-desktop-site">
-                <header className="mesa-site-header">
-                  <strong>MESA GARDENS</strong>
-                  <nav>
-                    <span>WORK</span>
-                    <span>SERVICES</span>
-                    <span>ABOUT</span>
-                  </nav>
-                  <span className="mesa-header-cta">START A PROJECT</span>
-                </header>
-                <div className="mesa-site-hero">
-                  <div className="mesa-site-copy">
-                    <span className="mesa-eyebrow">LANDSCAPE DESIGN / SAN ANTONIO</span>
-                    <strong>
-                      OUTDOOR SPACES,
-                      <em> MADE FOR TEXAS.</em>
-                    </strong>
-                    <p>Drought-smart landscapes designed for everyday living.</p>
-                    <span className="mesa-site-cta">
-                      VIEW OUR WORK
-                      <ArrowUpRight size={11} />
-                    </span>
-                  </div>
-                  <div className="mesa-scene">
-                    <i className="mesa-scene-sun" />
-                    <i className="mesa-scene-wall" />
-                    <i className="mesa-scene-ground" />
-                    <i className="mesa-scene-path" />
-                    <span className="mesa-plant mesa-plant-one">
-                      <i />
-                      <i />
-                      <i />
-                    </span>
-                    <span className="mesa-plant mesa-plant-two">
-                      <i />
-                      <i />
-                      <i />
-                    </span>
-                    <span className="mesa-scene-caption">01 / ALAMO HEIGHTS</span>
-                  </div>
-                </div>
-                <div className="mesa-site-strip">
-                  <span>
-                    <small>SERVICES</small>
-                    DESIGN + INSTALLATION
-                  </span>
-                  <span>
-                    <small>FOCUS</small>
-                    WATER-WISE PLANTING
-                  </span>
-                  <span>
-                    <small>BOOKING</small>
-                    FALL CONSULTATIONS OPEN
-                  </span>
-                </div>
-              </div>
+            <div className="free-landscape-brief">
+              <span>THE BRIEF</span>
+              <strong>A clear, responsive home for the work you already do.</strong>
+              <small>STRATEGY / DESIGN / BUILD / LAUNCH</small>
             </div>
-
-            <div className="specimen-phone" aria-hidden="true">
-              <div className="specimen-phone-speaker" />
-              <div className="mesa-mobile-site">
-                <header>
-                  <strong>MESA</strong>
-                  <span>
-                    <i />
-                    <i />
-                  </span>
-                </header>
-                <div className="mesa-mobile-scene">
-                  <i className="mesa-mobile-sun" />
-                  <i className="mesa-mobile-wall" />
-                  <i className="mesa-mobile-ground" />
-                  <span className="mesa-mobile-plant">
-                    <i />
-                    <i />
-                    <i />
-                  </span>
-                </div>
-                <div className="mesa-mobile-copy">
-                  <span>LANDSCAPE DESIGN / SATX</span>
-                  <strong>OUTDOOR SPACES, MADE FOR TEXAS.</strong>
-                  <span className="mesa-mobile-cta">VIEW WORK</span>
-                </div>
-              </div>
+            <div className="free-landscape-scene" aria-hidden="true">
+              <i className="free-landscape-sun" />
+              <i className="free-landscape-wall" />
+              <i className="free-landscape-ground" />
+              <i className="free-landscape-path" />
+              <span className="free-landscape-plant free-landscape-plant-one"><i /><i /><i /></span>
+              <span className="free-landscape-plant free-landscape-plant-two"><i /><i /><i /></span>
+              <small>SAN ANTONIO / OPEN TO ALL INDUSTRIES</small>
             </div>
           </motion.div>
         </section>
@@ -374,10 +258,10 @@ function FreeWebsitePage() {
         <section className="free-section free-process mx-auto max-w-[1400px]" id="how-it-works">
           <PageReveal className="free-section-heading free-process-heading">
             <p className="section-kicker">HOW IT WORKS</p>
+            <h2>Three steps. One clear outcome.</h2>
             <p>
-              You do not need technical language or a polished pitch. The best submission
-              will help me understand the person, the need, and the difference this project
-              could make.
+              No technical brief or polished pitch required. A clear explanation of what you
+              do, who it serves, and what the website needs to accomplish is enough.
             </p>
           </PageReveal>
           <div className="giveaway-steps">
@@ -397,14 +281,14 @@ function FreeWebsitePage() {
           </div>
         </section>
 
-        <section className="free-section free-scope mx-auto max-w-[1400px]">
+        <section className="free-section free-scope mx-auto max-w-[1400px]" id="scope">
           <PageReveal className="free-scope-copy">
             <p className="section-kicker">WHAT THE WINNER RECEIVES</p>
-            <h2>A focused website built to be useful.</h2>
+            <h2>Everything needed for a strong first version.</h2>
             <p>
-              The goal is a professional public-facing website—not a rushed template. I will
-              shape the structure, design the experience, build it responsively, and help
-              launch a clear first version.
+              The result will be a professional public-facing website, not a rushed template.
+              I&apos;ll shape the structure, design the experience, build it responsively, and
+              help launch it.
             </p>
             <div className="free-scope-note">
               <Sparkles size={21} />
@@ -428,10 +312,10 @@ function FreeWebsitePage() {
         <section className="free-section free-application mx-auto max-w-[1400px]" id="application">
           <PageReveal className="free-application-copy">
             <p className="section-kicker">TELL ME YOUR STORY</p>
-            <h2>Help me understand what this could unlock.</h2>
+            <h2>Tell me what the site needs to do.</h2>
             <p>
-              Specific details help me compare submissions fairly. Share the real situation,
-              the people you serve, and what you hope becomes possible with the right website.
+              Specific details make it easier to compare submissions fairly. Share the real
+              situation, the people you serve, and the outcome the website should support.
             </p>
             <div className="application-signals">
               <div>
@@ -717,14 +601,14 @@ function FreeWebsitePage() {
           <Link className="brand footer-brand" to="/#top">
             <span className="brand-copy">
               <strong>RAFA THE DEV</strong>
-              <small>CUSTOM SOFTWARE FOR REAL BUSINESSES</small>
+              <small>ONE WEBSITE / DESIGNED AND BUILT AT NO COST</small>
             </span>
           </Link>
           <div className="footer-links">
-            <Link to="/#services">Services</Link>
-            <Link to="/#process">The Process</Link>
-            <Link to="/#about">About Me</Link>
-            <Link to="/free-website" aria-current="page">Free Website</Link>
+            <a href="#how-it-works">Process</a>
+            <a href="#scope">What&apos;s included</a>
+            <a href="#application">Apply</a>
+            <Link to="/">Rafa the Dev</Link>
             <a href="https://www.instagram.com/rafathedev/" target="_blank" rel="noreferrer">
               Instagram <ArrowUpRight size={14} />
             </a>
