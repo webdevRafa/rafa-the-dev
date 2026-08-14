@@ -655,7 +655,7 @@ function FreeWebsitePage() {
         <div className="footer-grid">
           <Link className="brand footer-brand" to="/#top">
             <span className="brand-mark">R</span>
-            <span className="brand-copy"><strong>RAFA / THE DEV</strong><small>DESIGN · CODE · LAUNCH</small></span>
+            <span className="brand-copy"><strong>RAFA / THE DEV</strong></span>
           </Link>
           <div className="footer-links">
             <Link to="/#services">Services</Link><Link to="/#packages">Packages</Link><Link to="/#process">Process</Link><Link to="/#about">About</Link><Link to="/free-website" aria-current="page">Free website</Link>

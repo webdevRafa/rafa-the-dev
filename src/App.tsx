@@ -532,7 +532,7 @@ function App() {
       <footer className="site-footer page-frame">
         <div className="footer-callout"><p>READY WHEN YOU ARE</p><h2>Let’s make the next useful thing.</h2><a className="button button-primary" href="#contact">Start a project <ArrowUpRight size={18} /></a></div>
         <div className="footer-grid">
-          <Link className="brand footer-brand" to="/#top"><span className="brand-mark">R</span><span className="brand-copy"><strong>RAFA / THE DEV</strong><small>DESIGN · CODE · LAUNCH</small></span></Link>
+          <Link className="brand footer-brand" to="/#top"><span className="brand-mark">R</span><span className="brand-copy"><strong>RAFA / THE DEV</strong></span></Link>
           <div className="footer-links"><a href="#services">Services</a><a href="#packages">Packages</a><a href="#process">Process</a><a href="#about">About</a></div>
           <a className="footer-instagram" href="https://www.instagram.com/rafathedev/" target="_blank" rel="noreferrer"><FaInstagram /> @rafathedev <ArrowUpRight size={15} /></a>
         </div>

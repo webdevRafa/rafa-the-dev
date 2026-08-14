@@ -49,7 +49,6 @@ function SiteHeader() {
         <span className="brand-mark" aria-hidden="true">R</span>
         <span className="brand-copy">
           <strong>RAFA / THE DEV</strong>
-          <small>DESIGN · CODE · LAUNCH</small>
         </span>
       </Link>
 
