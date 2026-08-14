@@ -24,12 +24,12 @@
 .free-hero-copy { position: relative; z-index: 2; }
 .free-hero h1 {
   margin: 20px 0 28px;
-  font: 720 clamp(4.2rem, 7.8vw, 8rem)/0.84 var(--rt-font-display);
-  letter-spacing: -0.072em;
+  font: 400 clamp(4.7rem, 8.8vw, 9.2rem)/0.82 var(--rt-font-editorial);
+  letter-spacing: -0.04em;
 }
 .free-hero-static-line { display: block; }
 .free-hero-word-window { position: relative; display: block; min-height: 0.94em; overflow: hidden; color: transparent; background: linear-gradient(95deg, #ff7359, #f054be 64%, #a779ff); -webkit-background-clip: text; background-clip: text; }
-.free-hero-word { position: absolute; inset: 0 auto auto 0; font-style: normal; }
+.free-hero-word { position: absolute; inset: 0 auto auto 0; font-style: italic; }
 .free-hero-intro { max-width: 720px; margin: 0; color: #bec5d5; font-size: clamp(1.05rem, 1.45vw, 1.28rem); line-height: 1.7; }
 .free-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; margin-top: 34px; }
 .free-instagram-rule { display: inline-flex; align-items: center; gap: 9px; color: #eab5d5; font-size: 0.78rem; font-weight: 650; text-decoration: none; }
@@ -50,7 +50,7 @@
 .giveaway-brief::before { content: ''; position: absolute; z-index: -1; inset: -34px 30px 30px -42px; border-radius: 55% 45% 41% 59% / 49% 60% 40% 51%; background: linear-gradient(140deg, rgba(255, 91, 111, 0.28), rgba(135, 70, 255, 0.22)); filter: blur(3px); transform: rotate(-8deg); }
 .giveaway-brief-body { min-height: 320px; padding: 42px 34px; border-radius: 32px 12px 42px 15px; background: linear-gradient(160deg, rgba(242, 69, 171, 0.18), rgba(22, 19, 51, 0.45)); }
 .giveaway-brief-body p { margin: 0 0 18px; color: #ff91cd; font: 600 0.66rem var(--rt-font-mono); letter-spacing: 0.16em; }
-.giveaway-brief-body strong { display: block; max-width: 360px; font: 680 clamp(2.5rem, 4.5vw, 4.6rem)/0.9 var(--rt-font-display); letter-spacing: -0.055em; }
+.giveaway-brief-body strong { display: block; max-width: 400px; font: 400 clamp(2.8rem, 5vw, 5rem)/0.9 var(--rt-font-editorial); letter-spacing: -0.035em; }
 .giveaway-brief-body span { display: block; max-width: 360px; margin-top: 24px; color: #c1c5d3; line-height: 1.65; }
 .giveaway-brief-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; margin-top: 18px; overflow: hidden; border-radius: 14px 8px 30px 10px; background: rgba(255, 255, 255, 0.1); }
 .giveaway-brief-grid > div { display: grid; align-content: center; min-height: 100px; padding: 18px; background: rgba(8, 10, 24, 0.88); }
@@ -81,7 +81,7 @@
 
 .free-scope { display: grid; grid-template-columns: 0.88fr 1.12fr; gap: 9vw; align-items: center; }
 .free-scope h2,
-.free-application h2 { margin: 16px 0 28px; font: 700 clamp(2.8rem, 5.5vw, 5.5rem)/0.95 var(--rt-font-display); letter-spacing: -0.055em; }
+.free-application h2 { margin: 16px 0 28px; font: 400 clamp(3.1rem, 6vw, 6rem)/0.92 var(--rt-font-editorial); letter-spacing: -0.035em; }
 .free-scope-copy > p:not(.section-kicker),
 .free-application-copy > p:not(.section-kicker) { color: var(--rt-muted); line-height: 1.8; }
 .free-scope-note { display: flex; gap: 14px; margin-top: 32px; padding: 20px; color: #d8c4d7; border: 1px solid rgba(239, 79, 189, 0.24); border-radius: 18px; background: rgba(239, 79, 189, 0.07); font-size: 0.82rem; line-height: 1.6; }
@@ -114,7 +114,7 @@
 .eligibility-checks strong,
 .eligibility-checks em { color: #ff9bcf; font-style: normal; }
 .giveaway-preview-ready { display: flex; min-height: 670px; flex-direction: column; align-items: flex-start; justify-content: center; }
-.giveaway-preview-ready h3 { margin: 12px 0; font: 680 clamp(2.7rem, 5vw, 4.8rem)/0.95 var(--rt-font-display); letter-spacing: -0.05em; }
+.giveaway-preview-ready h3 { margin: 12px 0; font: 400 clamp(3rem, 5.4vw, 5.2rem)/0.92 var(--rt-font-editorial); letter-spacing: -0.035em; }
 .giveaway-preview-ready > p:not(.section-kicker) { max-width: 620px; color: var(--rt-muted); line-height: 1.75; }
 .giveaway-preview-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
 

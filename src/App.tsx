@@ -195,53 +195,6 @@ function FaqItem({ faq, index }: { faq: (typeof faqs)[number]; index: number }) 
   )
 }
 
-function HeroSignalBoard() {
-  const reduceMotion = useReducedMotion()
-  return (
-    <motion.div
-      className="signal-board"
-      initial={reduceMotion ? false : { opacity: 0, x: 52, rotate: 2 }}
-      animate={{ opacity: 1, x: 0, rotate: 0 }}
-      transition={{ duration: 0.9, delay: 0.25, ease: revealEase }}
-    >
-      <span className="signal-board__orb" />
-      <div className="signal-board__art" aria-hidden="true">
-        <span className="signal-board__mesh" />
-        <span className="signal-board__loop signal-board__loop--outer" />
-        <span className="signal-board__loop signal-board__loop--inner" />
-        <span className="signal-board__shard signal-board__shard--one" />
-        <span className="signal-board__shard signal-board__shard--two" />
-        <span className="signal-board__shard signal-board__shard--three" />
-        <span className="signal-board__core">
-          <i />
-          <i />
-          <i />
-        </span>
-        <span className="signal-board__coordinate">08 / 13 / BUILD</span>
-      </div>
-      <motion.div
-        className="signal-card signal-card--top"
-        animate={reduceMotion ? undefined : { y: [0, -10, 0], rotate: [-2, 0, -2] }}
-        transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut' }}
-      >
-        <span>NOW BUILDING</span>
-        <strong>Clearer systems for real businesses.</strong>
-      </motion.div>
-      <motion.div
-        className="signal-card signal-card--bottom"
-        animate={reduceMotion ? undefined : { y: [0, 9, 0], rotate: [2, 0, 2] }}
-        transition={{ duration: 7.2, repeat: Infinity, ease: 'easeInOut' }}
-      >
-        <span className="live-dot" />
-        <div><strong>AVAILABLE</strong><small>For select projects</small></div>
-      </motion.div>
-      <div className="signal-board__rail" aria-hidden="true">
-        <span>WEB</span><span>APPS</span><span>SYSTEMS</span>
-      </div>
-    </motion.div>
-  )
-}
-
 function App() {
   const [briefReady, setBriefReady] = useState(false)
   const [briefCopied, setBriefCopied] = useState(false)
@@ -327,7 +280,21 @@ function App() {
               </motion.div>
             </motion.div>
           </div>
-          <HeroSignalBoard />
+          <motion.aside
+            className="hero-context"
+            initial={reduceMotion ? false : { opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.72, delay: 0.42, ease: revealEase }}
+            aria-label="Studio details"
+          >
+            <div className="hero-availability"><span className="live-dot" /> Available for select projects</div>
+            <p>Independent design and development for businesses ready to replace friction with something clearer.</p>
+            <dl>
+              <div><dt>FOCUS</dt><dd>Websites + web systems</dd></div>
+              <div><dt>APPROACH</dt><dd>Strategy through launch</dd></div>
+              <div><dt>BASED IN</dt><dd>San Antonio, Texas</dd></div>
+            </dl>
+          </motion.aside>
           <div className="hero-proof" aria-label="Core technologies and approach">
             <span>STRATEGY TO LAUNCH</span>
             <div>{['React', 'TypeScript', 'Firebase', 'Stripe', 'Vercel'].map((item) => <span key={item}>{item}</span>)}</div>
@@ -426,22 +393,15 @@ function App() {
         </section>
 
         <section className="about-section page-frame" id="about" data-ambient-scene="5">
-          <Reveal className="about-visual">
-            <div className="about-system-art" aria-hidden="true">
-              <span className="about-system-art__grid" />
-              <span className="about-system-art__orbit about-system-art__orbit--one" />
-              <span className="about-system-art__orbit about-system-art__orbit--two" />
-              <span className="about-system-art__module about-system-art__module--strategy"><i>01</i><b>STRATEGY</b></span>
-              <span className="about-system-art__module about-system-art__module--design"><i>02</i><b>DESIGN</b></span>
-              <span className="about-system-art__module about-system-art__module--build"><i>03</i><b>BUILD</b></span>
-              <span className="about-system-art__node about-system-art__node--one" />
-              <span className="about-system-art__node about-system-art__node--two" />
-              <span className="about-system-art__node about-system-art__node--three" />
+          <Reveal className="about-aside">
+            <p className="section-kicker">THE PERSON BEHIND THE BUILD</p>
+            <div className="about-facts" aria-label="About Rafa">
+              <div><span>BASED IN</span><strong>San Antonio, Texas</strong></div>
+              <div><span>WORKING STYLE</span><strong>Direct collaboration</strong></div>
+              <div><span>BUILT FOR</span><strong>Real businesses</strong></div>
             </div>
-            <span className="about-stamp">SAN ANTONIO<br />TEXAS</span>
           </Reveal>
           <Reveal className="about-copy" delay={0.08}>
-            <p className="section-kicker">THE PERSON BEHIND THE BUILD</p>
             <h2>Thoughtful software. Straightforward collaboration.</h2>
             <p className="about-lead">I’m Rafa, a full-stack developer who likes understanding how a business works before writing the first line of code.</p>
             <p>My projects have included marketplaces, booking platforms, payment systems, dashboards, portals, analytics tools, and custom operations software.</p>
