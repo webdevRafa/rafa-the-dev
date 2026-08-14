@@ -683,7 +683,7 @@ function App() {
                     <span className="package-badge">MOST POPULAR</span>
                   )}
                   <p className="package-index">
-                    0{index + 1} / {item.timeline}
+                    {item.timeline}
                   </p>
                   <h3>{item.name}</h3>
                   <div className="package-price-wrap">
@@ -694,7 +694,7 @@ function App() {
                   </div>
                   <p>{item.note}</p>
                   <div className="package-architecture">
-                    <span>DATA ARCHITECTURE</span>
+                    <span>PROJECT COMPLEXITY</span>
                     <strong>{item.architecture}</strong>
                   </div>
                   <ul>

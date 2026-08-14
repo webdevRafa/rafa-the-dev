@@ -107,7 +107,7 @@ function PackagePage() {
               <p>Friendly base pricing for the focused version. Add only the capabilities your project actually needs.</p>
               <dl>
                 <div><dt><Clock3 size={15} /> Typical timing</dt><dd>{servicePackage.timeline}</dd></div>
-                <div><dt><Database size={15} /> Data level</dt><dd>{servicePackage.architecture}</dd></div>
+                <div><dt><Database size={15} /> Project complexity</dt><dd>{servicePackage.architecture}</dd></div>
               </dl>
             </aside>
           </div>
