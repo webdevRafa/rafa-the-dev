@@ -34,7 +34,7 @@ export const servicePackages: ServicePackage[] = [
     accent: 'cyan',
     note: 'A clean, credible website for a business that needs to explain its services and make it easy to get in touch.',
     idealFor: 'Local businesses, independent professionals, new ventures, and established companies replacing an outdated site.',
-    features: ['Up to five custom pages', 'Mobile-friendly custom design', 'Contact or inquiry form', 'Automatic confirmation emails'],
+    features: ['Up to five custom pages', 'Mobile-friendly custom design', 'Contact form + automatic emails', 'Search-friendly launch setup'],
     includes: [
       { title: 'Up to five pages', description: 'A practical page set such as Home, About, Services, Gallery, and Contact.' },
       { title: 'Mobile-friendly custom design', description: 'A polished experience built to work beautifully on phones, tablets, and desktop screens.' },
@@ -42,10 +42,9 @@ export const servicePackages: ServicePackage[] = [
       { title: 'Ready to go live', description: 'Fast loading, accessibility, search-friendly basics, domain connection, and a complete website launch.' },
     ],
     addOns: [
-      { id: 'search-visibility', name: 'Search visibility setup', description: 'Help search engines understand your site with clear page titles, descriptions, a sitemap, and Google Search Console setup.', price: 250 },
-      { id: 'local-business-seo', name: 'Local business SEO', description: 'Improve visibility for nearby customers with location-focused content, local business details, and a map.', price: 150 },
-      { id: 'copy-refinement', name: 'Copy refinement', description: 'I polish and restructure your supplied copy so it reads clearly and confidently.', price: 200 },
-      { id: 'appointment-requests', name: 'Appointment request form', description: 'A detailed request form that collects the information you need before following up.', price: 300 },
+      { id: 'search-visibility', name: 'Search visibility upgrade', description: 'Go beyond the included search-friendly basics with deeper page optimization, Google Search Console setup, and local business details when relevant.', price: 200 },
+      { id: 'copy-refinement', name: 'Copy refinement', description: 'I polish and restructure your supplied copy so it reads clearly and confidently.', price: 150 },
+      { id: 'appointment-requests', name: 'Appointment request form', description: 'A detailed request form that collects the information you need before following up.', price: 200 },
     ],
   },
   {
@@ -68,11 +67,11 @@ export const servicePackages: ServicePackage[] = [
       { title: 'Simple management dashboard', description: 'View, organize, and update incoming requests from one convenient place.' },
     ],
     addOns: [
-      { id: 'search-visibility', name: 'Search visibility setup', description: 'Help search engines understand your site with optimized pages, a sitemap, and Google Search Console setup.', price: 300 },
-      { id: 'booking-workflow', name: 'Online booking', description: 'Let customers choose available times and receive confirmations, with clear rules for rescheduling.', price: 500 },
-      { id: 'stripe-payments', name: 'Online payments or deposits', description: 'Let customers pay securely online while you keep track of each payment.', price: 600 },
-      { id: 'email-automation', name: 'Automatic customer emails', description: 'Branded emails for important moments such as confirmations, updates, and reminders.', price: 250 },
-      { id: 'admin-dashboard', name: 'Advanced management dashboard', description: 'Filter requests, update statuses, add notes, and manage customer records in one place.', price: 700 },
+      { id: 'search-visibility', name: 'Search visibility upgrade', description: 'Go beyond the included search-friendly basics with deeper page optimization and Google Search Console setup.', price: 200 },
+      { id: 'booking-workflow', name: 'Online booking', description: 'Let customers choose available times and receive confirmations, with clear rules for rescheduling.', price: 350 },
+      { id: 'stripe-payments', name: 'Online payments or deposits', description: 'Let customers pay securely online while you keep track of each payment.', price: 400 },
+      { id: 'email-automation', name: 'Extended email automation', description: 'Add branded confirmations, reminders, and status updates across multiple steps of the customer experience.', price: 150 },
+      { id: 'admin-dashboard', name: 'Advanced management dashboard', description: 'Filter requests, update statuses, add notes, and manage customer records in one place.', price: 400 },
     ],
   },
   {
@@ -94,11 +93,11 @@ export const servicePackages: ServicePackage[] = [
       { title: 'Admin dashboard', description: 'Your team gets a central place to manage records, statuses, and important actions.' },
     ],
     addOns: [
-      { id: 'search-ready-pages', name: 'Search-ready marketing pages', description: 'Public pages that clearly explain what you offer, encourage inquiries, and help search engines understand your business.', price: 350 },
-      { id: 'additional-role', name: 'Additional account type', description: 'A separate sign-in experience and access level for another kind of customer, employee, or partner.', price: 500 },
-      { id: 'additional-workflow', name: 'Additional business process', description: 'Build another connected process for a different task your customers or team need to complete.', price: 1000 },
-      { id: 'api-integration', name: 'Connect another business service', description: 'Connect your system to another service your business uses, with safeguards when requests fail or run late.', price: 750 },
-      { id: 'analytics-dashboard', name: 'Reporting dashboard', description: 'Clear charts and summaries that help you understand activity across your system.', price: 650 },
+      { id: 'search-ready-pages', name: 'Search-ready marketing pages', description: 'Public pages that clearly explain what you offer, encourage inquiries, and help search engines understand your business.', price: 300 },
+      { id: 'additional-role', name: 'Additional account type', description: 'A separate sign-in experience and access level for another kind of customer, employee, or partner.', price: 400 },
+      { id: 'additional-workflow', name: 'Additional business process', description: 'Build another connected process for a different task your customers or team need to complete.', price: 750 },
+      { id: 'api-integration', name: 'Connect another business service', description: 'Connect your system to another service your business uses, with safeguards when requests fail or run late.', price: 600 },
+      { id: 'analytics-dashboard', name: 'Reporting dashboard', description: 'Clear charts and summaries that help you understand activity across your system.', price: 500 },
     ],
   },
 ]
