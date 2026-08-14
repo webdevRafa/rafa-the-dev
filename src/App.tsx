@@ -396,7 +396,7 @@ function App() {
 
         <section className="services-section page-frame" id="services" data-ambient-scene="2">
           <Reveal className="section-heading">
-            <div><p className="section-kicker">WHAT I BUILD</p><h2>Digital experiences with a job to do.</h2></div>
+            <div><p className="section-kicker">WHAT I BUILD</p><h2>Websites for your customers. Systems for your business.</h2></div>
             <p>Start with the outcome. I will help decide the right experience, system, and first version to get you there.</p>
           </Reveal>
           <ServicesGrid />
