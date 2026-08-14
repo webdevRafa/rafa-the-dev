@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
 import { FaInstagram } from 'react-icons/fa6'
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 const revealEase = [0.22, 1, 0.36, 1] as const
 
@@ -10,8 +10,6 @@ function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const reduceMotion = useReducedMotion()
-  const { pathname } = useLocation()
-  const freeWebsiteActive = pathname === '/free-website'
 
   useEffect(() => {
     const updateHeader = () => setScrolled(window.scrollY > 24)
@@ -60,14 +58,6 @@ function SiteHeader() {
         <Link to="/#packages" onClick={closeMenu}>Packages</Link>
         <Link to="/#process" onClick={closeMenu}>Process</Link>
         <Link to="/#about" onClick={closeMenu}>About</Link>
-        <Link
-          className={`nav-feature-link${freeWebsiteActive ? ' is-active' : ''}`}
-          to="/free-website"
-          aria-current={freeWebsiteActive ? 'page' : undefined}
-          onClick={closeMenu}
-        >
-          Free website
-        </Link>
         <a
           className="mobile-instagram"
           href="https://www.instagram.com/rafathedev/"
