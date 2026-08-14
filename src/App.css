@@ -376,23 +376,36 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
 /* Packages */
 .packages-section { position: relative; }
 .packages-grid { display: grid; grid-template-columns: repeat(3, 1fr); align-items: stretch; gap: 16px; margin-top: 64px; }
+.package-card-shell { min-width: 0; }
 .package-card {
   position: relative;
   display: flex;
+  height: 100%;
   flex-direction: column;
-  min-height: 590px;
+  min-height: 660px;
   padding: 32px;
+  overflow: hidden;
   border: 1px solid var(--rt-line);
   border-radius: var(--rt-radius-lg);
   background: rgba(9, 14, 31, 0.78);
+  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.12);
   backdrop-filter: blur(14px);
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), border-color 320ms ease, box-shadow 420ms ease;
 }
-.package-card.is-featured { margin-top: -20px; margin-bottom: 20px; border-color: rgba(158, 111, 255, 0.55); background: linear-gradient(160deg, rgba(50, 38, 101, 0.9), rgba(11, 16, 35, 0.92)); box-shadow: 0 30px 90px rgba(78, 50, 180, 0.2); }
-.package-badge { position: absolute; top: 20px; right: 20px; padding: 7px 9px; color: #070a14; border-radius: 100px; background: #b9a3ff; font: 700 0.55rem var(--rt-font-mono); letter-spacing: 0.1em; }
+.package-card::before { content: ''; position: absolute; z-index: 0; inset: 0; background: linear-gradient(160deg, rgba(50, 38, 101, 0.96), rgba(23, 21, 59, 0.94) 58%, rgba(11, 16, 35, 0.94)); opacity: 0; transition: opacity 320ms ease; pointer-events: none; }
+.package-card > *:not(.package-badge) { position: relative; z-index: 1; }
+.package-card.is-active { border-color: rgba(158, 111, 255, 0.65); box-shadow: 0 32px 90px rgba(78, 50, 180, 0.24); }
+.package-card.is-active::before { opacity: 1; }
+.package-badge { position: absolute; z-index: 2; top: 20px; right: 20px; padding: 7px 9px; color: #070a14; border-radius: 100px; background: #b9a3ff; font: 700 0.55rem var(--rt-font-mono); letter-spacing: 0.1em; }
 .package-index { margin: 0; color: #7f8aa3; font: 500 0.61rem var(--rt-font-mono); letter-spacing: 0.08em; }
 .package-card h3 { margin: 72px 0 8px; font: 670 2.1rem/1 var(--rt-font-display); letter-spacing: -0.035em; }
-.package-price { font: 720 clamp(3rem, 5vw, 4.7rem)/1 var(--rt-font-display); letter-spacing: -0.06em; }
+.package-price-wrap { display: grid; gap: 7px; }
+.package-price-wrap > span { color: #8a95ae; font: 600 0.57rem var(--rt-font-mono); letter-spacing: 0.13em; }
+.package-price { font: 720 clamp(3rem, 4.6vw, 4.45rem)/1 var(--rt-font-display); letter-spacing: -0.06em; }
 .package-card > p:not(.package-index) { min-height: 72px; margin: 20px 0 28px; color: var(--rt-muted); line-height: 1.65; }
+.package-architecture { display: grid; gap: 7px; margin-bottom: 28px; padding: 16px 0; border-top: 1px solid rgba(185, 163, 255, 0.24); border-bottom: 1px solid rgba(185, 163, 255, 0.24); }
+.package-architecture span { color: #8d7dba; font: 600 0.55rem var(--rt-font-mono); letter-spacing: 0.13em; }
+.package-architecture strong { color: #dcd5f4; font-size: 0.76rem; font-weight: 650; }
 .package-card li svg { color: #ad93ff; }
 .package-card > a { display: inline-flex; align-items: center; gap: 9px; margin-top: auto; padding-top: 32px; color: white; font-size: 0.8rem; font-weight: 700; text-decoration: none; }
 .package-card > a:hover { color: #b9a5ff; }
@@ -401,6 +414,10 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
 .care-strip strong { font-family: var(--rt-font-display); }
 .care-strip p { margin: 0; color: var(--rt-muted); font-size: 0.85rem; }
 .care-strip b { white-space: nowrap; color: #ffc08c; font-family: var(--rt-font-display); }
+
+@media (hover: hover) and (pointer: fine) and (min-width: 1101px) {
+  .package-card.is-active { transform: translateY(-20px); }
+}
 
 /* Process */
 .process-section { display: grid; grid-template-columns: 0.75fr 1.25fr; gap: 10vw; }
@@ -517,8 +534,7 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
   .hero-section { grid-template-columns: minmax(0, 1.25fr) minmax(250px, 0.55fr); gap: 48px; }
   .service-card { min-height: 450px; }
   .packages-grid { grid-template-columns: 1fr; }
-  .package-card,
-  .package-card.is-featured { min-height: auto; margin: 0; }
+  .package-card { min-height: auto; }
   .package-card h3 { margin-top: 54px; }
   .package-card > p:not(.package-index) { min-height: auto; }
   .care-strip { grid-template-columns: auto 1fr auto; }

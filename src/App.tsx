@@ -68,26 +68,29 @@ const services = [
 
 const packages = [
   {
-    name: 'Launch Page',
-    price: '$950',
-    note: 'A sharp single-page presence for one clear offer.',
-    timeline: '1–2 weeks',
-    features: ['One custom responsive page', 'Conversion-focused structure', 'Contact or lead form', 'SEO + accessibility foundation'],
+    name: 'Website Foundation',
+    price: '$1,200',
+    note: 'A polished marketing site when the main job is explaining the offer and generating qualified inquiries.',
+    timeline: '1–3 weeks',
+    architecture: 'Light — lead capture only',
+    features: ['Flexible page count based on content', 'Conversion-focused UX + responsive build', 'Lead capture + confirmation email', 'SEO, analytics + accessibility foundation'],
   },
   {
-    name: 'Business Website',
-    price: '$2,500',
-    note: 'A complete digital home for a growing service business.',
-    timeline: '2–4 weeks',
+    name: 'Connected Business Site',
+    price: '$3,500',
+    note: 'A customer-facing website connected to one meaningful workflow your business needs to manage.',
+    timeline: '3–6 weeks',
+    architecture: 'Focused — one core workflow',
     featured: true,
-    features: ['Up to five focused pages', 'Content + UX guidance', 'Custom responsive build', 'Analytics + launch support'],
+    features: ['Everything in Website Foundation', 'Purpose-built Firestore data model', 'Booking, payments, or email integration', 'Lightweight admin or managed records'],
   },
   {
-    name: 'Custom Web System',
-    price: '$5,000+',
-    note: 'Software for bookings, portals, operations, or payments.',
+    name: 'Custom Business System',
+    price: '$7,500',
+    note: 'A full web application for portals, operations, marketplaces, or interconnected business processes.',
     timeline: 'Scoped together',
-    features: ['Technical product blueprint', 'Authentication + database', 'Custom workflows + integrations', 'Testing + production launch'],
+    architecture: 'Advanced — roles + connected data',
+    features: ['Multi-collection data architecture', 'Authentication, permissions + security rules', 'Multiple workflows + API integrations', 'Admin tools, testing + production launch'],
   },
 ]
 
@@ -304,6 +307,7 @@ function App() {
   const [projectBrief, setProjectBrief] = useState('')
   const [isSubmittingBrief, setIsSubmittingBrief] = useState(false)
   const [briefSubmitError, setBriefSubmitError] = useState('')
+  const [activePackageIndex, setActivePackageIndex] = useState(1)
   const reduceMotion = useReducedMotion()
   const { scrollYProgress } = useScroll()
   const smoothScrollProgress = useSpring(scrollYProgress, { stiffness: 180, damping: 28, restDelta: 0.001 })
@@ -433,19 +437,32 @@ function App() {
 
         <section className="packages-section page-frame" id="packages" data-ambient-scene="3">
           <Reveal className="section-heading packages-heading">
-            <div><p className="section-kicker">CLEAR STARTING POINTS</p><h2>Choose the size of the first move.</h2></div>
-            <p>These packages create a practical baseline. Your final proposal is tailored to the work you actually need.</p>
+            <div><p className="section-kicker">CLEAR STARTING POINTS</p><h2>Pricing follows the system, not the sitemap.</h2></div>
+            <p>Page count matters a little. Data models, user roles, business rules, automations, and integrations are what shape most of the investment.</p>
           </Reveal>
-          <div className="packages-grid">
+          <div
+            className="packages-grid"
+            onMouseLeave={() => setActivePackageIndex(1)}
+            onBlurCapture={(event) => {
+              if (!(event.relatedTarget instanceof Node) || !event.currentTarget.contains(event.relatedTarget)) setActivePackageIndex(1)
+            }}
+          >
             {packages.map((item, index) => (
-              <Reveal className={`package-card${item.featured ? ' is-featured' : ''}`} delay={index * 0.08} key={item.name}>
-                {item.featured && <span className="package-badge">MOST POPULAR</span>}
-                <p className="package-index">0{index + 1} / {item.timeline}</p>
-                <h3>{item.name}</h3>
-                <strong className="package-price">{item.price}</strong>
-                <p>{item.note}</p>
-                <ul>{item.features.map((feature) => <li key={feature}><Check size={15} />{feature}</li>)}</ul>
-                <a href="#contact">Talk about this package <ArrowRight size={17} /></a>
+              <Reveal className="package-card-shell" delay={index * 0.08} key={item.name}>
+                <article
+                  className={`package-card${activePackageIndex === index ? ' is-active' : ''}`}
+                  onMouseEnter={() => setActivePackageIndex(index)}
+                  onFocusCapture={() => setActivePackageIndex(index)}
+                >
+                  {item.featured && <span className="package-badge">MOST POPULAR</span>}
+                  <p className="package-index">0{index + 1} / {item.timeline}</p>
+                  <h3>{item.name}</h3>
+                  <div className="package-price-wrap"><span>STARTING AT</span><strong className="package-price">{item.price}</strong></div>
+                  <p>{item.note}</p>
+                  <div className="package-architecture"><span>DATA ARCHITECTURE</span><strong>{item.architecture}</strong></div>
+                  <ul>{item.features.map((feature) => <li key={feature}><Check size={15} />{feature}</li>)}</ul>
+                  <a href="#contact">Talk about this package <ArrowRight size={17} /></a>
+                </article>
               </Reveal>
             ))}
           </div>
