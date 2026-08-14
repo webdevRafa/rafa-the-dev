@@ -21,6 +21,12 @@
   --rt-shadow: 0 32px 80px rgba(0, 0, 0, 0.38);
 }
 
+@property --service-glow-color {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: #3158ff;
+}
+
 .public-site-shell,
 .free-site-shell {
   position: relative;
@@ -308,22 +314,21 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
 .about-section,
 .faq-section,
 .contact-section { padding-block: clamp(100px, 12vw, 170px); }
-.services-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: stretch; gap: 18px; margin-top: 68px; }
+.services-grid { position: relative; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: stretch; gap: 18px; margin-top: 68px; isolation: isolate; }
+.services-grid__spotlight { display: none; }
 .service-card {
   position: relative;
+  z-index: 1;
   grid-column: span 6;
   min-height: 480px;
   padding: clamp(28px, 4vw, 48px);
   overflow: hidden;
   border: 1px solid var(--rt-line);
   border-radius: var(--rt-radius-lg);
-  background: linear-gradient(145deg, rgba(18, 28, 58, 0.82), rgba(8, 13, 29, 0.82));
+  background: linear-gradient(145deg, rgba(18, 28, 58, 0.7), rgba(8, 13, 29, 0.76));
   box-shadow: 0 22px 70px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(9px);
 }
-.service-card::after { content: ''; position: absolute; right: -80px; bottom: -100px; width: 260px; aspect-ratio: 1; border-radius: 50%; background: var(--card-glow, var(--rt-blue)); opacity: 0.13; filter: blur(20px); }
-.service-card--2 { --card-glow: var(--rt-violet); }
-.service-card--3 { --card-glow: var(--rt-magenta); }
-.service-card--4 { --card-glow: var(--rt-coral); }
 .service-card__meta { display: flex; align-items: center; justify-content: space-between; color: #76829e; font: 500 0.66rem var(--rt-font-mono); }
 .service-card__meta svg { color: var(--rt-cyan); }
 .service-card__tag { margin: 82px 0 13px; color: var(--rt-cyan) !important; font: 600 0.66rem var(--rt-font-mono) !important; letter-spacing: 0.12em; text-transform: uppercase; }
@@ -338,6 +343,35 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
 .capability-ribbon > div { display: flex; align-items: center; gap: 12px; min-height: 84px; padding: 20px; background: rgba(7, 12, 27, 0.92); }
 .capability-ribbon svg { color: var(--rt-violet); }
 .capability-ribbon span { color: #bdc5d6; font-size: 0.78rem; }
+
+@media (hover: hover) and (pointer: fine) and (min-width: 901px) {
+  .services-grid__spotlight {
+    --service-glow-x: 50%;
+    --service-glow-y: 50%;
+    --service-clip-top: 0px;
+    --service-clip-right: 50%;
+    --service-clip-bottom: 50%;
+    --service-clip-left: 0px;
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    display: block;
+    clip-path: inset(var(--service-clip-top) var(--service-clip-right) var(--service-clip-bottom) var(--service-clip-left) round var(--rt-radius-lg));
+    background: radial-gradient(
+      circle 310px at var(--service-glow-x) var(--service-glow-y),
+      color-mix(in srgb, var(--service-glow-color) 88%, white 12%) 0%,
+      color-mix(in srgb, var(--service-glow-color) 74%, transparent) 20%,
+      color-mix(in srgb, var(--service-glow-color) 36%, transparent) 44%,
+      transparent 72%
+    );
+    opacity: 0;
+    filter: saturate(135%);
+    pointer-events: none;
+    transition: opacity 180ms ease, --service-glow-color 360ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: background, opacity, clip-path;
+  }
+  .services-grid.is-spotlight-active .services-grid__spotlight { opacity: 1; }
+}
 
 /* Packages */
 .packages-section { position: relative; }
