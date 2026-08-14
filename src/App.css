@@ -92,18 +92,22 @@
   min-height: 70px;
   padding: 10px 12px 10px 18px;
   color: var(--rt-paper);
-  border: 1px solid rgba(232, 238, 255, 0.14);
+  border: 1px solid transparent;
   border-radius: 18px;
-  background: rgba(7, 11, 24, 0.68);
-  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.22);
-  backdrop-filter: blur(18px) saturate(130%);
-  transition: background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+  background: rgba(7, 11, 24, 0);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0);
+  -webkit-backdrop-filter: blur(0) saturate(100%);
+  backdrop-filter: blur(0) saturate(100%);
+  transition: background 320ms ease, border-color 320ms ease, box-shadow 320ms ease, backdrop-filter 320ms ease, -webkit-backdrop-filter 320ms ease;
+  will-change: transform;
 }
 
 .site-header.is-scrolled {
   background: rgba(6, 9, 20, 0.9);
   border-color: rgba(232, 238, 255, 0.2);
   box-shadow: 0 18px 54px rgba(0, 0, 0, 0.36);
+  -webkit-backdrop-filter: blur(18px) saturate(130%);
+  backdrop-filter: blur(18px) saturate(130%);
 }
 
 .brand {

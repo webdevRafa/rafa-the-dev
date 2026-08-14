@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
 import { FaInstagram } from 'react-icons/fa6'
@@ -9,14 +9,63 @@ const revealEase = [0.22, 1, 0.36, 1] as const
 function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [headerVisible, setHeaderVisible] = useState(true)
   const reduceMotion = useReducedMotion()
+  const lastScrollY = useRef(0)
+  const scrollDirection = useRef<-1 | 0 | 1>(0)
+  const intentDistance = useRef(0)
 
   useEffect(() => {
-    const updateHeader = () => setScrolled(window.scrollY > 24)
-    updateHeader()
-    window.addEventListener('scroll', updateHeader, { passive: true })
-    return () => window.removeEventListener('scroll', updateHeader)
-  }, [])
+    let frameId = 0
+
+    lastScrollY.current = Math.max(window.scrollY, 0)
+
+    const updateHeader = () => {
+      const nextScrollY = Math.max(window.scrollY, 0)
+      const delta = nextScrollY - lastScrollY.current
+
+      setScrolled(nextScrollY > 24)
+
+      if (nextScrollY <= 32 || menuOpen) {
+        setHeaderVisible(true)
+        scrollDirection.current = 0
+        intentDistance.current = 0
+      } else if (Math.abs(delta) >= 1) {
+        const nextDirection = delta > 0 ? 1 : -1
+
+        if (nextDirection !== scrollDirection.current) {
+          scrollDirection.current = nextDirection
+          intentDistance.current = 0
+        }
+
+        intentDistance.current += Math.abs(delta)
+
+        if (nextDirection === 1 && nextScrollY > 72 && intentDistance.current >= 18) {
+          setHeaderVisible(false)
+          intentDistance.current = 0
+        }
+
+        if (nextDirection === -1 && intentDistance.current >= 10) {
+          setHeaderVisible(true)
+          intentDistance.current = 0
+        }
+      }
+
+      lastScrollY.current = nextScrollY
+      frameId = 0
+    }
+
+    const handleScroll = () => {
+      if (frameId === 0) frameId = window.requestAnimationFrame(updateHeader)
+    }
+
+    frameId = window.requestAnimationFrame(updateHeader)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      if (frameId !== 0) window.cancelAnimationFrame(frameId)
+    }
+  }, [menuOpen])
 
   useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {
@@ -42,8 +91,9 @@ function SiteHeader() {
     <motion.header
       className={`site-header${scrolled ? ' is-scrolled' : ''}`}
       initial={reduceMotion ? false : { opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.62, ease: revealEase }}
+      animate={{ opacity: 1, y: headerVisible ? 0 : '-155%' }}
+      transition={reduceMotion ? { duration: 0 } : { duration: headerVisible ? 0.48 : 0.34, ease: revealEase }}
+      onFocusCapture={() => setHeaderVisible(true)}
     >
       <Link className="brand header-brand" to="/#top" aria-label="Rafa the Dev home">
         <span className="brand-mark" aria-hidden="true">R</span>
