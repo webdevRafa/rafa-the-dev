@@ -44,7 +44,6 @@ export const servicePackages: ServicePackage[] = [
     addOns: [
       { id: 'search-visibility', name: 'Search visibility upgrade', description: 'Go beyond the included search-friendly basics with deeper page optimization, Google Search Console setup, and local business details when relevant.', price: 200 },
       { id: 'copy-refinement', name: 'Copy refinement', description: 'I polish and restructure your supplied copy so it reads clearly and confidently.', price: 150 },
-      { id: 'appointment-requests', name: 'Appointment request form', description: 'A detailed request form that collects the information you need before following up.', price: 200 },
     ],
   },
   {
