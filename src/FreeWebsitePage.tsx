@@ -16,6 +16,7 @@ import { FaInstagram } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
 import './App.css'
 import './FreeWebsitePage.css'
+import AmbientVectorField from './AmbientVectorField'
 
 const revealEase = [0.22, 1, 0.36, 1] as const
 const revealViewport = { once: true, amount: 0.14 } as const
@@ -62,11 +63,10 @@ const scopeOptions = [
 ]
 
 const giveawayHeroWords = [
-  'STORY.',
-  'IDEA.',
-  'VISION.',
+  'BUSINESS.',
   'MISSION.',
-  'PROBLEM.',
+  'IDEA.',
+  'COMMUNITY.',
   'DREAM.',
 ] as const
 
@@ -198,8 +198,9 @@ function FreeWebsitePage() {
           aria-hidden="true"
         />
       )}
+      <AmbientVectorField />
       <main id="main">
-        <section className="free-hero mx-auto max-w-[1400px]" id="top">
+        <section className="free-hero page-frame" id="top" data-ambient-scene="4">
           <motion.div
             className="free-hero-copy"
             initial={reduceMotion ? false : 'hidden'}
@@ -213,10 +214,10 @@ function FreeWebsitePage() {
                 visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: revealEase } },
               }}
             >
-              FREE WEBSITE GIVEAWAY
+              COMMUNITY BUILD · FREE WEBSITE
             </motion.p>
             <motion.h1
-              aria-label="You bring the story. I'll build the solution."
+              aria-label="One worthy business, mission, idea, community, or dream deserves a real launch."
               variants={{
                 hidden: { opacity: 0, y: 28, filter: 'blur(7px)' },
                 visible: {
@@ -227,9 +228,9 @@ function FreeWebsitePage() {
                 },
               }}
             >
-              <span className="free-hero-static-line">You bring the</span>
+              <span className="free-hero-static-line">One worthy</span>
               <RotatingGiveawayWord />
-              <span className="free-hero-static-line">I&apos;ll build the solution.</span>
+              <span className="free-hero-static-line">deserves a real launch.</span>
             </motion.h1>
             <motion.p
               className="free-hero-intro"
@@ -239,8 +240,8 @@ function FreeWebsitePage() {
               }}
             >
               I am choosing one person, small business, creator, or community organization
-              and building their website for free. Tell me what you are working toward and
-              why this website would matter.
+              and giving their story a thoughtful, custom website—strategy, design, build,
+              and launch included.
             </motion.p>
             <motion.div
               className="free-hero-actions"
@@ -304,7 +305,7 @@ function FreeWebsitePage() {
           </motion.aside>
         </section>
 
-        <section className="free-section free-process mx-auto max-w-[1400px]" id="how-it-works">
+        <section className="free-section free-process page-frame" id="how-it-works" data-ambient-scene="5">
           <PageReveal className="free-section-heading free-process-heading">
             <p className="section-kicker">HOW IT WORKS</p>
             <p>
@@ -330,7 +331,7 @@ function FreeWebsitePage() {
           </div>
         </section>
 
-        <section className="free-section free-scope mx-auto max-w-[1400px]">
+        <section className="free-section free-scope page-frame" data-ambient-scene="6">
           <PageReveal className="free-scope-copy">
             <p className="section-kicker">WHAT THE WINNER RECEIVES</p>
             <h2>A focused website built to be useful.</h2>
@@ -358,7 +359,7 @@ function FreeWebsitePage() {
           </PageReveal>
         </section>
 
-        <section className="free-section free-application mx-auto max-w-[1400px]" id="application">
+        <section className="free-section free-application page-frame" id="application" data-ambient-scene="7">
           <PageReveal className="free-application-copy">
             <p className="section-kicker">TELL ME YOUR STORY</p>
             <h2>Help me understand what this could unlock.</h2>
@@ -640,32 +641,28 @@ function FreeWebsitePage() {
       </main>
 
       <motion.footer
-        className="site-footer mx-auto max-w-[1400px]"
+        className="site-footer page-frame"
         initial={reduceMotion ? false : { opacity: 0, y: 28 }}
         whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
         viewport={revealViewport}
         transition={{ duration: 0.65, ease: revealEase }}
       >
-        <div className="footer-top">
+        <div className="footer-callout">
+          <p>YOUR STORY COULD BE NEXT</p>
+          <h2>Ready to share what you’re building?</h2>
+          <a className="button button-primary" href="#application">Apply now <ArrowUpRight size={18} /></a>
+        </div>
+        <div className="footer-grid">
           <Link className="brand footer-brand" to="/#top">
-            <span className="brand-copy">
-              <strong>RAFA THE DEV</strong>
-              <small>CUSTOM SOFTWARE FOR REAL BUSINESSES</small>
-            </span>
+            <span className="brand-mark">R</span>
+            <span className="brand-copy"><strong>RAFA / THE DEV</strong><small>DESIGN · CODE · LAUNCH</small></span>
           </Link>
           <div className="footer-links">
-            <Link to="/#services">Services</Link>
-            <Link to="/#process">The Process</Link>
-            <Link to="/#about">About Me</Link>
-            <Link to="/free-website" aria-current="page">Free Website</Link>
-            <a href="https://www.instagram.com/rafathedev/" target="_blank" rel="noreferrer">
-              Instagram <ArrowUpRight size={14} />
-            </a>
+            <Link to="/#services">Services</Link><Link to="/#packages">Packages</Link><Link to="/#process">Process</Link><Link to="/#about">About</Link><Link to="/free-website" aria-current="page">Free website</Link>
           </div>
+          <a className="footer-instagram" href="https://www.instagram.com/rafathedev/" target="_blank" rel="noreferrer"><FaInstagram /> @rafathedev <ArrowUpRight size={15} /></a>
         </div>
-        <div className="footer-bottom">
-          <p>Development services are provided by Devnetiks LLC.</p>
-        </div>
+        <div className="footer-bottom"><p>© {new Date().getFullYear()} Rafa the Dev</p><p>Development services provided by Devnetiks LLC.</p></div>
       </motion.footer>
     </div>
   )
