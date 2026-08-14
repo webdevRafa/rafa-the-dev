@@ -349,7 +349,7 @@ function App() {
                 <span /> Full-stack developer · San Antonio
               </motion.p>
               <motion.h1 variants={{ hidden: { opacity: 0, y: 35, filter: 'blur(9px)' }, visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.82, ease: revealEase } } }}>
-                From rough idea to <em>useful software.</em>
+                Websites and systems that make <em>business easier.</em>
               </motion.h1>
               <motion.p className="hero-intro" variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.65 } } }}>
                 I design and build websites, portals, booking flows, payment systems, and custom tools that help small businesses move with less friction.
@@ -375,8 +375,8 @@ function App() {
               <div><dt>BASED IN</dt><dd>San Antonio, Texas</dd></div>
             </dl>
           </motion.aside>
-          <div className="hero-proof" aria-label="Core technologies and approach">
-            <span>STRATEGY TO LAUNCH</span>
+          <div className="hero-proof" aria-label="Core technologies">
+            <span>THE STACK BEHIND THE WORK</span>
             <div>{['React', 'TypeScript', 'Firebase', 'Stripe', 'Vercel'].map((item) => <span key={item}>{item}</span>)}</div>
           </div>
         </section>
