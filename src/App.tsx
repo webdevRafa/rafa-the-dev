@@ -205,14 +205,19 @@ function HeroSignalBoard() {
       transition={{ duration: 0.9, delay: 0.25, ease: revealEase }}
     >
       <span className="signal-board__orb" />
-      <div className="signal-board__portrait">
-        <img
-          src="/rafa-castro-portrait.png"
-          alt="Rafa Castro, full-stack developer"
-          width="1254"
-          height="1254"
-          fetchPriority="high"
-        />
+      <div className="signal-board__art" aria-hidden="true">
+        <span className="signal-board__mesh" />
+        <span className="signal-board__loop signal-board__loop--outer" />
+        <span className="signal-board__loop signal-board__loop--inner" />
+        <span className="signal-board__shard signal-board__shard--one" />
+        <span className="signal-board__shard signal-board__shard--two" />
+        <span className="signal-board__shard signal-board__shard--three" />
+        <span className="signal-board__core">
+          <i />
+          <i />
+          <i />
+        </span>
+        <span className="signal-board__coordinate">08 / 13 / BUILD</span>
       </div>
       <motion.div
         className="signal-card signal-card--top"
@@ -422,7 +427,17 @@ function App() {
 
         <section className="about-section page-frame" id="about" data-ambient-scene="5">
           <Reveal className="about-visual">
-            <div className="about-portrait"><img src="/rafa-castro-portrait.png" alt="Rafa Castro" width="1254" height="1254" loading="lazy" decoding="async" /></div>
+            <div className="about-system-art" aria-hidden="true">
+              <span className="about-system-art__grid" />
+              <span className="about-system-art__orbit about-system-art__orbit--one" />
+              <span className="about-system-art__orbit about-system-art__orbit--two" />
+              <span className="about-system-art__module about-system-art__module--strategy"><i>01</i><b>STRATEGY</b></span>
+              <span className="about-system-art__module about-system-art__module--design"><i>02</i><b>DESIGN</b></span>
+              <span className="about-system-art__module about-system-art__module--build"><i>03</i><b>BUILD</b></span>
+              <span className="about-system-art__node about-system-art__node--one" />
+              <span className="about-system-art__node about-system-art__node--two" />
+              <span className="about-system-art__node about-system-art__node--three" />
+            </div>
             <span className="about-stamp">SAN ANTONIO<br />TEXAS</span>
           </Reveal>
           <Reveal className="about-copy" delay={0.08}>
