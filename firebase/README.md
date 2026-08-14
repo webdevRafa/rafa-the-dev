@@ -2,6 +2,8 @@
 
 Both public forms write to a single top-level `submissions` collection. A shared collection creates one operational inbox and makes it straightforward to query all new leads by status and submission time. Each document is discriminated by `submissionType`, while form-specific fields stay isolated inside `payload`.
 
+The three package configurators also write to this collection as `project_inquiry` records. Their `source.formId` is `package-inquiry`, and the payload records the package, selected add-ons, base price, add-on total, and planning estimate. Keeping these requests in the project-inquiry pipeline preserves the existing confirmation email, admin inbox, lead conversion, and client conversion flow.
+
 New submissions also trigger the Resend confirmation-email function. Setup and deployment instructions are in [`functions/README.md`](../functions/README.md). The function appends `emailDelivery.confirmation` metadata after creation; this server-owned operational data does not change the public create schema below.
 
 ```text
@@ -25,6 +27,18 @@ submissions/{autoId}
   payload:
     form-specific fields
 ```
+
+Package inquiry payloads add:
+
+```text
+packageId / packageName
+selectedAddOns[]
+basePrice
+addOnTotal
+estimatedTotal
+```
+
+These public values are planning estimates, not authoritative invoices. Firestore rules validate the permitted package routes, base prices, field limits, and estimate arithmetic before accepting a document.
 
 The campaign ID for `/free-website` defaults to `free-website`. Set `VITE_FREE_WEBSITE_CAMPAIGN_ID` in Vercel when a new promotion needs its own reporting segment.
 

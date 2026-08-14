@@ -21,6 +21,7 @@ import { FaInstagram } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
 import './App.css'
 import AmbientVectorField from './AmbientVectorField'
+import { formatPackagePrice, servicePackages } from './packageCatalog'
 import { parseProjectBudget, PROJECT_BUDGET_OPTIONS } from './projectInquiryOptions'
 
 const services = [
@@ -63,34 +64,6 @@ const services = [
     features: ['Stripe integrations', 'Payment status tracking', 'Checkout + payout workflows'],
     icon: CircleDollarSign,
     glow: '#ff6c56',
-  },
-]
-
-const packages = [
-  {
-    name: 'Website Foundation',
-    price: '$1,200',
-    note: 'A polished marketing site when the main job is explaining the offer and generating qualified inquiries.',
-    timeline: '1–3 weeks',
-    architecture: 'Light — lead capture only',
-    features: ['Flexible page count based on content', 'Conversion-focused UX + responsive build', 'Lead capture + confirmation email', 'SEO, analytics + accessibility foundation'],
-  },
-  {
-    name: 'Connected Business Site',
-    price: '$3,500',
-    note: 'A customer-facing website connected to one meaningful workflow your business needs to manage.',
-    timeline: '3–6 weeks',
-    architecture: 'Focused — one core workflow',
-    featured: true,
-    features: ['Everything in Website Foundation', 'Purpose-built Firestore data model', 'Booking, payments, or email integration', 'Lightweight admin or managed records'],
-  },
-  {
-    name: 'Custom Business System',
-    price: '$7,500',
-    note: 'A full web application for portals, operations, marketplaces, or interconnected business processes.',
-    timeline: 'Scoped together',
-    architecture: 'Advanced — roles + connected data',
-    features: ['Multi-collection data architecture', 'Authentication, permissions + security rules', 'Multiple workflows + API integrations', 'Admin tools, testing + production launch'],
   },
 ]
 
@@ -447,7 +420,7 @@ function App() {
               if (!(event.relatedTarget instanceof Node) || !event.currentTarget.contains(event.relatedTarget)) setActivePackageIndex(1)
             }}
           >
-            {packages.map((item, index) => (
+            {servicePackages.map((item, index) => (
               <Reveal className="package-card-shell" delay={index * 0.08} key={item.name}>
                 <article
                   className={`package-card${activePackageIndex === index ? ' is-active' : ''}`}
@@ -457,11 +430,11 @@ function App() {
                   {item.featured && <span className="package-badge">MOST POPULAR</span>}
                   <p className="package-index">0{index + 1} / {item.timeline}</p>
                   <h3>{item.name}</h3>
-                  <div className="package-price-wrap"><span>STARTING AT</span><strong className="package-price">{item.price}</strong></div>
+                  <div className="package-price-wrap"><span>STARTING AT</span><strong className="package-price">{formatPackagePrice(item.price)}</strong></div>
                   <p>{item.note}</p>
                   <div className="package-architecture"><span>DATA ARCHITECTURE</span><strong>{item.architecture}</strong></div>
                   <ul>{item.features.map((feature) => <li key={feature}><Check size={15} />{feature}</li>)}</ul>
-                  <a href="#contact">Talk about this package <ArrowRight size={17} /></a>
+                  <Link to={`/packages/${item.slug}`}>Build your package <ArrowRight size={17} /></Link>
                 </article>
               </Reveal>
             ))}

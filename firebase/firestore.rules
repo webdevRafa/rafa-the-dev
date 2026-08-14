@@ -33,8 +33,14 @@ service cloud.firestore {
       let source = request.resource.data.source;
       return hasExactFields(source, ['site', 'route', 'formId', 'campaignId'])
         && source.site == 'rafa-the-dev'
-        && source.route in ['/', '/free-website']
-        && source.formId in ['homepage-project-inquiry', 'free-website-application']
+        && source.route in [
+          '/',
+          '/free-website',
+          '/packages/brochure-website',
+          '/packages/connected-business-site',
+          '/packages/custom-business-system'
+        ]
+        && source.formId in ['homepage-project-inquiry', 'free-website-application', 'package-inquiry']
         && isShortString(source.campaignId, 100);
     }
 
@@ -113,11 +119,70 @@ service cloud.firestore {
         && payload.scopeAcknowledged == true;
     }
 
+    function hasValidPackageInquiry() {
+      let data = request.resource.data;
+      let payload = data.payload;
+      let validPackage = (
+        data.source.route == '/packages/brochure-website'
+          && payload.packageId == 'brochure-website'
+          && payload.basePrice == 500
+      ) || (
+        data.source.route == '/packages/connected-business-site'
+          && payload.packageId == 'connected-business-site'
+          && payload.basePrice == 1500
+      ) || (
+        data.source.route == '/packages/custom-business-system'
+          && payload.packageId == 'custom-business-system'
+          && payload.basePrice == 5000
+      );
+
+      return data.submissionType == 'project_inquiry'
+        && data.source.formId == 'package-inquiry'
+        && data.source.campaignId == ''
+        && validPackage
+        && hasExactFields(
+          payload,
+          [
+            'capabilities',
+            'message',
+            'timing',
+            'budget',
+            'packageId',
+            'packageName',
+            'selectedAddOns',
+            'basePrice',
+            'addOnTotal',
+            'estimatedTotal'
+          ]
+        )
+        && payload.capabilities is list
+        && payload.capabilities.size() <= 9
+        && payload.selectedAddOns is list
+        && payload.selectedAddOns.size() <= 8
+        && isShortString(payload.message, 5000)
+        && payload.message.size() > 0
+        && isShortString(payload.timing, 80)
+        && isShortString(payload.budget, 80)
+        && isShortString(payload.packageId, 80)
+        && isShortString(payload.packageName, 120)
+        && payload.packageName.size() > 0
+        && payload.basePrice is int
+        && payload.addOnTotal is int
+        && payload.addOnTotal >= 0
+        && payload.addOnTotal <= 10000
+        && payload.estimatedTotal is int
+        && payload.estimatedTotal == payload.basePrice + payload.addOnTotal;
+    }
+
     match /submissions/{submissionId} {
       allow create: if hasValidBaseFields()
         && hasValidSource()
         && hasValidContact()
-        && (hasValidProjectInquiry() || hasValidFreeWebsiteApplication());
+        && (
+          hasValidProjectInquiry()
+          || hasValidPackageInquiry()
+          || hasValidFreeWebsiteApplication()
+        );
 
       allow read, update, delete: if isAdmin();
     }

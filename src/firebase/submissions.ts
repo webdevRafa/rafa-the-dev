@@ -7,8 +7,8 @@ const SCHEMA_VERSION = 1
 
 type SubmissionSource = {
   site: 'rafa-the-dev'
-  route: '/' | '/free-website'
-  formId: 'homepage-project-inquiry' | 'free-website-application'
+  route: '/' | '/free-website' | `/packages/${string}`
+  formId: 'homepage-project-inquiry' | 'free-website-application' | 'package-inquiry'
   campaignId: string
 }
 
@@ -42,6 +42,22 @@ export type FreeWebsiteApplicationInput = {
   scopeAcknowledged: boolean
 }
 
+export type PackageInquiryInput = {
+  name: string
+  email: string
+  business: string
+  phone: string
+  timing: string
+  message: string
+  packageId: string
+  packageName: string
+  packageRoute: `/packages/${string}`
+  selectedAddOns: string[]
+  basePrice: number
+  addOnTotal: number
+  estimatedTotal: number
+}
+
 function cleanText(value: string, maximumLength: number) {
   return value.trim().slice(0, maximumLength)
 }
@@ -53,6 +69,11 @@ function cleanEmail(value: string) {
 function cleanList(values: string[], maximumItems: number, maximumItemLength: number) {
   return [...new Set(values.map((value) => cleanText(value, maximumItemLength)).filter(Boolean))]
     .slice(0, maximumItems)
+}
+
+function cleanPrice(value: number) {
+  if (!Number.isFinite(value)) return 0
+  return Math.min(100000, Math.max(0, Math.round(value)))
 }
 
 function baseSubmission(
@@ -89,6 +110,45 @@ export async function submitProjectInquiry(input: ProjectInquiryInput) {
       message: cleanText(input.message, 5000),
       timing: cleanText(input.timing, 80),
       budget: cleanText(input.budget, 80),
+    },
+  }
+
+  const submissionReference = await addDoc(collection(db, SUBMISSIONS_COLLECTION), submission)
+  return submissionReference.id
+}
+
+export async function submitPackageInquiry(input: PackageInquiryInput) {
+  const basePrice = cleanPrice(input.basePrice)
+  const addOnTotal = cleanPrice(input.addOnTotal)
+  const estimatedTotal = cleanPrice(input.estimatedTotal)
+  const selectedAddOns = cleanList(input.selectedAddOns, 8, 120)
+
+  const submission = {
+    ...baseSubmission('project_inquiry', {
+      site: 'rafa-the-dev',
+      route: input.packageRoute,
+      formId: 'package-inquiry',
+      campaignId: '',
+    }),
+    contact: {
+      name: cleanText(input.name, 120),
+      email: cleanEmail(input.email),
+      business: cleanText(input.business, 160),
+      phone: cleanText(input.phone, 40),
+      location: '',
+      instagram: '',
+    },
+    payload: {
+      capabilities: [cleanText(input.packageName, 120), ...selectedAddOns],
+      message: cleanText(input.message, 5000),
+      timing: cleanText(input.timing, 80),
+      budget: `Planning estimate: $${estimatedTotal.toLocaleString('en-US')}`,
+      packageId: cleanText(input.packageId, 80),
+      packageName: cleanText(input.packageName, 120),
+      selectedAddOns,
+      basePrice,
+      addOnTotal,
+      estimatedTotal,
     },
   }
 

@@ -46,6 +46,7 @@
   position: relative;
   z-index: 2;
 }
+.route-loading { display: grid; min-height: 100svh; place-items: center; color: #aeb7cb; background: #060914; font: 500 0.72rem var(--rt-font-mono); letter-spacing: 0.1em; text-transform: uppercase; }
 
 .page-frame {
   width: min(100% - 40px, 1320px);
