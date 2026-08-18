@@ -361,10 +361,6 @@ function ServicesGrid() {
               ease: revealEase,
             }}
           >
-            <div className="service-card__meta">
-              <span>{service.number}</span>
-              <Icon size={22} />
-            </div>
             <div className="service-card__media">
               <img
                 src={service.image}
@@ -375,17 +371,23 @@ function ServicesGrid() {
                 decoding="async"
               />
             </div>
-            <p className="service-card__tag">{service.tag}</p>
-            <h3>{service.title}</h3>
-            <p>{service.description}</p>
-            <ul>
-              {service.features.map((feature) => (
-                <li key={feature}>
-                  <Check size={14} />
-                  {feature}
-                </li>
-              ))}
-            </ul>
+            <div className="service-card__content">
+              <div className="service-card__meta">
+                <span>{service.number}</span>
+                <Icon size={22} />
+              </div>
+              <p className="service-card__tag">{service.tag}</p>
+              <h3>{service.title}</h3>
+              <p>{service.description}</p>
+              <ul>
+                {service.features.map((feature) => (
+                  <li key={feature}>
+                    <Check size={14} />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </motion.article>
         );
       })}
@@ -584,7 +586,10 @@ function App() {
                   visible: { opacity: 1, y: 0, transition: { duration: 0.62 } },
                 }}
               >
-                <a className="button button-primary" href="#contact">
+                <a
+                  className="button button-primary hero-primary-cta"
+                  href="#contact"
+                >
                   Start a project <ArrowUpRight size={18} />
                 </a>
                 <a className="text-link" href="#services">
