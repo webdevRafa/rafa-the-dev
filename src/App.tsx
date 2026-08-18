@@ -27,7 +27,7 @@ import {
   Sparkles,
   Workflow,
 } from "lucide-react";
-import { FaInstagram } from "react-icons/fa6";
+import { FaGithub, FaInstagram } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import "./App.css";
 import AmbientVectorField from "./AmbientVectorField";
@@ -93,6 +93,39 @@ const services = [
     ],
     icon: CircleDollarSign,
     glow: "#ff6c56",
+  },
+];
+
+const selectedWork = [
+  {
+    name: "VectorTrace Forensics",
+    category: "Forensic engineering · Portfolio concept",
+    summary:
+      "A credibility-first, multi-page experience that turns technical evidence, specialist services, and expert profiles into a clear client journey.",
+    image: "/projects/vectortrace.png",
+    siteUrl: "https://crash-engineer.vercel.app/",
+    repoUrl: "https://github.com/webdevRafa/crash-engineer",
+    className: "work-card--vectortrace",
+  },
+  {
+    name: "The Last Row Cinema",
+    category: "Entertainment · Portfolio concept",
+    summary:
+      "An immersive cinema platform with original films, showtimes, concessions, memberships, and a playful identity carried across every route.",
+    image: "/projects/last-row-cinema.png",
+    siteUrl: "https://the-last-row-cinema.vercel.app/",
+    repoUrl: "https://github.com/webdevRafa/the-last-row-cinema",
+    className: "work-card--cinema",
+  },
+  {
+    name: "Gary the Clog Goblin",
+    category: "Local services · Portfolio concept",
+    summary:
+      "A personality-led plumbing website with detailed service pages, social proof, service-area content, and a guided estimate flow.",
+    image: "/projects/clog-goblin.png",
+    siteUrl: "https://clog-goblin.vercel.app/",
+    repoUrl: "https://github.com/webdevRafa/clog-goblin",
+    className: "work-card--goblin",
   },
 ];
 
@@ -636,6 +669,76 @@ function App() {
               <span>Automation + AI</span>
             </div>
           </Reveal>
+        </section>
+
+        <section
+          className="work-section page-frame"
+          id="work"
+          data-ambient-scene="3"
+        >
+          <Reveal className="section-heading work-heading">
+            <div>
+              <p className="section-kicker">SELECTED WORK</p>
+              <h2>Different businesses. Purpose-built experiences.</h2>
+            </div>
+            <p>
+              Three recent builds showing how strategy, visual direction, and
+              useful functionality can adapt to very different industries.
+            </p>
+          </Reveal>
+
+          <div className="work-grid">
+            {selectedWork.map((project, index) => (
+              <Reveal
+                className={`work-card-shell${index === 0 ? " work-card-shell--featured" : ""}`}
+                delay={index * 0.08}
+                key={project.name}
+              >
+                <article className={`work-card ${project.className}`}>
+                  <a
+                    className="work-card__media"
+                    href={project.siteUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`Open ${project.name} live site in a new tab`}
+                  >
+                    <img
+                      src={project.image}
+                      alt={`${project.name} website preview`}
+                      width="1200"
+                      height="630"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <span>
+                      Visit live site <ArrowUpRight size={17} />
+                    </span>
+                  </a>
+                  <div className="work-card__body">
+                    <p className="work-card__category">{project.category}</p>
+                    <h3>{project.name}</h3>
+                    <p>{project.summary}</p>
+                    <div className="work-card__links">
+                      <a
+                        href={project.siteUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        View website <ArrowUpRight size={16} />
+                      </a>
+                      <a
+                        href={project.repoUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <FaGithub size={16} /> Source code
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              </Reveal>
+            ))}
+          </div>
         </section>
 
         <section

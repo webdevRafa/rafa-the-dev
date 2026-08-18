@@ -311,6 +311,7 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
 
 /* Services */
 .services-section,
+.work-section,
 .packages-section,
 .process-section,
 .about-section,
@@ -374,6 +375,122 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
   }
   .services-grid.is-spotlight-active .services-grid__spotlight { opacity: 1; }
 }
+
+/* Selected work */
+.work-section { position: relative; }
+.work-heading h2 { max-width: 830px; }
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 64px;
+}
+.work-card-shell { grid-column: span 6; min-width: 0; }
+.work-card-shell--featured { grid-column: 1 / -1; }
+.work-card {
+  --work-accent: var(--rt-violet);
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--rt-line);
+  border-radius: var(--rt-radius-lg);
+  background: rgba(8, 13, 29, 0.82);
+  transition: border-color 220ms ease, background 220ms ease;
+}
+.work-card-shell--featured .work-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.55fr);
+}
+.work-card--vectortrace { --work-accent: #f3a900; }
+.work-card--cinema { --work-accent: #e73324; }
+.work-card--goblin { --work-accent: #70be45; }
+.work-card:hover {
+  border-color: color-mix(in srgb, var(--work-accent) 58%, transparent);
+  background: rgba(11, 17, 36, 0.9);
+}
+.work-card__media {
+  position: relative;
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  aspect-ratio: 1200 / 630;
+  color: white;
+  background: #090d18;
+}
+.work-card__media::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 34%;
+  background: linear-gradient(transparent, rgba(3, 5, 12, 0.72));
+  pointer-events: none;
+}
+.work-card__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1), filter 280ms ease;
+}
+.work-card:hover .work-card__media img { transform: scale(1.025); filter: saturate(1.06); }
+.work-card__media > span {
+  position: absolute;
+  z-index: 1;
+  right: 18px;
+  bottom: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 11px;
+  background: rgba(4, 7, 16, 0.76);
+  font-size: 0.72rem;
+  font-weight: 700;
+  backdrop-filter: blur(12px);
+}
+.work-card__body {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(24px, 3vw, 36px);
+}
+.work-card__category {
+  margin: 0;
+  color: var(--work-accent);
+  font: 600 0.59rem/1.5 var(--rt-font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.work-card h3 {
+  margin: 16px 0 0;
+  font: 650 clamp(1.6rem, 2.5vw, 2.45rem)/1.02 var(--rt-font-heading);
+  letter-spacing: -0.045em;
+}
+.work-card__body > p:not(.work-card__category) {
+  margin: 20px 0 28px;
+  color: var(--rt-muted);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+.work-card__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 22px;
+  margin-top: auto;
+  padding-top: 22px;
+  border-top: 1px solid var(--rt-line);
+}
+.work-card__links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #dce2ef;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+.work-card__links a:hover { color: var(--work-accent); }
+.work-card a:focus-visible { outline: 3px solid color-mix(in srgb, var(--work-accent) 60%, transparent); outline-offset: 3px; }
 
 /* Packages */
 .packages-section { position: relative; }
@@ -584,6 +701,9 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
   .services-grid { grid-template-columns: 1fr; }
   .service-card { grid-column: auto; min-height: 430px; margin: 0; }
   .capability-ribbon { grid-template-columns: repeat(2, 1fr); }
+  .work-card-shell,
+  .work-card-shell--featured { grid-column: 1 / -1; }
+  .work-card-shell--featured .work-card { display: block; }
   .process-intro,
   .about-aside,
   .contact-copy { position: static; }
@@ -616,6 +736,10 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
   .service-card__tag { margin-top: 58px; }
   .service-card h3 { font-size: 1.8rem; }
   .capability-ribbon { grid-template-columns: 1fr; }
+  .work-grid { margin-top: 42px; }
+  .work-card { border-radius: 25px; }
+  .work-card__body { padding: 24px; }
+  .work-card__media > span { right: 12px; bottom: 12px; }
   .packages-grid {
     grid-template-columns: none;
     grid-auto-flow: column;
