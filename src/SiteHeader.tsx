@@ -98,7 +98,7 @@ function SiteHeader() {
       <Link className="brand header-brand" to="/#top" aria-label="Rafa the Dev home">
         <span className="brand-mark" aria-hidden="true">R</span>
         <span className="brand-copy">
-          <strong>RAFA / THE DEV</strong>
+          <strong>RAFA THE DEV</strong>
         </span>
       </Link>
 

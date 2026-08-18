@@ -96,6 +96,36 @@ const services = [
   },
 ];
 
+const selectedWork = [
+  {
+    name: "VectorTrace Forensics",
+    category: "Forensic engineering · Portfolio concept",
+    summary:
+      "A credibility-first, multi-page experience that turns technical evidence, specialist services, and expert profiles into a clear client journey.",
+    image: "/projects/vectortrace.png",
+    siteUrl: "https://crash-engineer.vercel.app/",
+    className: "work-card--vectortrace",
+  },
+  {
+    name: "The Last Row Cinema",
+    category: "Entertainment · Portfolio concept",
+    summary:
+      "An immersive cinema platform with original films, showtimes, concessions, memberships, and a playful identity carried across every route.",
+    image: "/projects/last-row-cinema.png",
+    siteUrl: "https://the-last-row-cinema.vercel.app/",
+    className: "work-card--cinema",
+  },
+  {
+    name: "Gary the Clog Goblin",
+    category: "Local services · Portfolio concept",
+    summary:
+      "A personality-led plumbing website with detailed service pages, social proof, service-area content, and a guided estimate flow.",
+    image: "/projects/clog-goblin.png",
+    siteUrl: "https://clog-goblin.vercel.app/",
+    className: "work-card--goblin",
+  },
+];
+
 const process = [
   {
     number: "01",
@@ -137,7 +167,7 @@ const faqs = [
   {
     question: "Will I be able to update the site later?",
     answer:
-      "Yes. I choose the editing approach around what you need to maintain. I can also handle ongoing improvements through a Care & Growth plan starting at $150 per month.",
+      "Yes. I choose the editing approach around what you need to maintain. I can also handle ongoing improvements through a Care & Growth plan starting at $50 per month.",
   },
   {
     question: "What happens after launch?",
@@ -639,6 +669,69 @@ function App() {
         </section>
 
         <section
+          className="work-section page-frame"
+          id="work"
+          data-ambient-scene="3"
+        >
+          <Reveal className="section-heading work-heading">
+            <div>
+              <p className="section-kicker">SELECTED WORK</p>
+              <h2>Different businesses. Purpose-built experiences.</h2>
+            </div>
+            <p>
+              Three recent builds showing how strategy, visual direction, and
+              useful functionality can adapt to very different industries.
+            </p>
+          </Reveal>
+
+          <div className="work-grid">
+            {selectedWork.map((project, index) => (
+              <Reveal
+                className={`work-card-shell${index === 0 ? " work-card-shell--featured" : ""}`}
+                delay={index * 0.08}
+                key={project.name}
+              >
+                <article className={`work-card ${project.className}`}>
+                  <a
+                    className="work-card__media"
+                    href={project.siteUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`Open ${project.name} live site in a new tab`}
+                  >
+                    <img
+                      src={project.image}
+                      alt={`${project.name} website preview`}
+                      width="1200"
+                      height="630"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <span>
+                      Visit live site <ArrowUpRight size={17} />
+                    </span>
+                  </a>
+                  <div className="work-card__body">
+                    <p className="work-card__category">{project.category}</p>
+                    <h3>{project.name}</h3>
+                    <p>{project.summary}</p>
+                    <div className="work-card__links">
+                      <a
+                        href={project.siteUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        View website <ArrowUpRight size={16} />
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
+        <section
           className="packages-section page-frame"
           id="packages"
           data-ambient-scene="3"
@@ -657,6 +750,9 @@ function App() {
           </Reveal>
           <div
             className="packages-grid"
+            role="region"
+            aria-label="Compare service packages. On smaller screens, scroll horizontally to see all three."
+            tabIndex={0}
             onMouseLeave={() => setActivePackageIndex(1)}
             onBlurCapture={(event) => {
               if (
@@ -716,7 +812,7 @@ function App() {
             <span>AFTER LAUNCH</span>
             <strong>Care & Growth</strong>
             <p>Ongoing updates, support, and measured improvements.</p>
-            <b>From $150/mo</b>
+            <b>From $50/mo</b>
           </Reveal>
         </section>
 
@@ -1018,7 +1114,7 @@ function App() {
           <Link className="brand footer-brand" to="/#top">
             <span className="brand-mark">R</span>
             <span className="brand-copy">
-              <strong>RAFA / THE DEV</strong>
+              <strong>RAFA THE DEV</strong>
             </span>
           </Link>
           <div className="footer-links">
