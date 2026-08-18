@@ -223,7 +223,7 @@ function PackagePage() {
       </main>
 
       <footer className="package-page-footer page-frame">
-        <Link to="/" className="brand"><span className="brand-mark" aria-hidden="true"><img src="/brand-mark.png" alt="" /></span><span className="brand-copy"><strong>RAFA THE DEV</strong></span></Link>
+        <Link to="/" className="brand"><span className="brand-copy"><strong>RAFA THE DEV</strong></span></Link>
         <Link to="/#packages">Compare all packages</Link>
       </footer>
     </div>
