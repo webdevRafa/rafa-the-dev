@@ -27,7 +27,7 @@ import {
   Sparkles,
   Workflow,
 } from "lucide-react";
-import { FaGithub, FaInstagram } from "react-icons/fa6";
+import { FaInstagram } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import "./App.css";
 import AmbientVectorField from "./AmbientVectorField";
@@ -104,7 +104,6 @@ const selectedWork = [
       "A credibility-first, multi-page experience that turns technical evidence, specialist services, and expert profiles into a clear client journey.",
     image: "/projects/vectortrace.png",
     siteUrl: "https://crash-engineer.vercel.app/",
-    repoUrl: "https://github.com/webdevRafa/crash-engineer",
     className: "work-card--vectortrace",
   },
   {
@@ -114,7 +113,6 @@ const selectedWork = [
       "An immersive cinema platform with original films, showtimes, concessions, memberships, and a playful identity carried across every route.",
     image: "/projects/last-row-cinema.png",
     siteUrl: "https://the-last-row-cinema.vercel.app/",
-    repoUrl: "https://github.com/webdevRafa/the-last-row-cinema",
     className: "work-card--cinema",
   },
   {
@@ -124,7 +122,6 @@ const selectedWork = [
       "A personality-led plumbing website with detailed service pages, social proof, service-area content, and a guided estimate flow.",
     image: "/projects/clog-goblin.png",
     siteUrl: "https://clog-goblin.vercel.app/",
-    repoUrl: "https://github.com/webdevRafa/clog-goblin",
     className: "work-card--goblin",
   },
 ];
@@ -725,13 +722,6 @@ function App() {
                         rel="noreferrer"
                       >
                         View website <ArrowUpRight size={16} />
-                      </a>
-                      <a
-                        href={project.repoUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        <FaGithub size={16} /> Source code
                       </a>
                     </div>
                   </div>
