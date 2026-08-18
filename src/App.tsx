@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type {
   FormEvent,
+  PointerEvent as ReactPointerEvent,
   ReactNode,
 } from "react";
 import {
@@ -29,6 +30,7 @@ import {
 import { FaInstagram } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import "./App.css";
+import AmbientVectorField from "./AmbientVectorField";
 import { formatPackagePrice, servicePackages } from "./packageCatalog";
 import {
   parseProjectBudget,
@@ -48,9 +50,7 @@ const services = [
       "Lead capture + launch support",
     ],
     icon: Layers3,
-    image: "/studio/website-design.webp",
-    imageAlt:
-      "Tablet and phone presenting a responsive business website in a sunlit studio",
+    glow: "#3158ff",
   },
   {
     number: "02",
@@ -64,9 +64,7 @@ const services = [
       "Purpose-built business logic",
     ],
     icon: Workflow,
-    image: "/studio/business-systems.webp",
-    imageAlt:
-      "Two monitors presenting a connected operations dashboard in a dark studio",
+    glow: "#8c5bff",
   },
   {
     number: "03",
@@ -80,9 +78,7 @@ const services = [
       "Flexible scheduling rules",
     ],
     icon: CalendarDays,
-    image: "/studio/booking-flows.webp",
-    imageAlt:
-      "Phone calendar and appointment cards arranged on a bright editorial workspace",
+    glow: "#ee4fbd",
   },
   {
     number: "04",
@@ -96,9 +92,7 @@ const services = [
       "Checkout + payout workflows",
     ],
     icon: CircleDollarSign,
-    image: "/studio/payment-systems.webp",
-    imageAlt:
-      "Payment terminal, mobile checkout, and metal card on a dark studio surface",
+    glow: "#ff6c56",
   },
 ];
 
@@ -228,14 +222,123 @@ function Reveal({
 
 function ServicesGrid() {
   const reduceMotion = useReducedMotion();
+  const gridRef = useRef<HTMLDivElement>(null);
+  const spotlightRef = useRef<HTMLDivElement>(null);
+  const animationFrameRef = useRef<number | null>(null);
+  const activeCardRef = useRef<HTMLElement | null>(null);
+  const positionRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
+
+  useEffect(
+    () => () => {
+      if (animationFrameRef.current !== null)
+        cancelAnimationFrame(animationFrameRef.current);
+    },
+    []
+  );
+
+  const animateSpotlight = () => {
+    const spotlight = spotlightRef.current;
+    if (!spotlight) {
+      animationFrameRef.current = null;
+      return;
+    }
+
+    const position = positionRef.current;
+    position.x += (position.targetX - position.x) * 0.22;
+    position.y += (position.targetY - position.y) * 0.22;
+    spotlight.style.setProperty("--service-glow-x", `${position.x}px`);
+    spotlight.style.setProperty("--service-glow-y", `${position.y}px`);
+
+    if (
+      Math.abs(position.targetX - position.x) > 0.2 ||
+      Math.abs(position.targetY - position.y) > 0.2
+    ) {
+      animationFrameRef.current = requestAnimationFrame(animateSpotlight);
+    } else {
+      animationFrameRef.current = null;
+    }
+  };
+
+  const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const grid = gridRef.current;
+    const spotlight = spotlightRef.current;
+    if (
+      !grid ||
+      !spotlight ||
+      reduceMotion ||
+      !window.matchMedia("(hover: hover) and (pointer: fine)").matches
+    )
+      return;
+
+    const gridBounds = grid.getBoundingClientRect();
+    const targetX = event.clientX - gridBounds.left;
+    const targetY = event.clientY - gridBounds.top;
+    const wasActive = grid.classList.contains("is-spotlight-active");
+    positionRef.current.targetX = targetX;
+    positionRef.current.targetY = targetY;
+
+    if (!wasActive) {
+      positionRef.current.x = targetX;
+      positionRef.current.y = targetY;
+      spotlight.style.setProperty("--service-glow-x", `${targetX}px`);
+      spotlight.style.setProperty("--service-glow-y", `${targetY}px`);
+    }
+
+    const eventTarget = event.target instanceof Element ? event.target : null;
+    const card = eventTarget?.closest<HTMLElement>(".service-card") ?? null;
+    if (card && card !== activeCardRef.current) {
+      const cardBounds = card.getBoundingClientRect();
+      spotlight.style.setProperty(
+        "--service-clip-top",
+        `${Math.max(0, cardBounds.top - gridBounds.top)}px`
+      );
+      spotlight.style.setProperty(
+        "--service-clip-right",
+        `${Math.max(0, gridBounds.right - cardBounds.right)}px`
+      );
+      spotlight.style.setProperty(
+        "--service-clip-bottom",
+        `${Math.max(0, gridBounds.bottom - cardBounds.bottom)}px`
+      );
+      spotlight.style.setProperty(
+        "--service-clip-left",
+        `${Math.max(0, cardBounds.left - gridBounds.left)}px`
+      );
+      spotlight.style.setProperty(
+        "--service-glow-color",
+        card.dataset.glow ?? services[0].glow
+      );
+      activeCardRef.current = card;
+    }
+
+    if (card) grid.classList.add("is-spotlight-active");
+    if (animationFrameRef.current === null)
+      animationFrameRef.current = requestAnimationFrame(animateSpotlight);
+  };
+
+  const handlePointerLeave = () => {
+    gridRef.current?.classList.remove("is-spotlight-active");
+    activeCardRef.current = null;
+  };
 
   return (
-    <div className="services-grid">
+    <div
+      className="services-grid"
+      ref={gridRef}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
+    >
+      <div
+        className="services-grid__spotlight"
+        ref={spotlightRef}
+        aria-hidden="true"
+      />
       {services.map((service, index) => {
         const Icon = service.icon;
         return (
           <motion.article
             className={`service-card service-card--${index + 1}`}
+            data-glow={service.glow}
             key={service.title}
             initial={reduceMotion ? false : { opacity: 0, y: 38 }}
             whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
@@ -246,15 +349,6 @@ function ServicesGrid() {
               ease: revealEase,
             }}
           >
-            <img
-              className="service-card__image"
-              src={service.image}
-              alt={service.imageAlt}
-              width="1254"
-              height="1254"
-              loading="lazy"
-              decoding="async"
-            />
             <div className="service-card__meta">
               <span>{service.number}</span>
               <Icon size={22} />
@@ -411,6 +505,7 @@ function App() {
           aria-hidden="true"
         />
       )}
+      <AmbientVectorField />
       <main id="main">
         <section
           className="hero-section page-frame"
@@ -447,7 +542,7 @@ function App() {
                   },
                 }}
               >
-                Websites and systems that <span>elevate your business.</span>
+                Websites and systems that make <em>business easier.</em>
               </motion.h1>
               <motion.p
                 className="hero-intro"

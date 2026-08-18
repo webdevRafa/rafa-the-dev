@@ -12,6 +12,7 @@ import {
   Sparkles,
 } from 'lucide-react'
 import { Link, Navigate, useParams } from 'react-router-dom'
+import AmbientVectorField from './AmbientVectorField'
 import { formatPackagePrice, getServicePackage, servicePackages } from './packageCatalog'
 import './PackagePage.css'
 
@@ -86,6 +87,7 @@ function PackagePage() {
 
   return (
     <div className={`package-detail-shell is-${servicePackage.accent}`}>
+      <AmbientVectorField />
       <main id="main">
         <section className="package-detail-hero page-frame" data-ambient-scene="0">
           <Link className="package-back-link" to="/#packages"><ArrowLeft size={16} /> All packages</Link>
