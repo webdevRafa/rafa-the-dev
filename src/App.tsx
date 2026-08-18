@@ -51,6 +51,9 @@ const services = [
     ],
     icon: Layers3,
     glow: "#3158ff",
+    image: "/studio/website-design.webp",
+    imageAlt:
+      "Tablet and phone presenting a responsive business website in a sunlit studio",
   },
   {
     number: "02",
@@ -65,6 +68,9 @@ const services = [
     ],
     icon: Workflow,
     glow: "#8c5bff",
+    image: "/studio/business-systems.webp",
+    imageAlt:
+      "Two monitors presenting a connected operations dashboard in a dark studio",
   },
   {
     number: "03",
@@ -79,6 +85,9 @@ const services = [
     ],
     icon: CalendarDays,
     glow: "#ee4fbd",
+    image: "/studio/booking-flows.webp",
+    imageAlt:
+      "Phone calendar and appointment cards arranged on an editorial workspace",
   },
   {
     number: "04",
@@ -93,6 +102,9 @@ const services = [
     ],
     icon: CircleDollarSign,
     glow: "#ff6c56",
+    image: "/studio/payment-systems.webp",
+    imageAlt:
+      "Payment terminal, mobile checkout, and metal card on a dark studio surface",
   },
 ];
 
@@ -353,6 +365,16 @@ function ServicesGrid() {
               <span>{service.number}</span>
               <Icon size={22} />
             </div>
+            <div className="service-card__media">
+              <img
+                src={service.image}
+                alt={service.imageAlt}
+                width="1254"
+                height="1254"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
             <p className="service-card__tag">{service.tag}</p>
             <h3>{service.title}</h3>
             <p>{service.description}</p>
@@ -542,7 +564,7 @@ function App() {
                   },
                 }}
               >
-                Websites and systems that make <em>business easier.</em>
+                Websites and systems that <span>elevate your business.</span>
               </motion.h1>
               <motion.p
                 className="hero-intro"
