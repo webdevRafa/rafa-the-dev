@@ -127,7 +127,6 @@
   color: #050812;
   border-radius: 11px 3px 11px 3px;
   background: linear-gradient(135deg, var(--rt-cyan), #8af5ff 55%, var(--rt-violet));
-  box-shadow: 0 0 30px rgba(46, 231, 255, 0.23);
   font: 800 1.15rem/1 var(--rt-font-display);
 }
 
@@ -179,15 +178,13 @@
   font-weight: 760;
   text-decoration: none;
   cursor: pointer;
-  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+  transition: transform 180ms ease, border-color 180ms ease;
 }
 .button:hover { transform: translateY(-2px); }
 .button-primary {
   color: #050812;
   background: linear-gradient(120deg, var(--rt-cyan), #77f1ff 40%, #8c74ff 115%);
-  box-shadow: 0 16px 38px rgba(28, 142, 255, 0.22);
 }
-.button-primary:hover { box-shadow: 0 20px 46px rgba(46, 231, 255, 0.3); }
 .button-secondary { color: white; border-color: var(--rt-line); background: rgba(255, 255, 255, 0.045); }
 .button-small { min-height: 44px; padding-inline: 17px; border-radius: 11px; }
 .button:focus-visible,
@@ -508,7 +505,7 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
 .choice span { display: inline-flex; min-height: 38px; align-items: center; padding: 0 12px; color: #aeb6c7 !important; border: 1px solid var(--rt-line); border-radius: 100px; background: rgba(255, 255, 255, 0.025); font-size: 0.71rem; cursor: pointer; transition: 160ms ease; }
 .choice input:checked + span { color: white !important; border-color: var(--rt-coral); background: rgba(255, 108, 86, 0.15); }
 .choice input:focus-visible + span { outline: 3px solid rgba(255, 108, 86, 0.25); outline-offset: 2px; }
-.form-submit { width: 100%; margin-top: 3px; background: linear-gradient(115deg, var(--rt-coral), #ff8d5c 48%, var(--rt-magenta)); box-shadow: 0 18px 40px rgba(255, 83, 92, 0.2); }
+.form-submit { width: 100%; margin-top: 3px; background: linear-gradient(115deg, var(--rt-coral), #ff8d5c 48%, var(--rt-magenta)); }
 .form-submit:disabled { opacity: 0.58; cursor: wait; transform: none; }
 .form-error { margin: -6px 0 0; padding: 14px; color: #ffd5cf; border: 1px solid rgba(255, 108, 86, 0.42); border-radius: 10px; background: rgba(255, 73, 78, 0.1); font-size: 0.78rem; line-height: 1.5; }
 .form-disclaimer { margin: -8px 0 0; color: #717b91; font: 400 0.61rem/1.5 var(--rt-font-mono); text-align: center; }
@@ -619,7 +616,24 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
   .service-card__tag { margin-top: 58px; }
   .service-card h3 { font-size: 1.8rem; }
   .capability-ribbon { grid-template-columns: 1fr; }
-  .packages-grid { margin-top: 42px; }
+  .packages-grid {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: min(86vw, 380px);
+    gap: 12px;
+    margin-top: 42px;
+    margin-inline: -14px;
+    padding: 6px 14px 16px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-padding-inline: 14px;
+    scroll-snap-type: inline mandatory;
+    scrollbar-width: none;
+    touch-action: pan-x;
+    -webkit-overflow-scrolling: touch;
+  }
+  .packages-grid::-webkit-scrollbar { display: none; }
+  .package-card-shell { scroll-snap-align: start; scroll-snap-stop: always; }
   .package-card { padding: 26px; border-radius: 25px; }
   .package-card h3 { margin-top: 46px; }
   .care-strip { grid-template-columns: 1fr auto; gap: 12px; padding: 22px; }

@@ -137,7 +137,7 @@ const faqs = [
   {
     question: "Will I be able to update the site later?",
     answer:
-      "Yes. I choose the editing approach around what you need to maintain. I can also handle ongoing improvements through a Care & Growth plan starting at $150 per month.",
+      "Yes. I choose the editing approach around what you need to maintain. I can also handle ongoing improvements through a Care & Growth plan starting at $50 per month.",
   },
   {
     question: "What happens after launch?",
@@ -657,6 +657,9 @@ function App() {
           </Reveal>
           <div
             className="packages-grid"
+            role="region"
+            aria-label="Compare service packages. On smaller screens, scroll horizontally to see all three."
+            tabIndex={0}
             onMouseLeave={() => setActivePackageIndex(1)}
             onBlurCapture={(event) => {
               if (
@@ -716,7 +719,7 @@ function App() {
             <span>AFTER LAUNCH</span>
             <strong>Care & Growth</strong>
             <p>Ongoing updates, support, and measured improvements.</p>
-            <b>From $150/mo</b>
+            <b>From $50/mo</b>
           </Reveal>
         </section>
 
@@ -1018,7 +1021,7 @@ function App() {
           <Link className="brand footer-brand" to="/#top">
             <span className="brand-mark">R</span>
             <span className="brand-copy">
-              <strong>RAFA / THE DEV</strong>
+              <strong>RAFA THE DEV</strong>
             </span>
           </Link>
           <div className="footer-links">
