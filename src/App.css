@@ -322,10 +322,10 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 22px;
-  background: rgba(1, 5, 13, 0.58);
+  background: rgba(1, 5, 13, 0.42);
   box-shadow: 0 26px 80px rgba(0, 0, 0, 0.34);
-  -webkit-backdrop-filter: blur(22px) saturate(135%);
-  backdrop-filter: blur(22px) saturate(135%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(140%);
 }
 .hero-availability { display: flex; align-items: center; gap: 11px; color: #dce2f2; font: 600 0.65rem/1.4 var(--rt-font-mono); letter-spacing: 0.08em; text-transform: uppercase; }
 .hero-context > p { max-width: 340px; margin: 28px 0 34px; color: rgba(255, 255, 255, 0.76); font-size: 0.92rem; line-height: 1.75; }
@@ -414,6 +414,39 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
 .capability-ribbon > div { display: flex; align-items: center; gap: 12px; min-height: 84px; padding: 20px; background: rgba(7, 12, 27, 0.92); }
 .capability-ribbon svg { color: var(--rt-violet); }
 .capability-ribbon span { color: #bdc5d6; font-size: 0.78rem; }
+
+@media (min-width: 1180px) {
+  .services-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    width: calc(100vw - clamp(28px, 3vw, 56px));
+    margin-left: 50%;
+    gap: clamp(12px, 1.1vw, 18px);
+    transform: translateX(-50%);
+  }
+  .service-card {
+    grid-column: span 1;
+    min-height: clamp(550px, 38vw, 620px);
+    border-radius: clamp(24px, 2vw, 32px);
+  }
+  .service-card__media { height: clamp(170px, 13.5vw, 225px); }
+  .service-card__content { padding: clamp(22px, 2vw, 30px); }
+  .service-card__tag { margin: 22px 0 11px; }
+  .service-card h3 {
+    font-size: clamp(1.55rem, 1.65vw, 2rem);
+    line-height: 1.02;
+  }
+  .service-card__content > p:not(.service-card__tag) {
+    margin: 17px 0 22px;
+    font-size: 0.85rem;
+    line-height: 1.62;
+  }
+  .service-card ul { gap: 8px; }
+  .service-card li {
+    gap: 7px;
+    font-size: 0.74rem;
+    line-height: 1.4;
+  }
+}
 
 @media (hover: hover) and (pointer: fine) and (min-width: 901px) {
   .services-grid__spotlight {
