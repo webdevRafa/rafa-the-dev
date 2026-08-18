@@ -82,19 +82,20 @@
 .site-header {
   position: fixed;
   z-index: 50;
-  top: 18px;
-  left: max(20px, calc((100% - 1320px) / 2));
-  right: max(20px, calc((100% - 1320px) / 2));
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: auto;
-  min-height: 70px;
-  padding: 10px 12px 10px 18px;
+  width: 100%;
+  min-height: 78px;
+  padding: 10px max(20px, calc((100vw - 1320px) / 2));
   color: var(--rt-paper);
-  border: 1px solid transparent;
-  border-radius: 18px;
-  background: rgba(7, 11, 24, 0);
+  border: 0;
+  border-bottom: 1px solid transparent;
+  border-radius: 0;
+  background: transparent;
   box-shadow: 0 16px 50px rgba(0, 0, 0, 0);
   -webkit-backdrop-filter: blur(0) saturate(100%);
   backdrop-filter: blur(0) saturate(100%);
@@ -103,11 +104,13 @@
 }
 
 .site-header.is-scrolled {
-  background: rgba(6, 9, 20, 0.9);
-  border-color: rgba(232, 238, 255, 0.2);
-  box-shadow: 0 18px 54px rgba(0, 0, 0, 0.36);
-  -webkit-backdrop-filter: blur(18px) saturate(130%);
-  backdrop-filter: blur(18px) saturate(130%);
+  background:
+    linear-gradient(110deg, rgba(255, 255, 255, 0.055), transparent 28%, rgba(46, 231, 255, 0.035) 64%, transparent 86%),
+    rgba(6, 9, 20, 0.7);
+  border-bottom-color: rgba(232, 238, 255, 0.16);
+  box-shadow: 0 14px 42px rgba(0, 0, 0, 0.22);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  backdrop-filter: blur(24px) saturate(150%);
 }
 
 .brand {
@@ -648,7 +651,7 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
 .footer-bottom { display: flex; justify-content: space-between; gap: 20px; padding-top: 20px; color: #667188; border-top: 1px solid var(--rt-line); font: 400 0.58rem var(--rt-font-mono); letter-spacing: 0.06em; }
 
 @media (max-width: 1100px) {
-  .site-header { top: 12px; left: 12px; right: 12px; width: auto; }
+  .site-header { top: 0; left: 0; right: 0; width: 100%; padding-inline: 18px; }
   .nav-links > a:not(.button) { padding-inline: 8px; }
   .hero-section { grid-template-columns: minmax(0, 1.25fr) minmax(250px, 0.55fr); gap: 48px; }
   .service-card { min-height: 450px; }
@@ -665,7 +668,7 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
   .nav-links {
     position: fixed;
     z-index: -1;
-    inset: -13px -13px auto;
+    inset: 0 0 auto;
     display: flex;
     min-height: 100svh;
     flex-direction: column;
@@ -713,7 +716,7 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
 
 @media (max-width: 640px) {
   .page-frame { width: calc(100% - 28px); }
-  .site-header { min-height: 64px; padding: 8px 9px 8px 12px; border-radius: 15px; }
+  .site-header { min-height: 64px; padding: 8px 14px; border-radius: 0; }
   .brand-mark { width: 36px; }
   .brand-copy strong { font-size: 0.75rem; }
   .brand-copy small { font-size: 0.5rem; }
