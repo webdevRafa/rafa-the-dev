@@ -654,7 +654,9 @@ function FreeWebsitePage() {
         </div>
         <div className="footer-grid">
           <Link className="brand footer-brand" to="/#top">
-            <span className="brand-mark">R</span>
+            <span className="brand-mark" aria-hidden="true">
+              <img src="/brand-mark.png" alt="" />
+            </span>
             <span className="brand-copy"><strong>RAFA THE DEV</strong></span>
           </Link>
           <div className="footer-links">

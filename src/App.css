@@ -125,12 +125,15 @@
   display: grid;
   flex: 0 0 auto;
   place-items: center;
-  width: 40px;
+  width: 42px;
   aspect-ratio: 1;
-  color: #050812;
-  border-radius: 11px 3px 11px 3px;
-  background: linear-gradient(135deg, var(--rt-cyan), #8af5ff 55%, var(--rt-violet));
-  font: 800 1.15rem/1 var(--rt-font-display);
+}
+
+.brand-mark img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .brand-copy { display: grid; gap: 2px; }
