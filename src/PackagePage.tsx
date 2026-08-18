@@ -104,10 +104,10 @@ function PackagePage() {
             <aside className="package-snapshot" aria-label={`${servicePackage.name} overview`}>
               <span>STARTING AT</span>
               <strong>{formatPackagePrice(servicePackage.price)}</strong>
-              <p>Friendly base pricing for the focused version. Add only the capabilities your project actually needs.</p>
+              <p>A complete focused package at the starting price. Add extras only when they solve a specific need.</p>
               <dl>
                 <div><dt><Clock3 size={15} /> Typical timing</dt><dd>{servicePackage.timeline}</dd></div>
-                <div><dt><Database size={15} /> Data level</dt><dd>{servicePackage.architecture}</dd></div>
+                <div><dt><Database size={15} /> Project complexity</dt><dd>{servicePackage.architecture}</dd></div>
               </dl>
             </aside>
           </div>
@@ -115,7 +115,7 @@ function PackagePage() {
 
         <section className="package-included page-frame" id="included" data-ambient-scene="1">
           <header className="package-section-heading">
-            <div><p className="section-kicker">THE FOCUSED VERSION</p><h2>Enough to launch something useful.</h2></div>
+            <div><p className="section-kicker">WHAT&apos;S INCLUDED</p><h2>Everything needed for a strong first version.</h2></div>
             <p>{servicePackage.idealFor}</p>
           </header>
           <div className="package-included-grid">
@@ -132,8 +132,8 @@ function PackagePage() {
 
         <section className="package-configure page-frame" id="configure" data-ambient-scene="2">
           <header className="package-section-heading">
-            <div><p className="section-kicker">MAKE IT YOURS</p><h2>Start lean. Add what earns its place.</h2></div>
-            <p>Choose the extras that sound useful. This creates a planning estimate—not a surprise checkout or binding quote.</p>
+            <div><p className="section-kicker">OPTIONAL EXTRAS</p><h2>Add only what your business needs.</h2></div>
+            <p>Each extra expands the complete base package around a specific goal. This creates a planning estimate—not a checkout or final quote.</p>
           </header>
           <div className="package-configure-layout">
             <fieldset className="package-addons">
@@ -157,9 +157,9 @@ function PackagePage() {
               {selectedAddOns.map((addOn) => (
                 <div className="package-estimate-line is-addon" key={addOn.id}><span>{addOn.name}</span><strong>+{formatPackagePrice(addOn.price)}</strong></div>
               ))}
-              {selectedAddOns.length === 0 && <p className="package-estimate-empty">No extras selected. The focused base package may be all you need.</p>}
+              {selectedAddOns.length === 0 && <p className="package-estimate-empty">The base package already includes everything listed above. Extras are optional.</p>}
               <div className="package-estimate-total"><span>ESTIMATED START</span><strong>{formatPackagePrice(estimatedTotal)}</strong></div>
-              <p>Final pricing is confirmed after I review the content, workflow, and technical requirements with you.</p>
+              <p>Final pricing is confirmed after I review your goals, content, selected options, and any special requirements.</p>
               <a className="button button-primary" href="#request">Request this build <ArrowRight size={17} /></a>
             </aside>
           </div>
@@ -167,8 +167,8 @@ function PackagePage() {
 
         <section className="package-request page-frame" id="request" data-ambient-scene="3">
           <div className="package-request-copy">
-            <p className="section-kicker">SEND THE CONFIGURATION</p>
-            <h2>Let&apos;s see if this is the right starting point.</h2>
+            <p className="section-kicker">REQUEST THIS PACKAGE</p>
+            <h2>Let&apos;s confirm the right fit.</h2>
             <p>I will review your goals and selected options, then follow up with questions and a clear recommendation.</p>
             <div className="package-request-trust"><ShieldCheck size={19} /><span>No payment is collected here. Your estimate is simply attached to the inquiry.</span></div>
           </div>
