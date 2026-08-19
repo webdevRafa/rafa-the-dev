@@ -707,6 +707,7 @@ function App() {
               <Reveal
                 className={`work-card-shell${index === 0 ? " work-card-shell--featured" : ""}`}
                 delay={index * 0.08}
+                disableAnimation={isMobileViewport}
                 key={project.name}
               >
                 <article className={`work-card ${project.className}`}>

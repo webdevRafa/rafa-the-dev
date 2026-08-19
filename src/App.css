@@ -869,9 +869,9 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
     overflow-x: auto;
     overscroll-behavior-inline: contain;
     scroll-padding-inline: 14px;
-    scroll-snap-type: inline mandatory;
+    scroll-snap-type: x mandatory;
     scrollbar-width: none;
-    touch-action: pan-x;
+    touch-action: pan-x pan-y;
     -webkit-overflow-scrolling: touch;
   }
   .work-grid::-webkit-scrollbar { display: none; }
