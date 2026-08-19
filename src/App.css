@@ -396,6 +396,22 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
 .capability-ribbon svg { color: var(--rt-violet); }
 .capability-ribbon span { color: #bdc5d6; font-size: 0.78rem; }
 
+@media (min-width: 901px) {
+  .capability-ribbon {
+    gap: 0;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .capability-ribbon > div {
+    background: transparent;
+  }
+  .capability-ribbon > div + div {
+    border-left: 1px solid var(--rt-line);
+  }
+}
+
 @media (min-width: 1180px) {
   .services-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -801,8 +817,24 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
   .hero-copy h1 { margin-top: 18px; font-size: clamp(2.7rem, 12.5vw, 4rem); }
   .hero-copy h1 em,
   .hero-copy h1 span { width: auto; }
-  .hero-actions { align-items: flex-start; flex-direction: column; gap: 18px; }
+  .hero-actions {
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 12px;
+  }
   .hero-actions .button { width: max-content; }
+  .hero-actions .text-link {
+    min-width: 0;
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+  .hero-primary-cta {
+    min-height: 44px;
+    padding-inline: 12px;
+    gap: 7px;
+    font-size: 0.78rem;
+  }
   .hero-proof > div { gap: 10px 18px; }
   .signal-section { padding-block: 100px; }
   .section-heading h2,
