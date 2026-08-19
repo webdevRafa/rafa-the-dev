@@ -199,28 +199,54 @@ function Reveal({
   className,
   delay = 0,
   distance = 34,
+  disableAnimation = false,
 }: {
   children: ReactNode;
   className?: string;
   delay?: number;
   distance?: number;
+  disableAnimation?: boolean;
 }) {
   const reduceMotion = useReducedMotion();
+  const shouldSkipAnimation = Boolean(reduceMotion) || disableAnimation;
+
   return (
     <motion.div
       className={className}
       initial={
-        reduceMotion ? false : { opacity: 0, y: distance }
+        shouldSkipAnimation ? false : { opacity: 0, y: distance }
       }
       whileInView={
-        reduceMotion ? undefined : { opacity: 1, y: 0 }
+        shouldSkipAnimation ? undefined : { opacity: 1, y: 0 }
       }
       viewport={revealViewport}
-      transition={{ duration: 0.72, delay, ease: revealEase }}
+      transition={{
+        duration: shouldSkipAnimation ? 0 : 0.72,
+        delay: shouldSkipAnimation ? 0 : delay,
+        ease: revealEase,
+      }}
     >
       {children}
     </motion.div>
   );
+}
+
+function useMediaQuery(query: string) {
+  const [matches, setMatches] = useState(() =>
+    typeof window === "undefined" ? false : window.matchMedia(query).matches
+  );
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(query);
+    const updateMatch = () => setMatches(mediaQuery.matches);
+
+    updateMatch();
+    mediaQuery.addEventListener("change", updateMatch);
+
+    return () => mediaQuery.removeEventListener("change", updateMatch);
+  }, [query]);
+
+  return matches;
 }
 
 function ServicesGrid() {
@@ -446,6 +472,7 @@ function App() {
   const [isSubmittingBrief, setIsSubmittingBrief] = useState(false);
   const [briefSubmitError, setBriefSubmitError] = useState("");
   const [activePackageIndex, setActivePackageIndex] = useState(1);
+  const isMobileViewport = useMediaQuery("(max-width: 640px)");
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
   const smoothScrollProgress = useSpring(scrollYProgress, {
@@ -759,6 +786,7 @@ function App() {
               <Reveal
                 className="package-card-shell"
                 delay={index * 0.08}
+                disableAnimation={isMobileViewport}
                 key={item.name}
               >
                 <article
