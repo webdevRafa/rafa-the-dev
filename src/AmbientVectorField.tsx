@@ -48,10 +48,25 @@ const morphEase = [0.22, 1, 0.36, 1] as const
 
 function AmbientVectorField() {
   const [activeScene, setActiveScene] = useState(0)
+  const [useLiteField, setUseLiteField] = useState(() =>
+    typeof window !== 'undefined'
+      ? window.matchMedia('(max-width: 900px), (pointer: coarse)').matches
+      : false,
+  )
   const reduceMotion = useReducedMotion()
   const scene = atmosphereScenes[Math.min(activeScene, atmosphereScenes.length - 1)]
 
   useEffect(() => {
+    const media = window.matchMedia('(max-width: 900px), (pointer: coarse)')
+    const updateFieldMode = () => setUseLiteField(media.matches)
+    updateFieldMode()
+    media.addEventListener('change', updateFieldMode)
+    return () => media.removeEventListener('change', updateFieldMode)
+  }, [])
+
+  useEffect(() => {
+    if (useLiteField) return
+
     const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-ambient-scene]'))
     const observer = new IntersectionObserver(
       (entries) => {
@@ -71,7 +86,15 @@ function AmbientVectorField() {
 
     sections.forEach((section) => observer.observe(section))
     return () => observer.disconnect()
-  }, [])
+  }, [useLiteField])
+
+  if (useLiteField) {
+    return (
+      <div className="ambient-atmosphere ambient-atmosphere--lite" aria-hidden="true">
+        <span className="ambient-atmosphere__veil" />
+      </div>
+    )
+  }
 
   const transition = reduceMotion ? { duration: 0 } : { duration: 1.65, ease: morphEase }
 
