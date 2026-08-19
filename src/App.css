@@ -314,25 +314,6 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
   border-color: #7ceeff;
   background: rgba(46, 231, 255, 0.06);
 }
-.live-dot { width: 10px; height: 10px; border-radius: 50%; background: #42f5a1; box-shadow: 0 0 15px #42f5a1; }
-.hero-context {
-  align-self: end;
-  margin-bottom: 54px;
-  padding: clamp(26px, 3vw, 38px);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 22px;
-  background: rgba(1, 5, 13, 0.42);
-  box-shadow: 0 26px 80px rgba(0, 0, 0, 0.34);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-  backdrop-filter: blur(18px) saturate(140%);
-}
-.hero-availability { display: flex; align-items: center; gap: 11px; color: #dce2f2; font: 600 0.65rem/1.4 var(--rt-font-mono); letter-spacing: 0.08em; text-transform: uppercase; }
-.hero-context > p { max-width: 340px; margin: 28px 0 34px; color: rgba(255, 255, 255, 0.76); font-size: 0.92rem; line-height: 1.75; }
-.hero-context dl { display: grid; gap: 0; margin: 0; }
-.hero-context dl div { display: grid; gap: 7px; padding: 15px 0; border-top: 1px solid rgba(255, 255, 255, 0.15); }
-.hero-context dt { color: rgba(255, 255, 255, 0.48); font: 600 0.58rem var(--rt-font-mono); letter-spacing: 0.14em; }
-.hero-context dd { margin: 0; color: white; font-size: 0.78rem; font-weight: 600; }
 .hero-proof { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; padding-top: 24px; border-top: 1px solid var(--rt-line); }
 .hero-proof > span { color: #8490aa; font: 600 0.62rem var(--rt-font-mono); letter-spacing: 0.15em; }
 .hero-proof > div { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 14px 30px; }
@@ -415,6 +396,22 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
 .capability-ribbon svg { color: var(--rt-violet); }
 .capability-ribbon span { color: #bdc5d6; font-size: 0.78rem; }
 
+@media (min-width: 901px) {
+  .capability-ribbon {
+    gap: 0;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .capability-ribbon > div {
+    background: transparent;
+  }
+  .capability-ribbon > div + div {
+    border-left: 1px solid var(--rt-line);
+  }
+}
+
 @media (min-width: 1180px) {
   .services-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -482,7 +479,7 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
 .work-heading h2 { max-width: 830px; }
 .work-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: stretch;
   gap: 18px;
   margin-top: 64px;
@@ -502,7 +499,6 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
 }
 .work-card--vectortrace { --work-accent: #f3a900; }
 .work-card--cinema { --work-accent: #e73324; }
-.work-card--goblin { --work-accent: #70be45; }
 .work-card:hover {
   border-color: color-mix(in srgb, var(--work-accent) 58%, transparent);
   background: rgba(11, 17, 36, 0.9);
@@ -791,9 +787,6 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
   .hero-section { grid-template-columns: 1fr; grid-template-rows: auto auto auto; min-height: auto; padding-top: 150px; }
   .hero-copy { padding-block: 30px 0; }
   .hero-copy h1 { max-width: 760px; font-size: clamp(3.4rem, 10vw, 5.4rem); }
-  .hero-context { margin: 12px 0 4px; padding: 26px; border: 1px solid rgba(255, 255, 255, 0.16); }
-  .hero-context > p { max-width: 620px; }
-  .hero-context dl { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
   .hero-proof { flex-direction: column; align-items: flex-start; gap: 18px; }
   .hero-proof > div { justify-content: flex-start; }
   .signal-section,
@@ -823,9 +816,24 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
   .hero-copy h1 { margin-top: 18px; font-size: clamp(2.7rem, 12.5vw, 4rem); }
   .hero-copy h1 em,
   .hero-copy h1 span { width: auto; }
-  .hero-actions { align-items: flex-start; flex-direction: column; gap: 18px; }
+  .hero-actions {
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 12px;
+  }
   .hero-actions .button { width: max-content; }
-  .hero-context dl { grid-template-columns: 1fr; gap: 0; }
+  .hero-actions .text-link {
+    min-width: 0;
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+  .hero-primary-cta {
+    min-height: 44px;
+    padding-inline: 12px;
+    gap: 7px;
+    font-size: 0.78rem;
+  }
   .hero-proof > div { gap: 10px 18px; }
   .signal-section { padding-block: 100px; }
   .section-heading h2,

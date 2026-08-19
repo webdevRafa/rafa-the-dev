@@ -127,15 +127,6 @@ const selectedWork = [
     siteUrl: "https://the-last-row-cinema.vercel.app/",
     className: "work-card--cinema",
   },
-  {
-    name: "Gary the Clog Goblin",
-    category: "Local services · Portfolio concept",
-    summary:
-      "A personality-led plumbing website with detailed service pages, social proof, service-area content, and a guided estimate flow.",
-    image: "/projects/clog-goblin.png",
-    siteUrl: "https://clog-goblin.vercel.app/",
-    className: "work-card--goblin",
-  },
 ];
 
 const process = [
@@ -598,35 +589,6 @@ function App() {
               </motion.div>
             </motion.div>
           </div>
-          <motion.aside
-            className="hero-context"
-            initial={reduceMotion ? false : { opacity: 0, y: 28 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.72, delay: 0.42, ease: revealEase }}
-            aria-label="Studio details"
-          >
-            <div className="hero-availability">
-              <span className="live-dot" /> Available for select projects
-            </div>
-            <p>
-              Independent design and development for businesses ready to replace
-              friction with something clearer.
-            </p>
-            <dl>
-              <div>
-                <dt>FOCUS</dt>
-                <dd>Websites + web systems</dd>
-              </div>
-              <div>
-                <dt>APPROACH</dt>
-                <dd>Strategy through launch</dd>
-              </div>
-              <div>
-                <dt>BASED IN</dt>
-                <dd>San Antonio, Texas</dd>
-              </div>
-            </dl>
-          </motion.aside>
           <div className="hero-proof" aria-label="Core technologies">
             <span>THE STACK BEHIND THE WORK</span>
             <div>
@@ -706,7 +668,7 @@ function App() {
               <h2>Different businesses. Purpose-built experiences.</h2>
             </div>
             <p>
-              Three recent builds showing how strategy, visual direction, and
+              Two recent builds showing how strategy, visual direction, and
               useful functionality can adapt to very different industries.
             </p>
           </Reveal>
