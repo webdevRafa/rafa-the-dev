@@ -114,7 +114,7 @@ const selectedWork = [
     category: "Forensic engineering · Portfolio concept",
     summary:
       "A credibility-first, multi-page experience that turns technical evidence, specialist services, and expert profiles into a clear client journey.",
-    image: "/projects/vectortrace.png",
+    image: "/projects/vectortrace.webp",
     siteUrl: "https://crash-engineer.vercel.app/",
     className: "work-card--vectortrace",
   },
@@ -123,7 +123,7 @@ const selectedWork = [
     category: "Entertainment · Portfolio concept",
     summary:
       "An immersive cinema platform with original films, showtimes, concessions, memberships, and a playful identity carried across every route.",
-    image: "/projects/last-row-cinema.png",
+    image: "/projects/last-row-cinema.webp",
     siteUrl: "https://the-last-row-cinema.vercel.app/",
     className: "work-card--cinema",
   },
@@ -210,10 +210,10 @@ function Reveal({
     <motion.div
       className={className}
       initial={
-        reduceMotion ? false : { opacity: 0, y: distance, filter: "blur(8px)" }
+        reduceMotion ? false : { opacity: 0, y: distance }
       }
       whileInView={
-        reduceMotion ? undefined : { opacity: 1, y: 0, filter: "blur(0px)" }
+        reduceMotion ? undefined : { opacity: 1, y: 0 }
       }
       viewport={revealViewport}
       transition={{ duration: 0.72, delay, ease: revealEase }}
@@ -356,10 +356,12 @@ function ServicesGrid() {
               <img
                 src={service.image}
                 alt={service.imageAlt}
-                width="1254"
-                height="1254"
+                width="900"
+                height="900"
                 loading="lazy"
                 decoding="async"
+                fetchPriority="low"
+                sizes="(max-width: 900px) calc(100vw - 30px), 25vw"
               />
             </div>
             <div className="service-card__content">
@@ -695,6 +697,8 @@ function App() {
                       height="630"
                       loading="lazy"
                       decoding="async"
+                      fetchPriority="low"
+                      sizes="(max-width: 640px) 86vw, (max-width: 900px) calc(100vw - 30px), 50vw"
                     />
                     <span>
                       Visit live site <ArrowUpRight size={17} />

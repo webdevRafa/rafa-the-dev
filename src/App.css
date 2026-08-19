@@ -238,6 +238,11 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
   pointer-events: none;
 }
 .ambient-atmosphere svg { width: 100%; height: 100%; opacity: 0.33; filter: saturate(130%); }
+.ambient-atmosphere--lite {
+  background:
+    radial-gradient(circle at 16% 18%, rgba(46, 231, 255, 0.12), transparent 46%),
+    radial-gradient(circle at 82% 74%, rgba(121, 40, 255, 0.12), transparent 48%);
+}
 .ambient-atmosphere__field--primary { filter: blur(90px); opacity: 0.5; transform: scale(1.15); transform-origin: center; }
 .ambient-atmosphere__field--secondary { filter: blur(70px); opacity: 0.75; }
 .ambient-atmosphere__veil {
@@ -603,13 +608,12 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
   border: 1px solid var(--rt-line);
   border-radius: var(--rt-radius-lg);
   background: rgba(9, 14, 31, 0.78);
-  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.12);
-  backdrop-filter: blur(14px);
-  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), border-color 320ms ease, box-shadow 420ms ease;
+  box-shadow: none;
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), border-color 320ms ease;
 }
 .package-card::before { content: ''; position: absolute; z-index: 0; inset: 0; background: linear-gradient(160deg, rgba(50, 38, 101, 0.96), rgba(23, 21, 59, 0.94) 58%, rgba(11, 16, 35, 0.94)); opacity: 0; transition: opacity 320ms ease; pointer-events: none; }
 .package-card > *:not(.package-badge) { position: relative; z-index: 1; }
-.package-card.is-active { border-color: rgba(158, 111, 255, 0.65); box-shadow: 0 32px 90px rgba(78, 50, 180, 0.24); }
+.package-card.is-active { border-color: rgba(158, 111, 255, 0.65); }
 .package-card.is-active::before { opacity: 1; }
 .package-badge { position: absolute; z-index: 2; top: 20px; right: 20px; padding: 7px 9px; color: #070a14; border-radius: 100px; background: #b9a3ff; font: 700 0.55rem var(--rt-font-mono); letter-spacing: 0.1em; }
 .package-index { margin: 0; color: #7f8aa3; font: 500 0.61rem var(--rt-font-mono); letter-spacing: 0.08em; }
@@ -761,6 +765,11 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
 }
 
 @media (max-width: 900px) {
+  .site-header.is-scrolled {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+    -webkit-backdrop-filter: blur(12px) saturate(125%);
+    backdrop-filter: blur(12px) saturate(125%);
+  }
   .page-frame { width: min(100% - 30px, 760px); }
   .nav-links {
     position: fixed;
@@ -797,6 +806,7 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
   .contact-section { grid-template-columns: 1fr; gap: 54px; }
   .services-grid { grid-template-columns: 1fr; }
   .service-card { grid-column: auto; min-height: 430px; margin: 0; }
+  .service-card { box-shadow: none; backdrop-filter: none; }
   .capability-ribbon { grid-template-columns: repeat(2, 1fr); }
   .work-grid { grid-template-columns: 1fr; }
   .process-intro,
@@ -893,6 +903,13 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
   .packages-grid::-webkit-scrollbar { display: none; }
   .package-card-shell { scroll-snap-align: start; scroll-snap-stop: always; }
   .package-card { padding: 26px; border-radius: 25px; }
+  .package-card,
+  .package-card.is-active {
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .package-card { transition: border-color 180ms ease; }
   .package-card h3 { margin-top: 46px; }
   .care-strip { grid-template-columns: 1fr auto; gap: 12px; padding: 22px; }
   .care-strip span { grid-column: 1 / -1; }
