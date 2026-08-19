@@ -13,7 +13,6 @@ import {
 } from "framer-motion";
 import {
   ArrowDown,
-  ArrowRight,
   ArrowUpRight,
   CalendarDays,
   Check,
@@ -31,7 +30,6 @@ import { FaInstagram } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import "./App.css";
 import AmbientVectorField from "./AmbientVectorField";
-import { formatPackagePrice, servicePackages } from "./packageCatalog";
 import {
   parseProjectBudget,
   PROJECT_BUDGET_OPTIONS,
@@ -165,7 +163,7 @@ const faqs = [
   {
     question: "How much will my project cost?",
     answer:
-      "The packages give you a useful starting point. After a short conversation, I will confirm the scope, timing, deliverables, and exact price in a clear proposal.",
+      "Every project is quoted individually. After I review your goals, scope, timing, and any integrations, I will follow up with questions if needed and send a clear proposal with exact pricing.",
   },
   {
     question: "Will I be able to update the site later?",
@@ -177,18 +175,6 @@ const faqs = [
     answer:
       "I make sure everything is deployed and working as expected. From there, we can arrange ongoing support or plan the next useful improvement when the business needs it.",
   },
-];
-
-const projectTypes = [
-  "Business website",
-  "Custom web application",
-  "Booking or scheduling",
-  "Payments",
-  "Customer portal",
-  "Employee or admin system",
-  "Marketplace",
-  "Internal operations tool",
-  "Not sure yet",
 ];
 
 const revealEase = [0.22, 1, 0.36, 1] as const;
@@ -471,7 +457,6 @@ function App() {
   const [projectBrief, setProjectBrief] = useState("");
   const [isSubmittingBrief, setIsSubmittingBrief] = useState(false);
   const [briefSubmitError, setBriefSubmitError] = useState("");
-  const [activePackageIndex, setActivePackageIndex] = useState(1);
   const isMobileViewport = useMediaQuery("(max-width: 640px)");
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
@@ -487,7 +472,6 @@ function App() {
 
     const form = new FormData(event.currentTarget);
     const getValue = (name: string) => String(form.get(name) ?? "");
-    const capabilities = form.getAll("capabilities").map(String);
     const budget = parseProjectBudget(getValue("budget"));
     const brief = [
       "PROJECT INQUIRY — RAFATHEDEV.COM",
@@ -495,7 +479,6 @@ function App() {
       `Name: ${getValue("name")}`,
       `Email: ${getValue("email")}`,
       `Business: ${getValue("business") || "Not provided"}`,
-      `Project type: ${capabilities.join(", ") || "Not sure yet"}`,
       `Timing: ${getValue("timing") || "Not provided"}`,
       `Budget: ${budget || "Not provided"}`,
       "",
@@ -513,7 +496,6 @@ function App() {
         name: getValue("name"),
         email: getValue("email"),
         business: getValue("business"),
-        capabilities,
         message: getValue("message"),
         timing: getValue("timing"),
         budget,
@@ -753,92 +735,6 @@ function App() {
         </section>
 
         <section
-          className="packages-section page-frame"
-          id="packages"
-          data-ambient-scene="3"
-        >
-          <Reveal className="section-heading packages-heading">
-            <div>
-              <p className="section-kicker">CLEAR STARTING POINTS</p>
-              <h2>Choose the right starting point for your business.</h2>
-            </div>
-            <p>
-              Whether you need a polished online presence, a website with
-              connected features, or a fully custom system, choose the option
-              closest to your goals. I’ll help confirm the right fit before the
-              project begins.
-            </p>
-          </Reveal>
-          <div
-            className="packages-grid"
-            role="region"
-            aria-label="Compare service packages. On smaller screens, scroll horizontally to see all three."
-            tabIndex={0}
-            onMouseLeave={() => setActivePackageIndex(1)}
-            onBlurCapture={(event) => {
-              if (
-                !(event.relatedTarget instanceof Node) ||
-                !event.currentTarget.contains(event.relatedTarget)
-              )
-                setActivePackageIndex(1);
-            }}
-          >
-            {servicePackages.map((item, index) => (
-              <Reveal
-                className="package-card-shell"
-                delay={index * 0.08}
-                disableAnimation={isMobileViewport}
-                key={item.name}
-              >
-                <article
-                  className={`package-card${
-                    activePackageIndex === index ? " is-active" : ""
-                  }`}
-                  onMouseEnter={() => setActivePackageIndex(index)}
-                  onFocusCapture={() => setActivePackageIndex(index)}
-                >
-                  {item.featured && (
-                    <span className="package-badge">MOST POPULAR</span>
-                  )}
-                  <p className="package-index">
-                    {item.timeline}
-                  </p>
-                  <h3>{item.name}</h3>
-                  <div className="package-price-wrap">
-                    <span>STARTING AT</span>
-                    <strong className="package-price">
-                      {formatPackagePrice(item.price)}
-                    </strong>
-                  </div>
-                  <p>{item.note}</p>
-                  <div className="package-architecture">
-                    <span>PROJECT COMPLEXITY</span>
-                    <strong>{item.architecture}</strong>
-                  </div>
-                  <ul>
-                    {item.features.map((feature) => (
-                      <li key={feature}>
-                        <Check size={15} />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                  <Link to={`/packages/${item.slug}`}>
-                    Build your package <ArrowRight size={17} />
-                  </Link>
-                </article>
-              </Reveal>
-            ))}
-          </div>
-          <Reveal className="care-strip">
-            <span>AFTER LAUNCH</span>
-            <strong>Care & Growth</strong>
-            <p>Ongoing updates, support, and measured improvements.</p>
-            <b>From $50/mo</b>
-          </Reveal>
-        </section>
-
-        <section
           className="process-section page-frame"
           id="process"
           data-ambient-scene="4"
@@ -1000,21 +896,6 @@ function App() {
                       placeholder="Company name"
                     />
                   </label>
-                  <fieldset>
-                    <legend>What do you need?</legend>
-                    <div className="choice-grid">
-                      {projectTypes.map((type) => (
-                        <label className="choice" key={type}>
-                          <input
-                            type="checkbox"
-                            name="capabilities"
-                            value={type}
-                          />
-                          <span>{type}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </fieldset>
                   <label>
                     What are you trying to build or improve? <span>*</span>
                     <textarea
@@ -1056,7 +937,7 @@ function App() {
                   >
                     {isSubmittingBrief
                       ? "Sending your project..."
-                      : "Send my project inquiry"}
+                      : "Request my custom quote"}
                     <ArrowUpRight size={18} />
                   </button>
                   {briefSubmitError && (
@@ -1065,8 +946,8 @@ function App() {
                     </p>
                   )}
                   <p className="form-disclaimer">
-                    No account required. Your details are securely submitted so
-                    I can follow up.
+                    No account or payment required. I’ll review your details and
+                    follow up with a custom quote.
                   </p>
                 </motion.form>
               ) : (
@@ -1083,8 +964,8 @@ function App() {
                   <p className="section-kicker">YOUR PROJECT WAS RECEIVED</p>
                   <h3>Thanks for sharing your idea.</h3>
                   <p>
-                    Your details are saved and ready for review. I will read
-                    through the project and follow up shortly.
+                    Your details are saved and ready for review. I’ll evaluate
+                    the scope and follow up with any questions and a custom quote.
                   </p>
                   <textarea
                     value={projectBrief}
@@ -1140,7 +1021,6 @@ function App() {
           </Link>
           <div className="footer-links">
             <a href="#services">Services</a>
-            <a href="#packages">Packages</a>
             <a href="#process">Process</a>
             <a href="#about">About</a>
           </div>

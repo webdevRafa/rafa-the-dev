@@ -16,7 +16,6 @@ export type ProjectInquiryInput = {
   name: string
   email: string
   business: string
-  capabilities: string[]
   message: string
   timing: string
   budget: ProjectBudget | ''
@@ -106,7 +105,7 @@ export async function submitProjectInquiry(input: ProjectInquiryInput) {
       instagram: '',
     },
     payload: {
-      capabilities: cleanList(input.capabilities, 9, 80),
+      capabilities: [],
       message: cleanText(input.message, 5000),
       timing: cleanText(input.timing, 80),
       budget: cleanText(input.budget, 80),

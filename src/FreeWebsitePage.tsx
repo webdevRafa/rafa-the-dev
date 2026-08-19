@@ -657,7 +657,7 @@ function FreeWebsitePage() {
             <span className="brand-copy"><strong>RAFA THE DEV</strong></span>
           </Link>
           <div className="footer-links">
-            <Link to="/#services">Services</Link><Link to="/#packages">Packages</Link><Link to="/#process">Process</Link><Link to="/#about">About</Link><Link to="/free-website" aria-current="page">Free website</Link>
+            <Link to="/#services">Services</Link><Link to="/#process">Process</Link><Link to="/#about">About</Link><Link to="/free-website" aria-current="page">Free website</Link>
           </div>
           <a className="footer-instagram" href="https://www.instagram.com/rafathedev/" target="_blank" rel="noreferrer"><FaInstagram /> @rafathedev <ArrowUpRight size={15} /></a>
         </div>

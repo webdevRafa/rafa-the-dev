@@ -5,7 +5,6 @@ import ScrollToRouteTarget from './ScrollToRouteTarget.tsx'
 import SiteHeader from './SiteHeader.tsx'
 
 const AdminPage = lazy(() => import('./admin/AdminPage.tsx'))
-const PackagePage = lazy(() => import('./PackagePage.tsx'))
 
 function RouteShell() {
   const { pathname } = useLocation()
@@ -20,14 +19,7 @@ function RouteShell() {
       {!isAdminRoute && <SiteHeader />}
       <Routes>
         <Route path="/" element={<App />} />
-        <Route
-          path="/packages/:packageSlug"
-          element={(
-            <Suspense fallback={<div className="route-loading">Loading package...</div>}>
-              <PackagePage key={pathname} />
-            </Suspense>
-          )}
-        />
+        <Route path="/packages/:packageSlug" element={<Navigate to="/#contact" replace />} />
         <Route
           path="/admin"
           element={(
