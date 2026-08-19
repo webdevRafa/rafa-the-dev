@@ -127,15 +127,6 @@ const selectedWork = [
     siteUrl: "https://the-last-row-cinema.vercel.app/",
     className: "work-card--cinema",
   },
-  {
-    name: "Gary the Clog Goblin",
-    category: "Local services · Portfolio concept",
-    summary:
-      "A personality-led plumbing website with detailed service pages, social proof, service-area content, and a guided estimate flow.",
-    image: "/projects/clog-goblin.png",
-    siteUrl: "https://clog-goblin.vercel.app/",
-    className: "work-card--goblin",
-  },
 ];
 
 const process = [
@@ -677,7 +668,7 @@ function App() {
               <h2>Different businesses. Purpose-built experiences.</h2>
             </div>
             <p>
-              Three recent builds showing how strategy, visual direction, and
+              Two recent builds showing how strategy, visual direction, and
               useful functionality can adapt to very different industries.
             </p>
           </Reveal>
