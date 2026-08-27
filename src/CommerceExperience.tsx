@@ -174,8 +174,8 @@ function CommerceExperience() {
             </div>
             <div className="luxury-shop__header-copy">
               <p>
-                Ten fictional products. A real cart, inventory controls, responsive
-                interactions, and a wallet that updates when you place an order.
+                A curated fictional catalog with a real cart, inventory controls,
+                responsive interactions, and a wallet that updates when you place an order.
               </p>
               <button type="button" onClick={() => setCartOpen(true)}>
                 <ShoppingBag size={17} /> View cart{cartCount > 0 ? ` (${cartCount})` : ''}
@@ -204,7 +204,7 @@ function CommerceExperience() {
               const quantity = quantityFor(product.id)
               return (
                 <motion.article
-                  className="product-card"
+                  className={`product-card${quantity > 0 ? ' is-selected' : ''}${index >= 4 ? ' product-card--mobile-only' : ''}`}
                   key={product.id}
                   initial={reduceMotion ? false : { opacity: 0, y: 28 }}
                   whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
@@ -213,8 +213,8 @@ function CommerceExperience() {
                 >
                   <div className="product-card__media">
                     <img src={product.image} alt={product.name} loading="lazy" />
-                    <span>{String(index + 1).padStart(2, '0')} / 10</span>
-                    {quantity > 0 && <i>{quantity} in cart</i>}
+                    <span>{String(index + 1).padStart(2, '0')}</span>
+                    {quantity > 0 && <i>Selected</i>}
                   </div>
                   <div className="product-card__body">
                     <p>{product.category}</p>
@@ -223,8 +223,13 @@ function CommerceExperience() {
                       <strong>{formatDemoCurrency(product.price)}</strong>
                     </div>
                     <p className="product-card__description">{product.description}</p>
-                    <button type="button" onClick={() => addToCart(product.id)}>
-                      <Plus size={16} /> {quantity > 0 ? 'Add another' : 'Add to demo cart'}
+                    <button
+                      type="button"
+                      onClick={() => addToCart(product.id)}
+                      disabled={quantity > 0}
+                    >
+                      {quantity > 0 ? <Check size={16} /> : <Plus size={16} />}
+                      {quantity > 0 ? 'Added to demo cart' : 'Add to demo cart'}
                     </button>
                   </div>
                 </motion.article>

@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Check, Minus, Plus, RotateCcw, ShieldCheck, ShoppingBag, Trash2, X } from 'lucide-react'
 import { useLuxuryStore } from './LuxuryStoreState.ts'
 import { formatDemoCurrency } from './luxuryCatalog.ts'
+import ConfettiCelebration from './ConfettiCelebration.tsx'
 
 const drawerEase = [0.22, 1, 0.36, 1] as const
 
@@ -172,19 +173,22 @@ function CartDrawer() {
 
       <AnimatePresence>
         {order && (
-          <motion.div
-            className="demo-order-toast"
-            role="status"
-            initial={reduceMotion ? false : { opacity: 0, y: 20, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={reduceMotion ? undefined : { opacity: 0, y: 16 }}
-          >
-            <span className="demo-order-toast__icon"><Check size={19} /></span>
-            <div>
-              <strong>Demo order placed</strong>
-              <p>{order.itemCount} {order.itemCount === 1 ? 'item' : 'items'} · {formatDemoCurrency(order.total)} · {order.reference}</p>
-            </div>
-            <button type="button" aria-label="Dismiss order confirmation" onClick={dismissOrder}><X size={17} /></button>
+          <motion.div key={order.reference}>
+            <ConfettiCelebration />
+            <motion.div
+              className="demo-order-toast"
+              role="status"
+              initial={reduceMotion ? false : { opacity: 0, y: 20, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={reduceMotion ? undefined : { opacity: 0, y: 16 }}
+            >
+              <span className="demo-order-toast__icon"><Check size={19} /></span>
+              <div>
+                <strong>Demo order placed</strong>
+                <p>{order.itemCount} {order.itemCount === 1 ? 'item' : 'items'} · {formatDemoCurrency(order.total)} · {order.reference}</p>
+              </div>
+              <button type="button" aria-label="Dismiss order confirmation" onClick={dismissOrder}><X size={17} /></button>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
