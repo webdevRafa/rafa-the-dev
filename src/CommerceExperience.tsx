@@ -1,14 +1,10 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import {
   ArrowDown,
-  CalendarClock,
   Check,
-  CreditCard,
-  LayoutDashboard,
   Plus,
   ShoppingBag,
   Sparkles,
-  Workflow,
 } from 'lucide-react'
 import { useLuxuryStore } from './LuxuryStoreState.ts'
 import CountUp from './CountUpNumber.tsx'
@@ -21,11 +17,13 @@ import {
 
 const revealEase = [0.22, 1, 0.36, 1] as const
 
-const systemNodes = [
-  { label: 'Capture', detail: 'Qualified inquiry', icon: Workflow },
-  { label: 'Schedule', detail: 'Real availability', icon: CalendarClock },
-  { label: 'Transact', detail: 'Secure payment', icon: CreditCard },
-  { label: 'Operate', detail: 'One clear dashboard', icon: LayoutDashboard },
+const systemCapabilities = [
+  'Custom websites',
+  'Booking & scheduling',
+  'Payments & checkout',
+  'Customer portals',
+  'Dashboards & analytics',
+  'Workflow automation',
 ]
 
 type ProductCardProps = {
@@ -114,41 +112,27 @@ function CommerceExperience() {
           </p>
         </motion.div>
 
-        <motion.div
-          className="systems-section__map"
+        <motion.ul
+          className="systems-services"
+          aria-label="Services and systems I build"
           initial={reduceMotion ? false : { opacity: 0, x: 36 }}
           whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: reduceMotion ? 0 : 0.78, delay: 0.08, ease: revealEase }}
         >
-          <div className="systems-map__intro">
-            <span>ONE CONNECTED FLOW</span>
-            <p>
-              Bookings can update schedules, trigger payments and confirmations,
-              organize customer data, and give your team a live operational view.
-            </p>
-          </div>
-          <div className="systems-map__rail" aria-label="Example connected business system">
-            {systemNodes.map(({ label, detail, icon: Icon }, index) => (
-              <motion.div
-                className="systems-node"
-                key={label}
-                initial={reduceMotion ? false : { opacity: 0, y: 18 }}
-                whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.5 }}
-                transition={{ duration: reduceMotion ? 0 : 0.5, delay: index * 0.09 }}
-              >
-                <span className="systems-node__icon"><Icon size={18} /></span>
-                <span className="systems-node__index">0{index + 1}</span>
-                <div>
-                  <strong>{label}</strong>
-                  <small>{detail}</small>
-                </div>
-                {index < systemNodes.length - 1 && <i aria-hidden="true" />}
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+          {systemCapabilities.map((capability, index) => (
+            <motion.li
+              key={capability}
+              initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+              whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: reduceMotion ? 0 : 0.5, delay: index * 0.06 }}
+            >
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <strong>{capability}</strong>
+            </motion.li>
+          ))}
+        </motion.ul>
       </section>
 
       <motion.section
