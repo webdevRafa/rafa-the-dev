@@ -22,6 +22,7 @@ import { FaInstagram } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import "./App.css";
 import AmbientVectorField from "./AmbientVectorField";
+import CommerceExperience from "./CommerceExperience";
 import {
   parseProjectBudget,
   PROJECT_BUDGET_OPTIONS,
@@ -355,6 +356,8 @@ function App() {
           </Reveal>
         </section>
 
+        <CommerceExperience />
+
         {SHOW_CAPABILITY_RIBBON && (
           <section className="capability-reserve page-frame" aria-label="Technical capabilities">
             <Reveal className="capability-ribbon" delay={0.1}>
@@ -371,7 +374,7 @@ function App() {
         <section
           className="process-section page-frame"
           id="process"
-          data-ambient-scene="2"
+          data-ambient-scene="5"
         >
           <Reveal className="process-intro">
             <p className="section-kicker">THE BUILD PATH</p>
@@ -406,7 +409,7 @@ function App() {
         <section
           className="about-section page-frame"
           id="about"
-          data-ambient-scene="3"
+          data-ambient-scene="6"
         >
           <Reveal className="about-aside">
             <p className="section-kicker">THE PERSON BEHIND THE BUILD</p>
@@ -452,7 +455,7 @@ function App() {
           </Reveal>
         </section>
 
-        <section className="faq-section page-frame" data-ambient-scene="4">
+        <section className="faq-section page-frame" data-ambient-scene="7">
           <Reveal className="faq-heading">
             <p className="section-kicker">BEFORE WE BEGIN</p>
             <h2>Questions are part of the process.</h2>
@@ -467,7 +470,7 @@ function App() {
         <section
           className="contact-section page-frame"
           id="contact"
-          data-ambient-scene="5"
+          data-ambient-scene="7"
         >
           <Reveal className="contact-copy">
             <p className="section-kicker">START WITH THE IDEA</p>
