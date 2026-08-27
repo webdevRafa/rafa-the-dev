@@ -560,8 +560,19 @@ body.cart-drawer-open { overflow: hidden; }
   .systems-section { grid-template-columns: minmax(0, 1fr); padding-block: 100px; }
   .systems-section__map { padding: 20px 16px; border-radius: 24px; }
   .systems-map__intro { grid-template-columns: 1fr; gap: 12px; }
-  .systems-map__rail { grid-template-columns: 1fr; }
-  .systems-node { min-height: 96px; }
+  .systems-map__rail { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .systems-node {
+    grid-template-columns: auto 1fr;
+    grid-template-areas: 'icon index' 'copy copy';
+    align-content: start;
+    min-height: 158px;
+    padding: 15px;
+    gap: 9px 10px;
+  }
+  .systems-node__icon { width: 36px; height: 36px; border-radius: 10px; }
+  .systems-node > div { margin-top: 4px; }
+  .systems-node strong { font-size: 0.84rem; }
+  .systems-node small { font-size: 0.67rem; line-height: 1.4; }
   .wallet-gift-section { grid-template-columns: minmax(0, 1fr); min-height: auto; padding-block: 100px; }
   .systems-section__lead h2,
   .wallet-gift__copy h2,
