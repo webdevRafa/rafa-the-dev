@@ -16,6 +16,7 @@ import {
   formatDemoCurrency,
   LUXURY_DEMO_BALANCE,
   luxuryProducts,
+  type LuxuryProduct,
 } from './luxuryCatalog.ts'
 
 const revealEase = [0.22, 1, 0.36, 1] as const
@@ -26,6 +27,60 @@ const systemNodes = [
   { label: 'Transact', detail: 'Secure payment', icon: CreditCard },
   { label: 'Operate', detail: 'One clear dashboard', icon: LayoutDashboard },
 ]
+
+type ProductCardProps = {
+  product: LuxuryProduct
+  index: number
+  quantity: number
+  animate: boolean
+  onAdd: (productId: string) => void
+}
+
+function ProductCard({ product, index, quantity, animate, onAdd }: ProductCardProps) {
+  const content = (
+    <>
+      <div className="product-card__media">
+        <img src={product.image} alt={product.name} loading="lazy" />
+        <span>{String(index + 1).padStart(2, '0')}</span>
+        {quantity > 0 && <i>Selected</i>}
+      </div>
+      <div className="product-card__body">
+        <p>{product.category}</p>
+        <div className="product-card__title">
+          <h3>{product.name}</h3>
+          <strong>{formatDemoCurrency(product.price)}</strong>
+        </div>
+        <p className="product-card__description">{product.description}</p>
+        <button
+          type="button"
+          onClick={() => onAdd(product.id)}
+          disabled={quantity > 0}
+        >
+          {quantity > 0 ? <Check size={16} /> : <Plus size={16} />}
+          {quantity > 0 ? 'Added to demo cart' : 'Add to demo cart'}
+        </button>
+      </div>
+    </>
+  )
+
+  const className = `product-card${quantity > 0 ? ' is-selected' : ''}`
+
+  if (!animate) {
+    return <article className={className}>{content}</article>
+  }
+
+  return (
+    <motion.article
+      className={className}
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.12 }}
+      transition={{ duration: 0.62, delay: (index % 3) * 0.06, ease: revealEase }}
+    >
+      {content}
+    </motion.article>
+  )
+}
 
 function CommerceExperience() {
   const {
@@ -180,46 +235,58 @@ function CommerceExperience() {
           <div className="product-grid__mobile-hint" aria-hidden="true">Swipe to browse</div>
 
           <div
-            className="product-grid"
+            className="product-grid product-grid--desktop"
             role="region"
-            aria-label="Fictional luxury product catalog"
+            aria-label="Luxury product catalog"
             tabIndex={0}
           >
-            {luxuryProducts.map((product, index) => {
-              const quantity = quantityFor(product.id)
-              return (
-                <motion.article
-                  className={`product-card${quantity > 0 ? ' is-selected' : ''}${index >= 4 ? ' product-card--mobile-only' : ''}`}
+            {luxuryProducts.slice(0, 4).map((product, index) => (
+              <ProductCard
+                product={product}
+                index={index}
+                quantity={quantityFor(product.id)}
+                animate={!reduceMotion}
+                onAdd={addToCart}
+                key={product.id}
+              />
+            ))}
+          </div>
+
+          <div className="mobile-product-rows" aria-label="Luxury product catalog">
+            <div
+              className="mobile-product-row"
+              role="region"
+              aria-label="Luxury products, row one"
+              tabIndex={0}
+            >
+              {luxuryProducts.slice(0, 5).map((product, index) => (
+                <ProductCard
+                  product={product}
+                  index={index}
+                  quantity={quantityFor(product.id)}
+                  animate={false}
+                  onAdd={addToCart}
                   key={product.id}
-                  initial={reduceMotion ? false : { opacity: 0, y: 28 }}
-                  whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.12 }}
-                  transition={{ duration: reduceMotion ? 0 : 0.62, delay: (index % 3) * 0.06, ease: revealEase }}
-                >
-                  <div className="product-card__media">
-                    <img src={product.image} alt={product.name} loading="lazy" />
-                    <span>{String(index + 1).padStart(2, '0')}</span>
-                    {quantity > 0 && <i>Selected</i>}
-                  </div>
-                  <div className="product-card__body">
-                    <p>{product.category}</p>
-                    <div className="product-card__title">
-                      <h3>{product.name}</h3>
-                      <strong>{formatDemoCurrency(product.price)}</strong>
-                    </div>
-                    <p className="product-card__description">{product.description}</p>
-                    <button
-                      type="button"
-                      onClick={() => addToCart(product.id)}
-                      disabled={quantity > 0}
-                    >
-                      {quantity > 0 ? <Check size={16} /> : <Plus size={16} />}
-                      {quantity > 0 ? 'Added to demo cart' : 'Add to demo cart'}
-                    </button>
-                  </div>
-                </motion.article>
-              )
-            })}
+                />
+              ))}
+            </div>
+            <div
+              className="mobile-product-row"
+              role="region"
+              aria-label="Luxury products, row two"
+              tabIndex={0}
+            >
+              {luxuryProducts.slice(5).map((product, index) => (
+                <ProductCard
+                  product={product}
+                  index={index + 5}
+                  quantity={quantityFor(product.id)}
+                  animate={false}
+                  onAdd={addToCart}
+                  key={product.id}
+                />
+              ))}
+            </div>
           </div>
 
           <div className="luxury-shop__closing">
