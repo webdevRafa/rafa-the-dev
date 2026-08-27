@@ -1,7 +1,6 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import {
   ArrowDown,
-  ArrowRight,
   CalendarClock,
   Check,
   CreditCard,
@@ -30,7 +29,6 @@ const systemNodes = [
 
 function CommerceExperience() {
   const {
-    balance,
     walletUnlocked,
     cartLines,
     cartCount,
@@ -114,12 +112,11 @@ function CommerceExperience() {
           <p className="section-kicker">THANKS FOR STOPPING BY</p>
           <h2>I got you a little something.</h2>
           <p>
-            You made it this far, so your fictional wallet has been funded with
-            fifty million dollars. Let’s spend it while I show you what a polished
-            product experience can feel like.
+            You made it this far, so I’m giving you $50,000,000 to spend at my
+            store while I show you what a polished product experience can feel like.
           </p>
           <a className="wallet-gift__link" href="#shop">
-            Enter the demo shop <ArrowDown size={17} />
+            View available items <ArrowDown size={17} />
           </a>
         </motion.div>
 
@@ -131,10 +128,8 @@ function CommerceExperience() {
           transition={{ duration: reduceMotion ? 0 : 0.9, delay: 0.08, ease: revealEase }}
         >
           <div className="wallet-card__top">
-            <span><Sparkles size={16} /> DEMO WALLET</span>
-            <span>RAFA / 50</span>
+            <span><Sparkles size={16} /> AVAILABLE TO SPEND</span>
           </div>
-          <p>Available balance</p>
           <strong aria-label={formatDemoCurrency(LUXURY_DEMO_BALANCE)}>
             {walletUnlocked ? (
               <CountUp
@@ -148,7 +143,6 @@ function CommerceExperience() {
           </strong>
           <div className="wallet-card__bottom">
             <span>FOR DEMONSTRATION ONLY</span>
-            <span className="wallet-card__approved"><Check size={13} /> FUNDS READY</span>
           </div>
         </motion.div>
       </motion.section>
@@ -169,12 +163,12 @@ function CommerceExperience() {
             transition={{ duration: reduceMotion ? 0 : 0.72, ease: revealEase }}
           >
             <div>
-              <p className="section-kicker">THE $50M DEMO SHOP</p>
-              <h2>Go ahead. Add something ridiculous.</h2>
+              <p className="section-kicker">RAFA’S SHOP</p>
+              <h2>Choose any, on me.</h2>
             </div>
             <div className="luxury-shop__header-copy">
               <p>
-                A curated fictional catalog with a real cart, inventory controls,
+                A curated collection with a real cart, inventory controls,
                 responsive interactions, and a wallet that updates when you place an order.
               </p>
               <button type="button" onClick={() => setCartOpen(true)}>
@@ -183,16 +177,7 @@ function CommerceExperience() {
             </div>
           </motion.header>
 
-          <div className="luxury-shop__status" aria-label="Demo shop status">
-            <span><i /> Fictional catalog</span>
-            <span>Available: {formatDemoCurrency(balance)}</span>
-            <span>No checkout or payment collection</span>
-          </div>
-
-          <div className="product-grid__mobile-hint" aria-hidden="true">
-            <span>Swipe to browse</span>
-            <span>2 rows · 5 columns <ArrowRight size={14} /></span>
-          </div>
+          <div className="product-grid__mobile-hint" aria-hidden="true">Swipe to browse</div>
 
           <div
             className="product-grid"

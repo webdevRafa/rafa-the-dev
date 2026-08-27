@@ -206,10 +206,8 @@
 }
 
 .wallet-card__top > span:first-child { display: inline-flex; align-items: center; gap: 9px; color: var(--rt-cyan); }
-.wallet-card > p { position: relative; z-index: 1; margin: 82px 0 12px; color: #9ba6bb; font-size: 0.78rem; }
-.wallet-card > strong { position: relative; z-index: 1; display: block; font: 540 clamp(2.45rem, 4.5vw, 4.7rem)/1 var(--rt-font-heading); letter-spacing: -0.045em; }
+.wallet-card > strong { position: relative; z-index: 1; display: block; margin-top: 92px; font: 540 clamp(2.45rem, 4.5vw, 4.7rem)/1 var(--rt-font-heading); letter-spacing: -0.045em; }
 .wallet-card__bottom { position: absolute; left: clamp(28px, 4vw, 48px); right: clamp(28px, 4vw, 48px); bottom: 34px; }
-.wallet-card__approved { display: inline-flex; align-items: center; gap: 6px; color: #65efcc; }
 
 /* Demo storefront */
 .luxury-shop-section {
@@ -255,28 +253,11 @@
   cursor: pointer;
 }
 
-.luxury-shop__status {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 12px 28px;
-  margin-top: 48px;
-  padding: 15px 0;
-  color: #7d899f;
-  border-block: 1px solid var(--rt-line);
-  font: 500 0.58rem var(--rt-font-mono);
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-}
-
-.luxury-shop__status span { display: inline-flex; align-items: center; gap: 8px; }
-.luxury-shop__status i { width: 7px; height: 7px; border-radius: 50%; background: #5af0c9; box-shadow: 0 0 12px rgba(90, 240, 201, 0.7); }
-
 .product-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
-  margin-top: 28px;
+  margin-top: 48px;
 }
 
 .product-grid__mobile-hint { display: none; }
@@ -586,17 +567,14 @@ body.cart-drawer-open { overflow: hidden; }
   .wallet-gift__copy h2,
   .luxury-shop__header h2 { font-size: clamp(2rem, 9vw, 2.8rem); }
   .wallet-card { min-height: 280px; padding: 24px 20px; border-radius: 22px; }
-  .wallet-card > p { margin-top: 58px; }
-  .wallet-card > strong { font-size: clamp(2rem, 10vw, 3.1rem); }
+  .wallet-card > strong { margin-top: 68px; font-size: clamp(2rem, 10vw, 3.1rem); }
   .wallet-card__bottom { left: 20px; right: 20px; bottom: 24px; }
-  .wallet-card__bottom > span:first-child { display: none; }
-  .wallet-card__bottom { justify-content: flex-end; }
+  .wallet-card__bottom { justify-content: flex-start; }
   .luxury-shop-section { padding-block: 90px; }
-  .luxury-shop__status { justify-content: flex-start; }
   .product-grid__mobile-hint {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 16px;
     margin-top: 26px;
     color: #77849d;
@@ -604,7 +582,6 @@ body.cart-drawer-open { overflow: hidden; }
     letter-spacing: 0.09em;
     text-transform: uppercase;
   }
-  .product-grid__mobile-hint span:last-child { display: inline-flex; align-items: center; gap: 7px; color: var(--rt-cyan); }
   .product-grid {
     grid-template-columns: none;
     grid-template-rows: repeat(2, minmax(0, 1fr));
