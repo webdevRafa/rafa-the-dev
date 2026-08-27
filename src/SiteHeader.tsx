@@ -104,7 +104,6 @@ function SiteHeader() {
       </Link>
 
       <nav className={`nav-links${menuOpen ? ' is-open' : ''}`} aria-label="Main navigation">
-        <Link to="/#services" onClick={closeMenu}>Services</Link>
         <Link to="/#process" onClick={closeMenu}>Process</Link>
         <Link to="/#about" onClick={closeMenu}>About</Link>
         <a

@@ -19,7 +19,6 @@ function RouteShell() {
       {!isAdminRoute && <SiteHeader />}
       <Routes>
         <Route path="/" element={<App />} />
-        <Route path="/packages/:packageSlug" element={<Navigate to="/#contact" replace />} />
         <Route
           path="/admin"
           element={(

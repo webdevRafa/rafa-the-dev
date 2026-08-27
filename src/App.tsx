@@ -1,9 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import type {
-  FormEvent,
-  PointerEvent as ReactPointerEvent,
-  ReactNode,
-} from "react";
+import { useState } from "react";
+import type { FormEvent, ReactNode } from "react";
 import {
   AnimatePresence,
   motion,
@@ -14,17 +10,13 @@ import {
 import {
   ArrowDown,
   ArrowUpRight,
-  CalendarDays,
   Check,
   ChevronDown,
-  CircleDollarSign,
   Copy,
   Gauge,
-  Layers3,
   MessageSquareMore,
   ShieldCheck,
   Sparkles,
-  Workflow,
 } from "lucide-react";
 import { FaInstagram } from "react-icons/fa6";
 import { Link } from "react-router-dom";
@@ -35,96 +27,13 @@ import {
   PROJECT_BUDGET_OPTIONS,
 } from "./projectInquiryOptions";
 
-const services = [
-  {
-    number: "01",
-    tag: "Be understood",
-    title: "Websites that turn attention into action.",
-    description:
-      "Position your business clearly, build trust quickly, and give every visitor an obvious next step—on every screen size.",
-    features: [
-      "Strategy + information architecture",
-      "Responsive design + development",
-      "Lead capture + launch support",
-    ],
-    icon: Layers3,
-    glow: "#3158ff",
-    image: "/studio/website-design.webp",
-    imageAlt:
-      "Tablet and phone presenting a responsive business website in a sunlit studio",
-  },
-  {
-    number: "02",
-    tag: "Run smoother",
-    title: "Custom software shaped around your workflow.",
-    description:
-      "Replace scattered tools and repetitive steps with one focused system built around the way your team actually works.",
-    features: [
-      "Secure accounts + permissions",
-      "Dashboards + operational data",
-      "Purpose-built business logic",
-    ],
-    icon: Workflow,
-    glow: "#8c5bff",
-    image: "/studio/business-systems.webp",
-    imageAlt:
-      "Two monitors presenting a connected operations dashboard in a dark studio",
-  },
-  {
-    number: "03",
-    tag: "Book more",
-    title: "Scheduling that respects real availability.",
-    description:
-      "Create a polished booking flow with the right rules for availability, pricing, confirmations, and rescheduling.",
-    features: [
-      "Live availability",
-      "Customer notifications",
-      "Flexible scheduling rules",
-    ],
-    icon: CalendarDays,
-    glow: "#ee4fbd",
-    image: "/studio/booking-flows.webp",
-    imageAlt:
-      "Phone calendar and appointment cards arranged on an editorial workspace",
-  },
-  {
-    number: "04",
-    tag: "Get paid",
-    title: "Payment experiences clients can trust.",
-    description:
-      "From deposits and invoices to marketplace payouts, I connect the moving parts and keep the experience clear.",
-    features: [
-      "Stripe integrations",
-      "Payment status tracking",
-      "Checkout + payout workflows",
-    ],
-    icon: CircleDollarSign,
-    glow: "#ff6c56",
-    image: "/studio/payment-systems.webp",
-    imageAlt:
-      "Payment terminal, mobile checkout, and metal card on a dark studio surface",
-  },
-];
-
-const selectedWork = [
-  {
-    name: "VectorTrace Forensics",
-    category: "Forensic engineering · Portfolio concept",
-    summary:
-      "A credibility-first, multi-page experience that turns technical evidence, specialist services, and expert profiles into a clear client journey.",
-    image: "/projects/vectortrace.webp",
-    siteUrl: "https://crash-engineer.vercel.app/",
-    className: "work-card--vectortrace",
-  },
-  {
-    name: "The Last Row Cinema",
-    category: "Entertainment · Portfolio concept",
-    summary:
-      "An immersive cinema platform with original films, showtimes, concessions, memberships, and a playful identity carried across every route.",
-    image: "/projects/last-row-cinema.webp",
-    siteUrl: "https://the-last-row-cinema.vercel.app/",
-    className: "work-card--cinema",
-  },
+// Preserved for a future section. Set this to true when the capability ribbon returns.
+const SHOW_CAPABILITY_RIBBON = false;
+const capabilityHighlights = [
+  { label: "Secure authentication", icon: ShieldCheck },
+  { label: "Dashboards + analytics", icon: Gauge },
+  { label: "Email + API integrations", icon: MessageSquareMore },
+  { label: "Automation + AI", icon: Sparkles },
 ];
 
 const process = [
@@ -168,7 +77,7 @@ const faqs = [
   {
     question: "Will I be able to update the site later?",
     answer:
-      "Yes. I choose the editing approach around what you need to maintain. I can also handle ongoing improvements through a Care & Growth plan starting at $50 per month.",
+      "Yes. I choose the editing approach around what you need to maintain. If you want ongoing help after launch, we can shape support around what the project actually needs.",
   },
   {
     question: "What happens after launch?",
@@ -185,16 +94,14 @@ function Reveal({
   className,
   delay = 0,
   distance = 34,
-  disableAnimation = false,
 }: {
   children: ReactNode;
   className?: string;
   delay?: number;
   distance?: number;
-  disableAnimation?: boolean;
 }) {
   const reduceMotion = useReducedMotion();
-  const shouldSkipAnimation = Boolean(reduceMotion) || disableAnimation;
+  const shouldSkipAnimation = Boolean(reduceMotion);
 
   return (
     <motion.div
@@ -214,189 +121,6 @@ function Reveal({
     >
       {children}
     </motion.div>
-  );
-}
-
-function useMediaQuery(query: string) {
-  const [matches, setMatches] = useState(() =>
-    typeof window === "undefined" ? false : window.matchMedia(query).matches
-  );
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia(query);
-    const updateMatch = () => setMatches(mediaQuery.matches);
-
-    updateMatch();
-    mediaQuery.addEventListener("change", updateMatch);
-
-    return () => mediaQuery.removeEventListener("change", updateMatch);
-  }, [query]);
-
-  return matches;
-}
-
-function ServicesGrid() {
-  const reduceMotion = useReducedMotion();
-  const gridRef = useRef<HTMLDivElement>(null);
-  const spotlightRef = useRef<HTMLDivElement>(null);
-  const animationFrameRef = useRef<number | null>(null);
-  const activeCardRef = useRef<HTMLElement | null>(null);
-  const positionRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
-
-  useEffect(
-    () => () => {
-      if (animationFrameRef.current !== null)
-        cancelAnimationFrame(animationFrameRef.current);
-    },
-    []
-  );
-
-  const animateSpotlight = () => {
-    const spotlight = spotlightRef.current;
-    if (!spotlight) {
-      animationFrameRef.current = null;
-      return;
-    }
-
-    const position = positionRef.current;
-    position.x += (position.targetX - position.x) * 0.22;
-    position.y += (position.targetY - position.y) * 0.22;
-    spotlight.style.setProperty("--service-glow-x", `${position.x}px`);
-    spotlight.style.setProperty("--service-glow-y", `${position.y}px`);
-
-    if (
-      Math.abs(position.targetX - position.x) > 0.2 ||
-      Math.abs(position.targetY - position.y) > 0.2
-    ) {
-      animationFrameRef.current = requestAnimationFrame(animateSpotlight);
-    } else {
-      animationFrameRef.current = null;
-    }
-  };
-
-  const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
-    const grid = gridRef.current;
-    const spotlight = spotlightRef.current;
-    if (
-      !grid ||
-      !spotlight ||
-      reduceMotion ||
-      !window.matchMedia("(hover: hover) and (pointer: fine)").matches
-    )
-      return;
-
-    const gridBounds = grid.getBoundingClientRect();
-    const targetX = event.clientX - gridBounds.left;
-    const targetY = event.clientY - gridBounds.top;
-    const wasActive = grid.classList.contains("is-spotlight-active");
-    positionRef.current.targetX = targetX;
-    positionRef.current.targetY = targetY;
-
-    if (!wasActive) {
-      positionRef.current.x = targetX;
-      positionRef.current.y = targetY;
-      spotlight.style.setProperty("--service-glow-x", `${targetX}px`);
-      spotlight.style.setProperty("--service-glow-y", `${targetY}px`);
-    }
-
-    const eventTarget = event.target instanceof Element ? event.target : null;
-    const card = eventTarget?.closest<HTMLElement>(".service-card") ?? null;
-    if (card && card !== activeCardRef.current) {
-      const cardBounds = card.getBoundingClientRect();
-      spotlight.style.setProperty(
-        "--service-clip-top",
-        `${Math.max(0, cardBounds.top - gridBounds.top)}px`
-      );
-      spotlight.style.setProperty(
-        "--service-clip-right",
-        `${Math.max(0, gridBounds.right - cardBounds.right)}px`
-      );
-      spotlight.style.setProperty(
-        "--service-clip-bottom",
-        `${Math.max(0, gridBounds.bottom - cardBounds.bottom)}px`
-      );
-      spotlight.style.setProperty(
-        "--service-clip-left",
-        `${Math.max(0, cardBounds.left - gridBounds.left)}px`
-      );
-      spotlight.style.setProperty(
-        "--service-glow-color",
-        card.dataset.glow ?? services[0].glow
-      );
-      activeCardRef.current = card;
-    }
-
-    if (card) grid.classList.add("is-spotlight-active");
-    if (animationFrameRef.current === null)
-      animationFrameRef.current = requestAnimationFrame(animateSpotlight);
-  };
-
-  const handlePointerLeave = () => {
-    gridRef.current?.classList.remove("is-spotlight-active");
-    activeCardRef.current = null;
-  };
-
-  return (
-    <div
-      className="services-grid"
-      ref={gridRef}
-      onPointerMove={handlePointerMove}
-      onPointerLeave={handlePointerLeave}
-    >
-      <div
-        className="services-grid__spotlight"
-        ref={spotlightRef}
-        aria-hidden="true"
-      />
-      {services.map((service, index) => {
-        const Icon = service.icon;
-        return (
-          <motion.article
-            className={`service-card service-card--${index + 1}`}
-            data-glow={service.glow}
-            key={service.title}
-            initial={reduceMotion ? false : { opacity: 0, y: 38 }}
-            whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-            viewport={revealViewport}
-            transition={{
-              duration: 0.65,
-              delay: index * 0.07,
-              ease: revealEase,
-            }}
-          >
-            <div className="service-card__media">
-              <img
-                src={service.image}
-                alt={service.imageAlt}
-                width="900"
-                height="900"
-                loading="lazy"
-                decoding="async"
-                fetchPriority="low"
-                sizes="(max-width: 900px) calc(100vw - 30px), 25vw"
-              />
-            </div>
-            <div className="service-card__content">
-              <div className="service-card__meta">
-                <span>{service.number}</span>
-                <Icon size={22} />
-              </div>
-              <p className="service-card__tag">{service.tag}</p>
-              <h3>{service.title}</h3>
-              <p>{service.description}</p>
-              <ul>
-                {service.features.map((feature) => (
-                  <li key={feature}>
-                    <Check size={14} />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.article>
-        );
-      })}
-    </div>
   );
 }
 
@@ -457,7 +181,6 @@ function App() {
   const [projectBrief, setProjectBrief] = useState("");
   const [isSubmittingBrief, setIsSubmittingBrief] = useState(false);
   const [briefSubmitError, setBriefSubmitError] = useState("");
-  const isMobileViewport = useMediaQuery("(max-width: 640px)");
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
   const smoothScrollProgress = useSpring(scrollYProgress, {
@@ -578,8 +301,8 @@ function App() {
                 }}
               >
                 I design and build websites, portals, booking flows, payment
-                systems, and custom tools that help small businesses move with
-                less friction.
+                systems, and custom tools that make life a whole lot easier for
+                small business owners.
               </motion.p>
               <motion.div
                 className="hero-actions"
@@ -594,8 +317,8 @@ function App() {
                 >
                   Start a project <ArrowUpRight size={18} />
                 </a>
-                <a className="text-link" href="#services">
-                  See what I build <ArrowDown size={17} />
+                <a className="text-link" href="#process">
+                  See how I work <ArrowDown size={17} />
                 </a>
               </motion.div>
             </motion.div>
@@ -632,112 +355,23 @@ function App() {
           </Reveal>
         </section>
 
-        <section
-          className="services-section page-frame"
-          id="services"
-          data-ambient-scene="2"
-        >
-          <Reveal className="section-heading">
-            <div>
-              <p className="section-kicker">WHAT I BUILD</p>
-              <h2>Websites for your customers. Systems for your business.</h2>
-            </div>
-            <p>
-              Start with the outcome. I will help decide the right experience,
-              system, and first version to get you there.
-            </p>
-          </Reveal>
-          <ServicesGrid />
-          <Reveal className="capability-ribbon" delay={0.1}>
-            <div>
-              <ShieldCheck size={19} />
-              <span>Secure authentication</span>
-            </div>
-            <div>
-              <Gauge size={19} />
-              <span>Dashboards + analytics</span>
-            </div>
-            <div>
-              <MessageSquareMore size={19} />
-              <span>Email + API integrations</span>
-            </div>
-            <div>
-              <Sparkles size={19} />
-              <span>Automation + AI</span>
-            </div>
-          </Reveal>
-        </section>
-
-        <section
-          className="work-section page-frame"
-          id="work"
-          data-ambient-scene="3"
-        >
-          <Reveal className="section-heading work-heading">
-            <div>
-              <p className="section-kicker">SELECTED WORK</p>
-              <h2>Different businesses. Purpose-built experiences.</h2>
-            </div>
-            <p>
-              Two recent builds showing how strategy, visual direction, and
-              useful functionality can adapt to very different industries.
-            </p>
-          </Reveal>
-
-          <div className="work-grid">
-            {selectedWork.map((project, index) => (
-              <Reveal
-                className={`work-card-shell${index === 0 ? " work-card-shell--featured" : ""}`}
-                delay={index * 0.08}
-                disableAnimation={isMobileViewport}
-                key={project.name}
-              >
-                <article className={`work-card ${project.className}`}>
-                  <a
-                    className="work-card__media"
-                    href={project.siteUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={`Open ${project.name} live site in a new tab`}
-                  >
-                    <img
-                      src={project.image}
-                      alt={`${project.name} website preview`}
-                      width="1200"
-                      height="630"
-                      loading="lazy"
-                      decoding="async"
-                      fetchPriority="low"
-                      sizes="(max-width: 640px) 86vw, (max-width: 900px) calc(100vw - 30px), 50vw"
-                    />
-                    <span>
-                      Visit live site <ArrowUpRight size={17} />
-                    </span>
-                  </a>
-                  <div className="work-card__body">
-                    <p className="work-card__category">{project.category}</p>
-                    <h3>{project.name}</h3>
-                    <p>{project.summary}</p>
-                    <div className="work-card__links">
-                      <a
-                        href={project.siteUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        View website <ArrowUpRight size={16} />
-                      </a>
-                    </div>
-                  </div>
-                </article>
-              </Reveal>
-            ))}
-          </div>
-        </section>
+        {SHOW_CAPABILITY_RIBBON && (
+          <section className="capability-reserve page-frame" aria-label="Technical capabilities">
+            <Reveal className="capability-ribbon" delay={0.1}>
+              {capabilityHighlights.map(({ label, icon: Icon }) => (
+                <div key={label}>
+                  <Icon size={19} aria-hidden="true" />
+                  <span>{label}</span>
+                </div>
+              ))}
+            </Reveal>
+          </section>
+        )}
 
         <section
           className="process-section page-frame"
           id="process"
-          data-ambient-scene="4"
+          data-ambient-scene="2"
         >
           <Reveal className="process-intro">
             <p className="section-kicker">THE BUILD PATH</p>
@@ -772,7 +406,7 @@ function App() {
         <section
           className="about-section page-frame"
           id="about"
-          data-ambient-scene="5"
+          data-ambient-scene="3"
         >
           <Reveal className="about-aside">
             <p className="section-kicker">THE PERSON BEHIND THE BUILD</p>
@@ -818,7 +452,7 @@ function App() {
           </Reveal>
         </section>
 
-        <section className="faq-section page-frame" data-ambient-scene="6">
+        <section className="faq-section page-frame" data-ambient-scene="4">
           <Reveal className="faq-heading">
             <p className="section-kicker">BEFORE WE BEGIN</p>
             <h2>Questions are part of the process.</h2>
@@ -833,7 +467,7 @@ function App() {
         <section
           className="contact-section page-frame"
           id="contact"
-          data-ambient-scene="7"
+          data-ambient-scene="5"
         >
           <Reveal className="contact-copy">
             <p className="section-kicker">START WITH THE IDEA</p>
@@ -1020,7 +654,6 @@ function App() {
             </span>
           </Link>
           <div className="footer-links">
-            <a href="#services">Services</a>
             <a href="#process">Process</a>
             <a href="#about">About</a>
           </div>
