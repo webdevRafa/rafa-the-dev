@@ -121,6 +121,30 @@
   text-decoration: none;
 }
 
+.brand-emblem {
+  width: 31px;
+  height: 31px;
+  flex: 0 0 auto;
+  overflow: visible;
+  filter: drop-shadow(0 5px 12px rgba(46, 231, 255, 0.17));
+}
+
+.brand-emblem__fragment {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.header-brand:hover .brand-emblem__fragment--primary,
+.header-brand:focus-visible .brand-emblem__fragment--primary {
+  transform: translate(1.2px, -0.8px);
+}
+
+.header-brand:hover .brand-emblem__fragment--secondary,
+.header-brand:focus-visible .brand-emblem__fragment--secondary {
+  transform: translate(2px, -1.5px);
+}
+
 .brand-copy { display: grid; gap: 2px; }
 .brand-copy strong { font: 750 0.86rem/1 var(--rt-font-display); letter-spacing: 0.075em; }
 .brand-copy small { color: #9aa6c1; font: 500 0.58rem/1.2 var(--rt-font-mono); letter-spacing: 0.12em; }
@@ -756,6 +780,7 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
 @media (max-width: 640px) {
   .page-frame { width: calc(100% - 28px); }
   .site-header { min-height: 64px; padding: 8px 14px; border-radius: 0; }
+  .brand-emblem { width: 27px; height: 27px; }
   .brand-copy strong { font-size: 0.75rem; }
   .brand-copy small { font-size: 0.5rem; }
   .instagram-link { display: none; }
@@ -839,5 +864,8 @@ select:focus-visible { outline: 3px solid color-mix(in srgb, var(--rt-cyan) 55%,
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  .brand-emblem__fragment { transition: none; }
+  .header-brand:hover .brand-emblem__fragment,
+  .header-brand:focus-visible .brand-emblem__fragment { transform: none; }
   .ambient-atmosphere { display: none; }
 }

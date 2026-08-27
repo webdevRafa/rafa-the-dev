@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
 import { FaInstagram } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
+import BrandEmblem from './BrandEmblem.tsx'
 
 const revealEase = [0.22, 1, 0.36, 1] as const
 
@@ -96,6 +97,7 @@ function SiteHeader() {
       onFocusCapture={() => setHeaderVisible(true)}
     >
       <Link className="brand header-brand" to="/#top" aria-label="Rafa the Dev home">
+        <BrandEmblem />
         <span className="brand-copy">
           <strong>RAFA THE DEV</strong>
         </span>

@@ -1,11 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Rafa the Dev">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="favicon-title">
+  <title id="favicon-title">Rafa the Dev cube emblem</title>
   <defs>
-    <linearGradient id="brand-gradient" x1="7" y1="5" x2="58" y2="60" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#2ee7ff" />
-      <stop offset="0.55" stop-color="#8af5ff" />
-      <stop offset="1" stop-color="#8a66ff" />
+    <linearGradient id="emblem-top" x1="8" y1="8" x2="39" y2="29" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#aa80ff" />
+      <stop offset="1" stop-color="#7752f6" />
+    </linearGradient>
+    <linearGradient id="emblem-left" x1="5" y1="19" x2="25" y2="51" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#54efff" />
+      <stop offset="1" stop-color="#18c7df" />
+    </linearGradient>
+    <linearGradient id="emblem-right" x1="29" y1="24" x2="50" y2="49" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ff8b73" />
+      <stop offset="1" stop-color="#ff5d54" />
     </linearGradient>
   </defs>
-  <path d="M17 2h40a5 5 0 0 1 5 5v40a15 15 0 0 1-15 15H7a5 5 0 0 1-5-5V17A15 15 0 0 1 17 2Z" fill="url(#brand-gradient)" />
-  <text x="32" y="42" fill="#050812" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="800" text-anchor="middle">R</text>
+
+  <g shape-rendering="geometricPrecision">
+    <path d="M4 18 23 7l19 11-19 11L4 18Z" fill="url(#emblem-top)" />
+    <path d="m4 18 19 11v23L4 41V18Z" fill="url(#emblem-left)" />
+    <path d="m23 29 19-11v10.2l-8.5 4.9v12.8L23 52V29Z" fill="url(#emblem-right)" />
+
+    <path d="m38 36 7-4 7 4-7 4-7-4Z" fill="url(#emblem-top)" />
+    <path d="m38 36 7 4v8.4l-7-4V36Z" fill="url(#emblem-left)" />
+    <path d="m45 40 7-4v8.4l-7 4V40Z" fill="url(#emblem-right)" />
+
+    <path d="m51 23.5 4-2.3 4 2.3-4 2.3-4-2.3Z" fill="url(#emblem-top)" />
+    <path d="m51 23.5 4 2.3v5l-4-2.3v-5Z" fill="url(#emblem-left)" />
+    <path d="m55 25.8 4-2.3v5l-4 2.3v-5Z" fill="url(#emblem-right)" />
+
+    <path d="M4 18 23 29l19-11M23 29v23" fill="none" stroke="#fff" stroke-opacity=".16" stroke-width=".8" />
+  </g>
 </svg>
