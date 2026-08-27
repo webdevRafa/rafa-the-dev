@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { ArrowUpRight, Menu, X } from 'lucide-react'
+import { ArrowUpRight, Menu, ShoppingBag, WalletCards, X } from 'lucide-react'
 import { FaInstagram } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
+import BrandEmblem from './BrandEmblem.tsx'
+import CountUp from './CountUpNumber.tsx'
+import { useLuxuryStore } from './LuxuryStoreState.ts'
 
 const revealEase = [0.22, 1, 0.36, 1] as const
 
@@ -14,6 +17,8 @@ function SiteHeader() {
   const lastScrollY = useRef(0)
   const scrollDirection = useRef<-1 | 0 | 1>(0)
   const intentDistance = useRef(0)
+  const { balance, walletUnlocked, cartCount, setCartOpen } = useLuxuryStore()
+  const previousCartCount = useRef(cartCount)
 
   useEffect(() => {
     let frameId = 0
@@ -68,6 +73,16 @@ function SiteHeader() {
   }, [menuOpen])
 
   useEffect(() => {
+    if (cartCount > previousCartCount.current) {
+      setHeaderVisible(true)
+      scrollDirection.current = 0
+      intentDistance.current = 0
+    }
+
+    previousCartCount.current = cartCount
+  }, [cartCount])
+
+  useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setMenuOpen(false)
     }
@@ -96,14 +111,14 @@ function SiteHeader() {
       onFocusCapture={() => setHeaderVisible(true)}
     >
       <Link className="brand header-brand" to="/#top" aria-label="Rafa the Dev home">
+        <BrandEmblem />
         <span className="brand-copy">
           <strong>RAFA THE DEV</strong>
         </span>
       </Link>
 
       <nav className={`nav-links${menuOpen ? ' is-open' : ''}`} aria-label="Main navigation">
-        <Link to="/#services" onClick={closeMenu}>Services</Link>
-        <Link to="/#packages" onClick={closeMenu}>Packages</Link>
+        <Link className="nav-feature-link" to="/#shop" onClick={closeMenu}>Demo shop</Link>
         <Link to="/#process" onClick={closeMenu}>Process</Link>
         <Link to="/#about" onClick={closeMenu}>About</Link>
         <a
@@ -120,35 +135,72 @@ function SiteHeader() {
         </Link>
       </nav>
 
-      <div className="header-actions">
-        <a
-          className="instagram-link"
-          href="https://www.instagram.com/rafathedev/"
-          target="_blank"
-          rel="noreferrer"
-          aria-label="Follow Rafa the Dev on Instagram"
-        >
-          <FaInstagram size={17} aria-hidden="true" />
-        </a>
-        <button
-          className="menu-button"
-          type="button"
-          onClick={() => setMenuOpen((open) => !open)}
-          aria-expanded={menuOpen}
-          aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-        >
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.span
-              key={menuOpen ? 'close' : 'menu'}
-              initial={reduceMotion ? false : { opacity: 0, rotate: -35 }}
-              animate={{ opacity: 1, rotate: 0 }}
-              exit={reduceMotion ? undefined : { opacity: 0, rotate: 35 }}
-              transition={{ duration: 0.16 }}
+      <div className="header-tools">
+        <AnimatePresence>
+          {walletUnlocked && (
+            <motion.div
+              className="header-commerce"
+              initial={reduceMotion ? false : { opacity: 0, y: -9, scale: 0.94 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={reduceMotion ? undefined : { opacity: 0, y: -6 }}
+              transition={{ duration: reduceMotion ? 0 : 0.38, ease: revealEase }}
             >
-              {menuOpen ? <X size={22} /> : <Menu size={22} />}
-            </motion.span>
-          </AnimatePresence>
-        </button>
+              <div className="header-wallet" aria-label={`Demo wallet balance: ${balance.toLocaleString('en-US')} dollars`}>
+                <WalletCards size={17} aria-hidden="true" />
+                <span>Demo wallet</span>
+                <strong>
+                  <CountUp
+                    end={balance}
+                    duration={reduceMotion ? 0 : 1.15}
+                    separator=","
+                    prefix="$"
+                    preserveValue
+                  />
+                </strong>
+              </div>
+              <button
+                className="header-cart"
+                type="button"
+                onClick={() => setCartOpen(true)}
+                aria-label={`Open demo cart with ${cartCount} ${cartCount === 1 ? 'item' : 'items'}`}
+              >
+                <ShoppingBag size={18} aria-hidden="true" />
+                {cartCount > 0 && <span>{cartCount}</span>}
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <div className="header-actions">
+          <a
+            className="instagram-link"
+            href="https://www.instagram.com/rafathedev/"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Follow Rafa the Dev on Instagram"
+          >
+            <FaInstagram size={17} aria-hidden="true" />
+          </a>
+          <button
+            className="menu-button"
+            type="button"
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-expanded={menuOpen}
+            aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.span
+                key={menuOpen ? 'close' : 'menu'}
+                initial={reduceMotion ? false : { opacity: 0, rotate: -35 }}
+                animate={{ opacity: 1, rotate: 0 }}
+                exit={reduceMotion ? undefined : { opacity: 0, rotate: 35 }}
+                transition={{ duration: 0.16 }}
+              >
+                {menuOpen ? <X size={22} /> : <Menu size={22} />}
+              </motion.span>
+            </AnimatePresence>
+          </button>
+        </div>
       </div>
     </motion.header>
   )
