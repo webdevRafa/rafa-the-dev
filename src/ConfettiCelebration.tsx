@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react'
+import { createPortal } from 'react-dom'
 import { useReducedMotion } from 'framer-motion'
 
 const confettiColors = [
@@ -32,8 +33,14 @@ function ConfettiCelebration() {
 
   if (reduceMotion) return null
 
-  return (
-    <div className="confetti-celebration" aria-hidden="true">
+  const viewportHeight = Math.max(window.innerHeight, document.documentElement.clientHeight)
+
+  return createPortal(
+    <div
+      className="confetti-celebration"
+      aria-hidden="true"
+      style={{ '--confetti-viewport-height': `${viewportHeight}px` } as CSSProperties}
+    >
       {particles.map((particle, index) => (
         <i
           className="confetti-celebration__piece"
@@ -51,7 +58,8 @@ function ConfettiCelebration() {
           } as CSSProperties}
         />
       ))}
-    </div>
+    </div>,
+    document.body,
   )
 }
 
