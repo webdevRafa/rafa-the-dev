@@ -18,6 +18,7 @@ function SiteHeader() {
   const scrollDirection = useRef<-1 | 0 | 1>(0)
   const intentDistance = useRef(0)
   const { balance, walletUnlocked, cartCount, setCartOpen } = useLuxuryStore()
+  const previousCartCount = useRef(cartCount)
 
   useEffect(() => {
     let frameId = 0
@@ -70,6 +71,16 @@ function SiteHeader() {
       if (frameId !== 0) window.cancelAnimationFrame(frameId)
     }
   }, [menuOpen])
+
+  useEffect(() => {
+    if (cartCount > previousCartCount.current) {
+      setHeaderVisible(true)
+      scrollDirection.current = 0
+      intentDistance.current = 0
+    }
+
+    previousCartCount.current = cartCount
+  }, [cartCount])
 
   useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {

@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import {
   ArrowDown,
+  ArrowRight,
   CalendarClock,
   Check,
   CreditCard,
@@ -188,7 +189,17 @@ function CommerceExperience() {
             <span>No checkout or payment collection</span>
           </div>
 
-          <div className="product-grid">
+          <div className="product-grid__mobile-hint" aria-hidden="true">
+            <span>Swipe to browse</span>
+            <span>2 rows · 5 columns <ArrowRight size={14} /></span>
+          </div>
+
+          <div
+            className="product-grid"
+            role="region"
+            aria-label="Fictional luxury product catalog"
+            tabIndex={0}
+          >
             {luxuryProducts.map((product, index) => {
               const quantity = quantityFor(product.id)
               return (
