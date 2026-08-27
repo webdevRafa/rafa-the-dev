@@ -530,7 +530,7 @@ body.cart-drawer-open { overflow: hidden; }
   display: block;
   opacity: 0;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.08);
-  animation: confetti-fall var(--confetti-duration) cubic-bezier(0.16, 0.7, 0.28, 1) var(--confetti-delay) both;
+  animation: confetti-fall var(--confetti-duration) linear var(--confetti-delay) both;
   will-change: transform, opacity;
 }
 
@@ -540,10 +540,6 @@ body.cart-drawer-open { overflow: hidden; }
     transform: translate3d(0, -6vh, 0) rotate(0deg);
   }
   8% { opacity: 1; }
-  48% {
-    opacity: 1;
-    transform: translate3d(var(--confetti-drift-mid), 48vh, 0) rotate(var(--confetti-rotation-mid));
-  }
   88% { opacity: 1; }
   100% {
     opacity: 0;

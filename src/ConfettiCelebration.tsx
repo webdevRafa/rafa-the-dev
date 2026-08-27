@@ -18,7 +18,6 @@ const particles = Array.from({ length: 72 }, (_, index) => {
     color: confettiColors[index % confettiColors.length],
     delay: (index * 37) % 720,
     drift,
-    driftMid: Math.round(drift * -0.38),
     duration: 2700 + ((index * 71) % 1400),
     height: index % 4 === 0 ? Math.max(3, Math.round(size * 0.45)) : size + 4,
     left: 2 + ((index * 43) % 97),
@@ -42,10 +41,8 @@ function ConfettiCelebration() {
           style={{
             '--confetti-delay': `${particle.delay}ms`,
             '--confetti-drift': `${particle.drift}px`,
-            '--confetti-drift-mid': `${particle.driftMid}px`,
             '--confetti-duration': `${particle.duration}ms`,
             '--confetti-rotation': `${particle.rotation}deg`,
-            '--confetti-rotation-mid': `${Math.round(particle.rotation * 0.48)}deg`,
             backgroundColor: particle.color,
             borderRadius: particle.radius,
             height: `${particle.height}px`,
