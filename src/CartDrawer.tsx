@@ -15,6 +15,7 @@ function CartDrawer() {
     cartCount,
     cartTotal,
     order,
+    celebrationReference,
     setCartOpen,
     setQuantity,
     removeFromCart,
@@ -70,7 +71,7 @@ function CartDrawer() {
             >
               <header className="cart-drawer__header">
                 <div>
-                  <p>THE $50M DEMO SHOP</p>
+                  <p>RAFA’S SHOP</p>
                   <h2 id="cart-title">Your cart <span>{cartCount}</span></h2>
                 </div>
                 <button
@@ -171,24 +172,26 @@ function CartDrawer() {
         )}
       </AnimatePresence>
 
+      {celebrationReference && (
+        <ConfettiCelebration key={celebrationReference} />
+      )}
+
       <AnimatePresence>
         {order && (
-          <motion.div key={order.reference}>
-            <ConfettiCelebration />
-            <motion.div
-              className="demo-order-toast"
-              role="status"
-              initial={reduceMotion ? false : { opacity: 0, y: 20, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={reduceMotion ? undefined : { opacity: 0, y: 16 }}
-            >
-              <span className="demo-order-toast__icon"><Check size={19} /></span>
-              <div>
-                <strong>Demo order placed</strong>
-                <p>{order.itemCount} {order.itemCount === 1 ? 'item' : 'items'} · {formatDemoCurrency(order.total)} · {order.reference}</p>
-              </div>
-              <button type="button" aria-label="Dismiss order confirmation" onClick={dismissOrder}><X size={17} /></button>
-            </motion.div>
+          <motion.div
+            className="demo-order-toast"
+            key={order.reference}
+            role="status"
+            initial={reduceMotion ? false : { opacity: 0, y: 20, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={reduceMotion ? undefined : { opacity: 0, y: 16 }}
+          >
+            <span className="demo-order-toast__icon"><Check size={19} /></span>
+            <div>
+              <strong>Demo order placed</strong>
+              <p>{order.itemCount} {order.itemCount === 1 ? 'item' : 'items'} · {formatDemoCurrency(order.total)} · {order.reference}</p>
+            </div>
+            <button type="button" aria-label="Dismiss order confirmation" onClick={dismissOrder}><X size={17} /></button>
           </motion.div>
         )}
       </AnimatePresence>

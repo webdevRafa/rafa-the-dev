@@ -316,13 +316,10 @@
   grid-template-columns: auto 1fr;
   gap: 2px 9px;
   min-height: 42px;
-  padding: 7px 11px;
+  padding: 7px 4px;
   color: white;
-  border: 1px solid rgba(46, 231, 255, 0.24);
-  border-radius: 12px;
-  background: rgba(6, 12, 27, 0.68);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(16px);
+  border: 0;
+  background: transparent;
 }
 .header-wallet > svg { grid-row: 1 / 3; align-self: center; color: var(--rt-cyan); }
 .header-wallet > span { color: #8290aa; font: 550 0.48rem/1 var(--rt-font-mono); letter-spacing: 0.1em; text-transform: uppercase; }
@@ -335,11 +332,12 @@
   height: 42px;
   padding: 0;
   color: var(--rt-paper);
-  border: 1px solid var(--rt-line);
-  border-radius: 11px;
-  background: rgba(255, 255, 255, 0.045);
+  border: 0;
+  background: transparent;
   cursor: pointer;
+  transition: color 180ms ease, transform 180ms ease;
 }
+.header-cart:hover { color: var(--rt-cyan); transform: translateY(-1px); }
 .header-cart span {
   position: absolute;
   display: grid;
