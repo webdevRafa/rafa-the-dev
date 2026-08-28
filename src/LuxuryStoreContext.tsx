@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import {
   LUXURY_DEMO_BALANCE,
@@ -6,12 +6,38 @@ import {
 } from './luxuryCatalog.ts'
 import { LuxuryStoreContext, type DemoOrder, type LuxuryStoreValue } from './LuxuryStoreState.ts'
 
+const ORDER_TOAST_DURATION = 4_200
+const CONFETTI_DURATION = 5_200
+
 export function LuxuryStoreProvider({ children }: { children: ReactNode }) {
   const [balance, setBalance] = useState(LUXURY_DEMO_BALANCE)
   const [walletUnlocked, setWalletUnlocked] = useState(false)
   const [cartOpen, setCartOpen] = useState(false)
   const [cart, setCart] = useState<Record<string, number>>({})
   const [order, setOrder] = useState<DemoOrder | null>(null)
+  const [celebrationReference, setCelebrationReference] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!order) return
+
+    const reference = order.reference
+    const timeout = window.setTimeout(() => {
+      setOrder((current) => current?.reference === reference ? null : current)
+    }, ORDER_TOAST_DURATION)
+
+    return () => window.clearTimeout(timeout)
+  }, [order])
+
+  useEffect(() => {
+    if (!celebrationReference) return
+
+    const reference = celebrationReference
+    const timeout = window.setTimeout(() => {
+      setCelebrationReference((current) => current === reference ? null : current)
+    }, CONFETTI_DURATION)
+
+    return () => window.clearTimeout(timeout)
+  }, [celebrationReference])
 
   const cartLines = useMemo(
     () => luxuryProducts
@@ -49,14 +75,17 @@ export function LuxuryStoreProvider({ children }: { children: ReactNode }) {
 
   const placeOrder = () => {
     if (cartCount === 0 || cartTotal > balance) return
+    const reference = `DEMO-${Date.now().toString(36).slice(-6).toUpperCase()}`
+
     setBalance((current) => current - cartTotal)
     setCart({})
     setCartOpen(false)
     setOrder({
-      reference: `DEMO-${Date.now().toString(36).slice(-6).toUpperCase()}`,
+      reference,
       total: cartTotal,
       itemCount: cartCount,
     })
+    setCelebrationReference(reference)
   }
 
   const resetDemo = () => {
@@ -64,6 +93,7 @@ export function LuxuryStoreProvider({ children }: { children: ReactNode }) {
     setWalletUnlocked(true)
     setCart({})
     setOrder(null)
+    setCelebrationReference(null)
   }
 
   const value: LuxuryStoreValue = {
@@ -74,6 +104,7 @@ export function LuxuryStoreProvider({ children }: { children: ReactNode }) {
     cartCount,
     cartTotal,
     order,
+    celebrationReference,
     unlockWallet: () => setWalletUnlocked(true),
     setCartOpen,
     addToCart,

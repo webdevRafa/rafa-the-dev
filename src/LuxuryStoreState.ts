@@ -20,6 +20,7 @@ export type LuxuryStoreValue = {
   cartCount: number
   cartTotal: number
   order: DemoOrder | null
+  celebrationReference: string | null
   unlockWallet: () => void
   setCartOpen: (open: boolean) => void
   addToCart: (productId: string) => void
