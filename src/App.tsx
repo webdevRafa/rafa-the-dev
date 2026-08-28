@@ -391,13 +391,12 @@ function App() {
                 initial={reduceMotion ? false : { opacity: 0, x: 34 }}
                 whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }}
                 viewport={revealViewport}
-                transition={{
+              transition={{
                   duration: 0.6,
                   delay: index * 0.08,
                   ease: revealEase,
                 }}
               >
-                <span className="process-number">{item.number}</span>
                 <p>{item.label}</p>
                 <h3>{item.title}</h3>
                 <small>{item.copy}</small>
