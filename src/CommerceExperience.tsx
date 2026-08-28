@@ -96,7 +96,11 @@ function CommerceExperience() {
 
   return (
     <>
-      <section className="systems-section page-frame" data-ambient-scene="2">
+      <section
+        className="systems-section page-frame"
+        id="what-i-build"
+        data-ambient-scene="2"
+      >
         <motion.div
           className="systems-section__lead"
           initial={reduceMotion ? false : { opacity: 0, y: 34 }}
@@ -149,7 +153,7 @@ function CommerceExperience() {
           transition={{ duration: reduceMotion ? 0 : 0.76, ease: revealEase }}
         >
           <p className="section-kicker">THANKS FOR STOPPING BY</p>
-          <h2>I got you a little something.</h2>
+          <h2>Some free gifts for you.</h2>
           <p>
             You made it this far, so I’m giving you $50,000,000 to spend at my
             store while I show you what a polished product experience can feel like.

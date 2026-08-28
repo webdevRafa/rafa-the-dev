@@ -1,10 +1,14 @@
 /* Connected systems story */
 .systems-section {
   display: grid;
-  grid-template-columns: minmax(0, 0.86fr) minmax(480px, 1.14fr);
-  gap: 9vw;
-  align-items: center;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(56px, 7vw, 96px);
+  align-items: start;
   padding-block: clamp(110px, 14vw, 190px);
+}
+
+.systems-section__lead {
+  max-width: 980px;
 }
 
 .systems-section__lead h2,
@@ -25,9 +29,10 @@
 
 .systems-services {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0 clamp(24px, 4vw, 60px);
-  align-self: center;
+  align-self: stretch;
+  width: 100%;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -42,7 +47,7 @@
   border-bottom: 1px solid rgba(205, 218, 255, 0.16);
 }
 
-.systems-services li:nth-child(-n + 2) {
+.systems-services li:nth-child(-n + 3) {
   border-top: 1px solid rgba(205, 218, 255, 0.16);
 }
 
@@ -76,7 +81,6 @@
   left: 50%;
   width: 100vw;
   inset-block: 0;
-  border-block: 1px solid rgba(171, 143, 255, 0.16);
   background:
     radial-gradient(circle at 75% 50%, rgba(146, 73, 255, 0.17), transparent 31rem),
     radial-gradient(circle at 22% 22%, rgba(46, 231, 255, 0.08), transparent 26rem),
@@ -492,7 +496,8 @@ body.cart-drawer-open { overflow: hidden; }
   .systems-section,
   .wallet-gift-section { grid-template-columns: 1fr; gap: 58px; }
   .systems-section__lead { max-width: 760px; }
-  .systems-services { width: min(100%, 760px); }
+  .systems-services { grid-template-columns: repeat(2, minmax(0, 1fr)); width: min(100%, 760px); }
+  .systems-services li:nth-child(3) { border-top: 0; }
   .wallet-card { width: min(100%, 680px); }
   .luxury-shop__header { grid-template-columns: 1fr; gap: 28px; }
   .luxury-shop__header-copy { max-width: 650px; }
@@ -512,7 +517,8 @@ body.cart-drawer-open { overflow: hidden; }
   .systems-section { grid-template-columns: minmax(0, 1fr); padding-block: 100px; }
   .systems-services { grid-template-columns: 1fr; }
   .systems-services li { min-height: 72px; }
-  .systems-services li:nth-child(2) { border-top: 0; }
+  .systems-services li:nth-child(2),
+  .systems-services li:nth-child(3) { border-top: 0; }
   .wallet-gift-section { grid-template-columns: minmax(0, 1fr); min-height: auto; padding-block: 100px; }
   .systems-section__lead h2,
   .wallet-gift__copy h2,
