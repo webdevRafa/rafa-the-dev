@@ -1,5 +1,5 @@
-import { useState } from "react";
-import type { FormEvent, ReactNode } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import type { FormEvent, KeyboardEvent, ReactNode } from "react";
 import {
   AnimatePresence,
   motion,
@@ -89,6 +89,12 @@ const faqs = [
 
 const revealEase = [0.22, 1, 0.36, 1] as const;
 const revealViewport = { once: true, amount: 0.14 } as const;
+const PROJECT_TIMING_OPTIONS = [
+  "As soon as possible",
+  "Within 1–2 months",
+  "Within 3–6 months",
+  "Still exploring",
+] as const;
 
 function Reveal({
   children,
@@ -169,6 +175,171 @@ function FaqItem({
             transition={{ duration: reduceMotion ? 0 : 0.34, ease: revealEase }}
           >
             <p>{faq.answer}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function CustomSelect({
+  label,
+  name,
+  options,
+  placeholder,
+}: {
+  label: string;
+  name: string;
+  options: readonly string[];
+  placeholder: string;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [value, setValue] = useState("");
+  const [activeIndex, setActiveIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const optionRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const selectId = useId();
+  const reduceMotion = useReducedMotion();
+  const selectedIndex = options.indexOf(value);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    optionRefs.current[activeIndex]?.focus();
+  }, [activeIndex, isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const closeOnOutsidePress = (event: PointerEvent) => {
+      if (!containerRef.current?.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    window.addEventListener("pointerdown", closeOnOutsidePress);
+    return () => window.removeEventListener("pointerdown", closeOnOutsidePress);
+  }, [isOpen]);
+
+  const openMenu = (preferredIndex = selectedIndex >= 0 ? selectedIndex : 0) => {
+    setActiveIndex(preferredIndex);
+    setIsOpen(true);
+  };
+
+  const selectOption = (option: string) => {
+    setValue(option);
+    setIsOpen(false);
+    requestAnimationFrame(() => triggerRef.current?.focus());
+  };
+
+  const handleTriggerKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      openMenu(
+        event.key === "ArrowUp"
+          ? selectedIndex >= 0
+            ? selectedIndex
+            : options.length - 1
+          : selectedIndex >= 0
+            ? selectedIndex
+            : 0
+      );
+    }
+  };
+
+  const handleOptionKeyDown = (
+    event: KeyboardEvent<HTMLButtonElement>,
+    index: number
+  ) => {
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setActiveIndex((index + 1) % options.length);
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      setActiveIndex((index - 1 + options.length) % options.length);
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      setActiveIndex(0);
+    } else if (event.key === "End") {
+      event.preventDefault();
+      setActiveIndex(options.length - 1);
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      setIsOpen(false);
+      triggerRef.current?.focus();
+    } else if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      selectOption(options[index]);
+    } else if (event.key === "Tab") {
+      setIsOpen(false);
+    }
+  };
+
+  return (
+    <div
+      className={`custom-select${isOpen ? " is-open" : ""}`}
+      ref={containerRef}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node)) {
+          setIsOpen(false);
+        }
+      }}
+    >
+      <span className="custom-select__label" id={`${selectId}-label`}>
+        {label}
+      </span>
+      <input type="hidden" name={name} value={value} readOnly />
+      <button
+        className={`custom-select__trigger${value ? "" : " is-placeholder"}`}
+        id={`${selectId}-trigger`}
+        ref={triggerRef}
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        aria-controls={`${selectId}-listbox`}
+        aria-labelledby={`${selectId}-label ${selectId}-trigger`}
+        onClick={() => (isOpen ? setIsOpen(false) : openMenu())}
+        onKeyDown={handleTriggerKeyDown}
+      >
+        <span>{value || placeholder}</span>
+        <motion.span
+          className="custom-select__chevron"
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={{ duration: reduceMotion ? 0 : 0.2 }}
+          aria-hidden="true"
+        >
+          <ChevronDown size={17} />
+        </motion.span>
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className="custom-select__menu"
+            id={`${selectId}-listbox`}
+            role="listbox"
+            aria-labelledby={`${selectId}-label`}
+            initial={reduceMotion ? false : { opacity: 0, y: -8, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={reduceMotion ? undefined : { opacity: 0, y: -5, scale: 0.98 }}
+            transition={{ duration: reduceMotion ? 0 : 0.18 }}
+          >
+            {options.map((option, index) => (
+              <button
+                className={`custom-select__option${value === option ? " is-selected" : ""}`}
+                key={option}
+                ref={(element) => {
+                  optionRefs.current[index] = element;
+                }}
+                type="button"
+                role="option"
+                aria-selected={value === option}
+                onClick={() => selectOption(option)}
+                onKeyDown={(event) => handleOptionKeyDown(event, index)}
+              >
+                <span>{option}</span>
+                {value === option && <Check size={15} aria-hidden="true" />}
+              </button>
+            ))}
           </motion.div>
         )}
       </AnimatePresence>
@@ -472,17 +643,19 @@ function App() {
           data-ambient-scene="7"
         >
           <Reveal className="contact-copy">
-            <p className="section-kicker">START WITH THE IDEA</p>
+            <p className="section-kicker">SHARE YOUR IDEA</p>
             <h2>What would make your business easier to run?</h2>
             <p>
-              Tell me where you are now and what you want to improve. You do not
-              need a technical plan—I will help shape the right next step.
+              Tell me where you are now and what you want to improve or build.
+              You don’t need a technical plan—I’ll turn your ideas into working
+              software.
             </p>
             <div className="contact-note">
               <span>NO PRESSURE</span>
               <p>
-                A clear conversation first. A scoped proposal only if the fit
-                makes sense.
+                Start with a free consultation. I’ll follow up with a clear
+                proposal, and you only pay once the system is complete and
+                you’re happy with the result. No obligation.
               </p>
             </div>
           </Reveal>
@@ -542,29 +715,18 @@ function App() {
                     />
                   </label>
                   <div className="form-row">
-                    <label>
-                      Desired timing
-                      <select name="timing" defaultValue="">
-                        <option value="" disabled>
-                          Select timing
-                        </option>
-                        <option>As soon as possible</option>
-                        <option>Within 1–2 months</option>
-                        <option>Within 3–6 months</option>
-                        <option>Still exploring</option>
-                      </select>
-                    </label>
-                    <label>
-                      Approximate budget
-                      <select name="budget" defaultValue="">
-                        <option value="" disabled>
-                          Select range
-                        </option>
-                        {PROJECT_BUDGET_OPTIONS.map((option) => (
-                          <option key={option}>{option}</option>
-                        ))}
-                      </select>
-                    </label>
+                    <CustomSelect
+                      label="Desired timing"
+                      name="timing"
+                      options={PROJECT_TIMING_OPTIONS}
+                      placeholder="Select timing"
+                    />
+                    <CustomSelect
+                      label="Approximate budget"
+                      name="budget"
+                      options={PROJECT_BUDGET_OPTIONS}
+                      placeholder="Select range"
+                    />
                   </div>
                   <button
                     className="button button-primary form-submit"
