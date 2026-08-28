@@ -81,7 +81,6 @@
   left: 50%;
   width: 100vw;
   inset-block: 0;
-  border-block: 1px solid rgba(171, 143, 255, 0.16);
   background:
     radial-gradient(circle at 75% 50%, rgba(146, 73, 255, 0.17), transparent 31rem),
     radial-gradient(circle at 22% 22%, rgba(46, 231, 255, 0.08), transparent 26rem),
