@@ -41,26 +41,26 @@ const process = [
   {
     number: "01",
     label: "Discover",
-    title: "Start with the real problem.",
-    copy: "We define the people, friction, goals, and constraints before deciding what to build.",
+    title: "Understand how your business works.",
+    copy: "We look at your day-to-day operations, the people involved, and where a better system can remove friction.",
   },
   {
     number: "02",
-    label: "Shape",
-    title: "Turn the idea into a focused plan.",
-    copy: "I map the content, flows, features, and technical path for the strongest first version.",
+    label: "Design",
+    title: "Design around your real operations.",
+    copy: "I turn what we learn into clear workflows, useful features, and an experience that fits the way your team works.",
   },
   {
     number: "03",
     label: "Build",
-    title: "Make progress visible.",
-    copy: "You see the product take shape in working increments with clear decisions along the way.",
+    title: "Build the system together.",
+    copy: "I develop the product in working stages, share progress, and make thoughtful adjustments as it comes to life.",
   },
   {
     number: "04",
     label: "Launch",
-    title: "Ship with confidence.",
-    copy: "I test, deploy, connect the details, and make sure the finished experience is ready to use.",
+    title: "Test thoroughly. Launch confidently.",
+    copy: "I test the complete experience, connect the final details, and make sure the system is ready for real use.",
   },
 ];
 
@@ -377,11 +377,11 @@ function App() {
           data-ambient-scene="5"
         >
           <Reveal className="process-intro">
-            <p className="section-kicker">THE BUILD PATH</p>
-            <h2>A calm process from first conversation to launch.</h2>
+            <p className="section-kicker">TAILORED SOFTWARE FOR YOUR BUSINESS</p>
+            <h2>Software designed for your operation—not a generic template.</h2>
             <p>
-              You work directly with the person designing and building the
-              product. No handoff maze. No mystery layer.
+              You’ll work directly with Rafa to plan and build a system around
+              the way your business actually operates.
             </p>
           </Reveal>
           <div className="process-list">
