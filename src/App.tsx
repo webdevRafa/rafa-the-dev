@@ -423,26 +423,26 @@ function App() {
                 <strong>Direct collaboration</strong>
               </div>
               <div>
-                <span>BUILT FOR</span>
-                <strong>Real businesses</strong>
+                <span>APPROACH</span>
+                <strong>Business-first thinking</strong>
               </div>
             </div>
           </Reveal>
           <Reveal className="about-copy" delay={0.08}>
-            <h2>Thoughtful software. Straightforward collaboration.</h2>
+            <h2>I’m Rafa, a full-stack developer.</h2>
             <p className="about-lead">
-              I’m Rafa, a full-stack developer who likes understanding how a
-              business works before writing the first line of code.
+              I have a passion for understanding how a business works and
+              building systems around the way people actually work.
             </p>
             <p>
-              My projects have included marketplaces, booking platforms, payment
-              systems, dashboards, portals, analytics tools, and custom
+              That has led me to create marketplaces, booking platforms,
+              payment systems, dashboards, portals, analytics tools, and custom
               operations software.
             </p>
             <p>
-              I will listen, ask useful questions, explain decisions clearly,
-              and keep you close to the work while we build something that makes
-              day-to-day business easier.
+              I keep the process direct and collaborative: I listen, ask useful
+              questions, explain decisions clearly, and keep you close to the
+              work from the first idea through launch.
             </p>
             <a
               className="text-link"

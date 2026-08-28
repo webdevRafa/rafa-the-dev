@@ -96,7 +96,11 @@ function CommerceExperience() {
 
   return (
     <>
-      <section className="systems-section page-frame" data-ambient-scene="2">
+      <section
+        className="systems-section page-frame"
+        id="what-i-build"
+        data-ambient-scene="2"
+      >
         <motion.div
           className="systems-section__lead"
           initial={reduceMotion ? false : { opacity: 0, y: 34 }}
