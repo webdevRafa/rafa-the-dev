@@ -8,10 +8,12 @@ import { LuxuryStoreProvider } from './LuxuryStoreContext.tsx'
 import './LuxuryStore.css'
 
 const AdminPage = lazy(() => import('./admin/AdminPage.tsx'))
+const ForestExperience = lazy(() => import('./forest/ForestExperience.tsx'))
 
 function RouteShell() {
   const { pathname } = useLocation()
   const isAdminRoute = pathname.startsWith('/admin')
+  const isImmersiveRoute = pathname.startsWith('/3d-experience')
 
   return (
     <LuxuryStoreProvider>
@@ -19,9 +21,17 @@ function RouteShell() {
       <a className="skip-link" href="#main">
         Skip to content
       </a>
-      {!isAdminRoute && <SiteHeader />}
+      {!isAdminRoute && !isImmersiveRoute && <SiteHeader />}
       <Routes>
         <Route path="/" element={<App />} />
+        <Route
+          path="/3d-experience"
+          element={(
+            <Suspense fallback={<div style={{ minHeight: '100dvh', background: '#02040b' }} />}>
+              <ForestExperience />
+            </Suspense>
+          )}
+        />
         <Route
           path="/admin"
           element={(
@@ -32,7 +42,7 @@ function RouteShell() {
         />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      {!isAdminRoute && <CartDrawer />}
+      {!isAdminRoute && !isImmersiveRoute && <CartDrawer />}
     </LuxuryStoreProvider>
   )
 }

@@ -118,6 +118,7 @@ function SiteHeader() {
       </Link>
 
       <nav className={`nav-links${menuOpen ? ' is-open' : ''}`} aria-label="Main navigation">
+        <Link className="nav-journey-link" to="/3d-experience" onClick={closeMenu}>3D journey</Link>
         <Link className="nav-feature-link" to="/#shop" onClick={closeMenu}>Demo shop</Link>
         <Link to="/#process" onClick={closeMenu}>Process</Link>
         <Link to="/#about" onClick={closeMenu}>About</Link>

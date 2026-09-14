@@ -157,6 +157,7 @@
   transition: color 160ms ease, background 160ms ease;
 }
 .nav-links > a:not(.button):hover { color: white; background: rgba(255, 255, 255, 0.055); }
+.nav-links .nav-journey-link { color: #e7bd72; }
 .nav-links .nav-feature-link { color: #ff9bd8; }
 .nav-links .nav-feature-link.is-active { color: white; background: rgba(238, 79, 189, 0.16); }
 .nav-links .mobile-instagram { display: none; }

@@ -14,16 +14,19 @@
     "seed:uncle-admin": "node scripts/seed-uncle-admin.mjs"
   },
   "dependencies": {
+    "@react-three/drei": "10.7.7",
+    "@react-three/fiber": "9.7.0",
     "@tailwindcss/vite": "^4.3.3",
     "firebase": "^12.17.0",
     "framer-motion": "^12.42.2",
     "lucide-react": "^1.27.0",
-    "react": "^19.2.7",
+    "react": "19.2.8",
     "react-countup": "^6.5.3",
-    "react-dom": "^19.2.7",
+    "react-dom": "19.2.8",
     "react-icons": "^5.7.0",
     "react-router-dom": "^7.18.1",
     "tailwindcss": "^4.3.3",
+    "three": "0.180.0",
     "typed.js": "^2.1.0"
   },
   "devDependencies": {
