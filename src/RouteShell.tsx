@@ -9,6 +9,7 @@ import './LuxuryStore.css'
 
 const AdminPage = lazy(() => import('./admin/AdminPage.tsx'))
 const ForestExperience = lazy(() => import('./forest/ForestExperience.tsx'))
+const SpaceOdysseyExperience = lazy(() => import('./space/SpaceOdysseyExperience.tsx'))
 
 function RouteShell() {
   const { pathname } = useLocation()
@@ -24,11 +25,20 @@ function RouteShell() {
       {!isAdminRoute && !isImmersiveRoute && <SiteHeader />}
       <Routes>
         <Route path="/" element={<App />} />
+        <Route path="/3d-experience" element={<Navigate to="/3d-experience/forest" replace />} />
         <Route
-          path="/3d-experience"
+          path="/3d-experience/forest"
           element={(
             <Suspense fallback={<div style={{ minHeight: '100dvh', background: '#02040b' }} />}>
               <ForestExperience />
+            </Suspense>
+          )}
+        />
+        <Route
+          path="/3d-experience/space"
+          element={(
+            <Suspense fallback={<div style={{ minHeight: '100dvh', background: '#01020a' }} />}>
+              <SpaceOdysseyExperience />
             </Suspense>
           )}
         />

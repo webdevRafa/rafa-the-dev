@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { ArrowUpRight, Menu, ShoppingBag, WalletCards, X } from 'lucide-react'
+import { ArrowUpRight, ChevronDown, Menu, Rocket, ShoppingBag, Trees, WalletCards, X } from 'lucide-react'
 import { FaInstagram } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
 import BrandEmblem from './BrandEmblem.tsx'
@@ -11,6 +11,7 @@ const revealEase = [0.22, 1, 0.36, 1] as const
 
 function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [experienceMenuOpen, setExperienceMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [headerVisible, setHeaderVisible] = useState(true)
   const reduceMotion = useReducedMotion()
@@ -19,6 +20,7 @@ function SiteHeader() {
   const intentDistance = useRef(0)
   const { balance, walletUnlocked, cartCount, setCartOpen } = useLuxuryStore()
   const previousCartCount = useRef(cartCount)
+  const experienceMenuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     let frameId = 0
@@ -84,10 +86,24 @@ function SiteHeader() {
 
   useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setMenuOpen(false)
+      if (event.key === 'Escape') {
+        setMenuOpen(false)
+        setExperienceMenuOpen(false)
+      }
     }
     window.addEventListener('keydown', closeOnEscape)
     return () => window.removeEventListener('keydown', closeOnEscape)
+  }, [])
+
+  useEffect(() => {
+    const closeOutside = (event: PointerEvent) => {
+      if (!experienceMenuRef.current?.contains(event.target as Node)) {
+        setExperienceMenuOpen(false)
+      }
+    }
+
+    window.addEventListener('pointerdown', closeOutside)
+    return () => window.removeEventListener('pointerdown', closeOutside)
   }, [])
 
   useEffect(() => {
@@ -100,7 +116,10 @@ function SiteHeader() {
     }
   }, [menuOpen])
 
-  const closeMenu = () => setMenuOpen(false)
+  const closeMenu = () => {
+    setMenuOpen(false)
+    setExperienceMenuOpen(false)
+  }
 
   return (
     <motion.header
@@ -118,7 +137,34 @@ function SiteHeader() {
       </Link>
 
       <nav className={`nav-links${menuOpen ? ' is-open' : ''}`} aria-label="Main navigation">
-        <Link className="nav-journey-link" to="/3d-experience" onClick={closeMenu}>3D journey</Link>
+        <div className={`nav-experience-menu${experienceMenuOpen ? ' is-open' : ''}`} ref={experienceMenuRef}>
+          <button
+            className="nav-experience-trigger"
+            type="button"
+            aria-expanded={experienceMenuOpen}
+            aria-controls="experience-menu"
+            aria-haspopup="menu"
+            onClick={() => setExperienceMenuOpen((open) => !open)}
+          >
+            3D experiences
+            <ChevronDown size={14} aria-hidden="true" />
+          </button>
+          <div
+            className="nav-experience-popover"
+            id="experience-menu"
+            role="menu"
+            aria-hidden={!experienceMenuOpen}
+          >
+            <Link to="/3d-experience/forest" role="menuitem" tabIndex={experienceMenuOpen ? 0 : -1} onClick={closeMenu}>
+              <Trees size={18} aria-hidden="true" />
+              <span><strong>Forest</strong><small>A lantern-lit walk</small></span>
+            </Link>
+            <Link to="/3d-experience/space" role="menuitem" tabIndex={experienceMenuOpen ? 0 : -1} onClick={closeMenu}>
+              <Rocket size={18} aria-hidden="true" />
+              <span><strong>Space odyssey</strong><small>A six-stage flight</small></span>
+            </Link>
+          </div>
+        </div>
         <Link className="nav-feature-link" to="/#shop" onClick={closeMenu}>Demo shop</Link>
         <Link to="/#process" onClick={closeMenu}>Process</Link>
         <Link to="/#about" onClick={closeMenu}>About</Link>

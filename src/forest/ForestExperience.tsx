@@ -27,7 +27,7 @@ export default function ForestExperience() {
 
   useEffect(() => {
     const previousTitle = document.title
-    document.title = '3D Journey | Rafa the Dev'
+    document.title = 'Forest Journey | Rafa the Dev'
     document.documentElement.classList.add('forest-route-active')
     document.body.classList.add('forest-route-active')
     return () => {
