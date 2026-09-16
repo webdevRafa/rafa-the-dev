@@ -1,143 +1,173 @@
-import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { ArrowUpRight, ChevronDown, Menu, Rocket, ShoppingBag, Trees, WalletCards, X } from 'lucide-react'
-import { FaInstagram } from 'react-icons/fa6'
-import { Link } from 'react-router-dom'
-import BrandEmblem from './BrandEmblem.tsx'
-import CountUp from './CountUpNumber.tsx'
-import { useLuxuryStore } from './LuxuryStoreState.ts'
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import {
+  ArrowUpRight,
+  ChevronDown,
+  Menu,
+  Rocket,
+  ShoppingBag,
+  Trees,
+  WalletCards,
+  Waves,
+  X,
+} from "lucide-react";
+import { FaInstagram } from "react-icons/fa6";
+import { Link } from "react-router-dom";
+import BrandEmblem from "./BrandEmblem.tsx";
+import CountUp from "./CountUpNumber.tsx";
+import { useLuxuryStore } from "./LuxuryStoreState.ts";
 
-const revealEase = [0.22, 1, 0.36, 1] as const
+const revealEase = [0.22, 1, 0.36, 1] as const;
 
 function SiteHeader() {
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [experienceMenuOpen, setExperienceMenuOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const [headerVisible, setHeaderVisible] = useState(true)
-  const reduceMotion = useReducedMotion()
-  const lastScrollY = useRef(0)
-  const scrollDirection = useRef<-1 | 0 | 1>(0)
-  const intentDistance = useRef(0)
-  const { balance, walletUnlocked, cartCount, setCartOpen } = useLuxuryStore()
-  const previousCartCount = useRef(cartCount)
-  const experienceMenuRef = useRef<HTMLDivElement>(null)
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [experienceMenuOpen, setExperienceMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [headerVisible, setHeaderVisible] = useState(true);
+  const reduceMotion = useReducedMotion();
+  const lastScrollY = useRef(0);
+  const scrollDirection = useRef<-1 | 0 | 1>(0);
+  const intentDistance = useRef(0);
+  const { balance, walletUnlocked, cartCount, setCartOpen } = useLuxuryStore();
+  const previousCartCount = useRef(cartCount);
+  const experienceMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    let frameId = 0
+    let frameId = 0;
 
-    lastScrollY.current = Math.max(window.scrollY, 0)
+    lastScrollY.current = Math.max(window.scrollY, 0);
 
     const updateHeader = () => {
-      const nextScrollY = Math.max(window.scrollY, 0)
-      const delta = nextScrollY - lastScrollY.current
+      const nextScrollY = Math.max(window.scrollY, 0);
+      const delta = nextScrollY - lastScrollY.current;
 
-      setScrolled(nextScrollY > 24)
+      setScrolled(nextScrollY > 24);
 
       if (nextScrollY <= 32 || menuOpen) {
-        setHeaderVisible(true)
-        scrollDirection.current = 0
-        intentDistance.current = 0
+        setHeaderVisible(true);
+        scrollDirection.current = 0;
+        intentDistance.current = 0;
       } else if (Math.abs(delta) >= 1) {
-        const nextDirection = delta > 0 ? 1 : -1
+        const nextDirection = delta > 0 ? 1 : -1;
 
         if (nextDirection !== scrollDirection.current) {
-          scrollDirection.current = nextDirection
-          intentDistance.current = 0
+          scrollDirection.current = nextDirection;
+          intentDistance.current = 0;
         }
 
-        intentDistance.current += Math.abs(delta)
+        intentDistance.current += Math.abs(delta);
 
-        if (nextDirection === 1 && nextScrollY > 72 && intentDistance.current >= 18) {
-          setHeaderVisible(false)
-          intentDistance.current = 0
+        if (
+          nextDirection === 1 &&
+          nextScrollY > 72 &&
+          intentDistance.current >= 18
+        ) {
+          setHeaderVisible(false);
+          intentDistance.current = 0;
         }
 
         if (nextDirection === -1 && intentDistance.current >= 10) {
-          setHeaderVisible(true)
-          intentDistance.current = 0
+          setHeaderVisible(true);
+          intentDistance.current = 0;
         }
       }
 
-      lastScrollY.current = nextScrollY
-      frameId = 0
-    }
+      lastScrollY.current = nextScrollY;
+      frameId = 0;
+    };
 
     const handleScroll = () => {
-      if (frameId === 0) frameId = window.requestAnimationFrame(updateHeader)
-    }
+      if (frameId === 0) frameId = window.requestAnimationFrame(updateHeader);
+    };
 
-    frameId = window.requestAnimationFrame(updateHeader)
-    window.addEventListener('scroll', handleScroll, { passive: true })
+    frameId = window.requestAnimationFrame(updateHeader);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
-      window.removeEventListener('scroll', handleScroll)
-      if (frameId !== 0) window.cancelAnimationFrame(frameId)
-    }
-  }, [menuOpen])
+      window.removeEventListener("scroll", handleScroll);
+      if (frameId !== 0) window.cancelAnimationFrame(frameId);
+    };
+  }, [menuOpen]);
 
   useEffect(() => {
     if (cartCount > previousCartCount.current) {
-      setHeaderVisible(true)
-      scrollDirection.current = 0
-      intentDistance.current = 0
+      setHeaderVisible(true);
+      scrollDirection.current = 0;
+      intentDistance.current = 0;
     }
 
-    previousCartCount.current = cartCount
-  }, [cartCount])
+    previousCartCount.current = cartCount;
+  }, [cartCount]);
 
   useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setMenuOpen(false)
-        setExperienceMenuOpen(false)
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        setExperienceMenuOpen(false);
       }
-    }
-    window.addEventListener('keydown', closeOnEscape)
-    return () => window.removeEventListener('keydown', closeOnEscape)
-  }, [])
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, []);
 
   useEffect(() => {
     const closeOutside = (event: PointerEvent) => {
       if (!experienceMenuRef.current?.contains(event.target as Node)) {
-        setExperienceMenuOpen(false)
+        setExperienceMenuOpen(false);
       }
-    }
+    };
 
-    window.addEventListener('pointerdown', closeOutside)
-    return () => window.removeEventListener('pointerdown', closeOutside)
-  }, [])
+    window.addEventListener("pointerdown", closeOutside);
+    return () => window.removeEventListener("pointerdown", closeOutside);
+  }, []);
 
   useEffect(() => {
-    if (!menuOpen) return
-    document.documentElement.classList.add('mobile-menu-open')
-    document.body.classList.add('mobile-menu-open')
+    if (!menuOpen) return;
+    document.documentElement.classList.add("mobile-menu-open");
+    document.body.classList.add("mobile-menu-open");
     return () => {
-      document.documentElement.classList.remove('mobile-menu-open')
-      document.body.classList.remove('mobile-menu-open')
-    }
-  }, [menuOpen])
+      document.documentElement.classList.remove("mobile-menu-open");
+      document.body.classList.remove("mobile-menu-open");
+    };
+  }, [menuOpen]);
 
   const closeMenu = () => {
-    setMenuOpen(false)
-    setExperienceMenuOpen(false)
-  }
+    setMenuOpen(false);
+    setExperienceMenuOpen(false);
+  };
 
   return (
     <motion.header
-      className={`site-header${scrolled ? ' is-scrolled' : ''}`}
+      className={`site-header${scrolled ? " is-scrolled" : ""}`}
       initial={reduceMotion ? false : { opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: headerVisible ? 0 : '-155%' }}
-      transition={reduceMotion ? { duration: 0 } : { duration: headerVisible ? 0.48 : 0.34, ease: revealEase }}
+      animate={{ opacity: 1, y: headerVisible ? 0 : "-155%" }}
+      transition={
+        reduceMotion
+          ? { duration: 0 }
+          : { duration: headerVisible ? 0.48 : 0.34, ease: revealEase }
+      }
       onFocusCapture={() => setHeaderVisible(true)}
     >
-      <Link className="brand header-brand" to="/#top" aria-label="Rafa the Dev home">
+      <Link
+        className="brand header-brand"
+        to="/#top"
+        aria-label="Rafa the Dev home"
+      >
         <BrandEmblem />
         <span className="brand-copy">
           <strong>RAFA THE DEV</strong>
         </span>
       </Link>
 
-      <nav className={`nav-links${menuOpen ? ' is-open' : ''}`} aria-label="Main navigation">
-        <div className={`nav-experience-menu${experienceMenuOpen ? ' is-open' : ''}`} ref={experienceMenuRef}>
+      <nav
+        className={`nav-links${menuOpen ? " is-open" : ""}`}
+        aria-label="Main navigation"
+      >
+        <div
+          className={`nav-experience-menu${
+            experienceMenuOpen ? " is-open" : ""
+          }`}
+          ref={experienceMenuRef}
+        >
           <button
             className="nav-experience-trigger"
             type="button"
@@ -155,19 +185,53 @@ function SiteHeader() {
             role="menu"
             aria-hidden={!experienceMenuOpen}
           >
-            <Link to="/3d-experience/forest" role="menuitem" tabIndex={experienceMenuOpen ? 0 : -1} onClick={closeMenu}>
+            <Link
+              to="/3d-experience/forest"
+              role="menuitem"
+              tabIndex={experienceMenuOpen ? 0 : -1}
+              onClick={closeMenu}
+            >
               <Trees size={18} aria-hidden="true" />
-              <span><strong>Forest</strong><small>A lantern-lit walk</small></span>
+              <span>
+                <strong>Forest</strong>
+                <small>A lantern-lit walk</small>
+              </span>
             </Link>
-            <Link to="/3d-experience/space" role="menuitem" tabIndex={experienceMenuOpen ? 0 : -1} onClick={closeMenu}>
+            <Link
+              to="/3d-experience/space"
+              role="menuitem"
+              tabIndex={experienceMenuOpen ? 0 : -1}
+              onClick={closeMenu}
+            >
               <Rocket size={18} aria-hidden="true" />
-              <span><strong>Space odyssey</strong><small>A six-stage flight</small></span>
+              <span>
+                <strong>Space odyssey</strong>
+                <small>A six-stage flight</small>
+              </span>
+            </Link>
+            <Link
+              to="/3d-experience/island"
+              role="menuitem"
+              tabIndex={experienceMenuOpen ? 0 : -1}
+              onClick={closeMenu}
+            >
+              <Waves size={18} aria-hidden="true" />
+              <span>
+                <strong>Island escape</strong>
+                <small>A tropical shoreline</small>
+              </span>
             </Link>
           </div>
         </div>
-        <Link className="nav-feature-link" to="/#shop" onClick={closeMenu}>Demo shop</Link>
-        <Link to="/#process" onClick={closeMenu}>Process</Link>
-        <Link to="/#about" onClick={closeMenu}>About</Link>
+        <Link className="nav-feature-link" to="/#shop" onClick={closeMenu}>
+          Demo shop
+        </Link>
+        <Link to="/#process" onClick={closeMenu}>
+          Process
+        </Link>
+        <Link to="/#about" onClick={closeMenu}>
+          About
+        </Link>
         <a
           className="mobile-instagram"
           href="https://www.instagram.com/rafathedev/"
@@ -177,7 +241,11 @@ function SiteHeader() {
         >
           <FaInstagram aria-hidden="true" /> @rafathedev
         </a>
-        <Link className="button button-small nav-cta" to="/#contact" onClick={closeMenu}>
+        <Link
+          className="button button-small nav-cta"
+          to="/#contact"
+          onClick={closeMenu}
+        >
           Start a project <ArrowUpRight size={16} />
         </Link>
       </nav>
@@ -187,12 +255,22 @@ function SiteHeader() {
           {walletUnlocked && (
             <motion.div
               className="header-commerce"
-              initial={reduceMotion ? false : { opacity: 0, y: -9, scale: 0.94 }}
+              initial={
+                reduceMotion ? false : { opacity: 0, y: -9, scale: 0.94 }
+              }
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={reduceMotion ? undefined : { opacity: 0, y: -6 }}
-              transition={{ duration: reduceMotion ? 0 : 0.38, ease: revealEase }}
+              transition={{
+                duration: reduceMotion ? 0 : 0.38,
+                ease: revealEase,
+              }}
             >
-              <div className="header-wallet" aria-label={`Demo wallet balance: ${balance.toLocaleString('en-US')} dollars`}>
+              <div
+                className="header-wallet"
+                aria-label={`Demo wallet balance: ${balance.toLocaleString(
+                  "en-US"
+                )} dollars`}
+              >
                 <WalletCards size={17} aria-hidden="true" />
                 <span>Demo wallet</span>
                 <strong>
@@ -209,7 +287,9 @@ function SiteHeader() {
                 className="header-cart"
                 type="button"
                 onClick={() => setCartOpen(true)}
-                aria-label={`Open demo cart with ${cartCount} ${cartCount === 1 ? 'item' : 'items'}`}
+                aria-label={`Open demo cart with ${cartCount} ${
+                  cartCount === 1 ? "item" : "items"
+                }`}
               >
                 <ShoppingBag size={18} aria-hidden="true" />
                 {cartCount > 0 && <span>{cartCount}</span>}
@@ -233,11 +313,13 @@ function SiteHeader() {
             type="button"
             onClick={() => setMenuOpen((open) => !open)}
             aria-expanded={menuOpen}
-            aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-label={
+              menuOpen ? "Close navigation menu" : "Open navigation menu"
+            }
           >
             <AnimatePresence mode="wait" initial={false}>
               <motion.span
-                key={menuOpen ? 'close' : 'menu'}
+                key={menuOpen ? "close" : "menu"}
                 initial={reduceMotion ? false : { opacity: 0, rotate: -35 }}
                 animate={{ opacity: 1, rotate: 0 }}
                 exit={reduceMotion ? undefined : { opacity: 0, rotate: 35 }}
@@ -250,7 +332,7 @@ function SiteHeader() {
         </div>
       </div>
     </motion.header>
-  )
+  );
 }
 
-export default SiteHeader
+export default SiteHeader;

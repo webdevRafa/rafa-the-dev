@@ -1,0 +1,146 @@
+.island-experience {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  min-height: 620px;
+  overflow: hidden;
+  background: #071d27;
+  color: #fff;
+  isolation: isolate;
+}
+
+.island-experience__canvas {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.island-experience__vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(2, 15, 22, 0.35) 0%, transparent 28%, transparent 66%, rgba(2, 15, 22, 0.45) 100%),
+    linear-gradient(90deg, rgba(2, 15, 22, 0.42) 0%, transparent 40%, transparent 100%);
+}
+
+.island-experience__hud {
+  position: absolute;
+  z-index: 2;
+  left: clamp(24px, 5vw, 80px);
+  top: clamp(110px, 16vh, 170px);
+  width: min(520px, calc(100vw - 48px));
+  pointer-events: none;
+  text-shadow: 0 3px 24px rgba(0, 0, 0, 0.35);
+}
+
+.island-experience__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.island-experience__hud h1 {
+  margin: 0;
+  font-size: clamp(3.25rem, 8vw, 7.5rem);
+  line-height: 0.88;
+  letter-spacing: -0.065em;
+  font-weight: 650;
+}
+
+.island-experience__hud > p:last-child {
+  max-width: 44rem;
+  margin: 24px 0 0;
+  font-size: clamp(0.95rem, 1.35vw, 1.08rem);
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.island-experience__controls {
+  position: absolute;
+  z-index: 2;
+  right: clamp(20px, 4vw, 56px);
+  bottom: clamp(22px, 5vh, 48px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(2, 17, 25, 0.42);
+  backdrop-filter: blur(16px);
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.72rem;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.island-experience__back {
+  position: absolute;
+  z-index: 3;
+  left: clamp(20px, 4vw, 56px);
+  bottom: clamp(22px, 5vh, 48px);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(2, 17, 25, 0.42);
+  backdrop-filter: blur(16px);
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.76rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+}
+
+.island-experience__back:hover {
+  transform: translateY(-2px);
+  background: rgba(2, 17, 25, 0.68);
+  border-color: rgba(255, 255, 255, 0.34);
+}
+
+@media (max-width: 720px) {
+  .island-experience {
+    min-height: 560px;
+  }
+
+  .island-experience__hud {
+    top: 116px;
+  }
+
+  .island-experience__hud h1 {
+    font-size: clamp(3rem, 17vw, 5.4rem);
+  }
+
+  .island-experience__hud > p:last-child {
+    max-width: 32rem;
+    font-size: 0.92rem;
+  }
+
+  .island-experience__controls {
+    right: 16px;
+    bottom: 18px;
+  }
+
+  .island-experience__back {
+    left: 16px;
+    bottom: 18px;
+  }
+}
+
+@media (max-width: 520px) {
+  .island-experience__controls span {
+    display: none;
+  }
+}
