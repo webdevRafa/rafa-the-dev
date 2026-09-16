@@ -1,5 +1,5 @@
-import { Suspense, useEffect } from "react";
-import { Canvas, useThree } from "@react-three/fiber";
+import { Suspense, useEffect, useRef } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Loader, OrbitControls, useGLTF } from "@react-three/drei";
 import { ACESFilmicToneMapping } from "three";
 import type {
@@ -8,6 +8,7 @@ import type {
   Mesh,
   MeshStandardMaterial,
   PerspectiveCamera,
+  Object3D,
 } from "three";
 import { ArrowLeft, MousePointer2, Waves } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -53,11 +54,49 @@ function tuneMaterial(material: Material) {
   mat.needsUpdate = true;
 }
 
+type SwayTarget = {
+  object: Object3D;
+  baseX: number;
+  baseY: number;
+  baseZ: number;
+  phase: number;
+};
+
+type TrunkSwayTarget = SwayTarget & {
+  bendFactor: number;
+  treePhase: number;
+  basePosX: number;
+  basePosY: number;
+  basePosZ: number;
+};
+
+type CanopySwayTarget = SwayTarget & {
+  treePhase: number;
+  basePosX: number;
+  basePosY: number;
+  basePosZ: number;
+};
+
 function IslandWorld() {
   const gltf = useGLTF(MODEL_URL);
   const { set, size } = useThree();
+  const palmRoots = useRef<SwayTarget[]>([]);
+  const palmTrunks = useRef<TrunkSwayTarget[]>([]);
+  const palmCrowns = useRef<CanopySwayTarget[]>([]);
+  const palmLeaves = useRef<CanopySwayTarget[]>([]);
 
   useEffect(() => {
+    palmRoots.current = [];
+    palmTrunks.current = [];
+    palmCrowns.current = [];
+    palmLeaves.current = [];
+
+    let treeIndex = 0;
+    let trunkIndex = 0;
+    let crownIndex = 0;
+    let leafIndex = 0;
+    const rootPhase = new Map<Object3D, number>();
+
     // The GLB was exported with Blender lights. Hide them so they do not stack
     // with the intentional React Three Fiber lighting below.
     gltf.scene.traverse((child) => {
@@ -66,6 +105,87 @@ function IslandWorld() {
       if (maybeLight.isLight) {
         maybeLight.visible = false;
         return;
+      }
+
+      // Each palm has a root object. Give every tree its own timing so the
+      // island does not look mechanically synchronized.
+      if (child.name.startsWith("PalmTree_Root")) {
+        const phase = treeIndex * 1.13;
+        rootPhase.set(child, phase);
+
+        palmRoots.current.push({
+          object: child,
+          baseX: child.rotation.x,
+          baseY: child.rotation.y,
+          baseZ: child.rotation.z,
+          phase,
+        });
+        treeIndex += 1;
+      }
+
+      // The Blender generator made the trunk from seven separate cylinder
+      // segments. Rotating those segments only slightly was hard to see, so
+      // we now BOTH tilt and laterally offset them. The upper pieces move
+      // farther than the lower pieces, creating a clearly visible bend.
+      if (child.name.startsWith("PalmTrunk_")) {
+        const match = child.name.match(/PalmTrunk_(\d+)/);
+        const segmentNumber = match ? Number(match[1]) : 1;
+        const bendFactor = Math.min(Math.max(segmentNumber / 7, 0.12), 1);
+        const treePhase = child.parent
+          ? rootPhase.get(child.parent) ?? trunkIndex * 0.31
+          : trunkIndex * 0.31;
+
+        palmTrunks.current.push({
+          object: child,
+          baseX: child.rotation.x,
+          baseY: child.rotation.y,
+          baseZ: child.rotation.z,
+          phase: trunkIndex * 0.19,
+          treePhase,
+          bendFactor,
+          basePosX: child.position.x,
+          basePosY: child.position.y,
+          basePosZ: child.position.z,
+        });
+        trunkIndex += 1;
+      }
+
+      if (child.name.startsWith("Palm_Crown")) {
+        const treePhase = child.parent
+          ? rootPhase.get(child.parent) ?? crownIndex * 1.13
+          : crownIndex * 1.13;
+
+        palmCrowns.current.push({
+          object: child,
+          baseX: child.rotation.x,
+          baseY: child.rotation.y,
+          baseZ: child.rotation.z,
+          phase: crownIndex * 0.41,
+          treePhase,
+          basePosX: child.position.x,
+          basePosY: child.position.y,
+          basePosZ: child.position.z,
+        });
+        crownIndex += 1;
+      }
+
+      if (child.name.startsWith("PalmLeaf")) {
+        const treePhase = child.parent
+          ? rootPhase.get(child.parent) ?? leafIndex * 0.37
+          : leafIndex * 0.37;
+
+        palmLeaves.current.push({
+          object: child,
+          baseX: child.rotation.x,
+          baseY: child.rotation.y,
+          baseZ: child.rotation.z,
+          phase: leafIndex * 0.37,
+          treePhase,
+          basePosX: child.position.x,
+          basePosY: child.position.y,
+          basePosZ: child.position.z,
+        });
+        leafIndex += 1;
       }
 
       const mesh = child as Mesh;
@@ -81,6 +201,112 @@ function IslandWorld() {
       materials.forEach(tuneMaterial);
     });
   }, [gltf.scene]);
+
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime();
+
+    // A broad wind pulse shared by each tree, plus a smaller second wave.
+    // This makes the trunks visibly travel left/right instead of merely
+    // rotating by a couple of degrees.
+    palmRoots.current.forEach(({ object, baseX, baseY, baseZ, phase }) => {
+      const wind = Math.sin(t * 0.62 + phase);
+      const secondary = Math.sin(t * 1.18 + phase * 1.7) * 0.18;
+      const sway = wind + secondary;
+
+      object.rotation.x = baseX + Math.cos(t * 0.48 + phase) * 0.035;
+      object.rotation.y = baseY + Math.sin(t * 0.31 + phase) * 0.018;
+      object.rotation.z = baseZ + sway * 0.075;
+    });
+
+    palmTrunks.current.forEach(
+      ({
+        object,
+        baseX,
+        baseY,
+        baseZ,
+        phase,
+        treePhase,
+        bendFactor,
+        basePosX,
+        basePosY,
+        basePosZ,
+      }) => {
+        const wind = Math.sin(t * 0.62 + treePhase);
+        const secondary = Math.sin(t * 1.18 + treePhase * 1.7) * 0.18;
+        const sway = wind + secondary;
+
+        // Upper trunk pieces physically move farther sideways.
+        // 0.48 means the top segment can shift roughly half a Blender unit.
+        const lateralOffset = sway * 0.48 * Math.pow(bendFactor, 1.65);
+        const depthOffset =
+          Math.cos(t * 0.52 + treePhase) * 0.07 * Math.pow(bendFactor, 1.4);
+
+        object.position.x = basePosX + lateralOffset;
+        object.position.y = basePosY + depthOffset;
+        object.position.z = basePosZ;
+
+        // Stronger visible tilt toward the direction of travel.
+        object.rotation.x =
+          baseX + Math.sin(t * 0.76 + phase) * 0.045 * bendFactor;
+        object.rotation.y =
+          baseY + Math.sin(t * 0.43 + treePhase) * 0.025 * bendFactor;
+        object.rotation.z = baseZ - sway * 0.18 * bendFactor;
+      }
+    );
+
+    // Keep the crown attached visually to the moving top of the trunk.
+    palmCrowns.current.forEach(
+      ({
+        object,
+        baseX,
+        baseY,
+        baseZ,
+        treePhase,
+        basePosX,
+        basePosY,
+        basePosZ,
+      }) => {
+        const wind = Math.sin(t * 0.62 + treePhase);
+        const secondary = Math.sin(t * 1.18 + treePhase * 1.7) * 0.18;
+        const sway = wind + secondary;
+
+        object.position.x = basePosX + sway * 0.5;
+        object.position.y = basePosY + Math.cos(t * 0.52 + treePhase) * 0.075;
+        object.position.z = basePosZ;
+        object.rotation.x = baseX + Math.cos(t * 0.9 + treePhase) * 0.025;
+        object.rotation.y = baseY;
+        object.rotation.z = baseZ - sway * 0.11;
+      }
+    );
+
+    // Fronds follow the canopy left/right and flutter independently.
+    palmLeaves.current.forEach(
+      ({
+        object,
+        baseX,
+        baseY,
+        baseZ,
+        phase,
+        treePhase,
+        basePosX,
+        basePosY,
+        basePosZ,
+      }) => {
+        const wind = Math.sin(t * 0.62 + treePhase);
+        const secondary = Math.sin(t * 1.18 + treePhase * 1.7) * 0.18;
+        const sway = wind + secondary;
+
+        object.position.x = basePosX + sway * 0.5;
+        object.position.y = basePosY + Math.cos(t * 0.52 + treePhase) * 0.075;
+        object.position.z = basePosZ;
+
+        object.rotation.x = baseX + Math.sin(t * 1.45 + phase) * 0.065;
+        object.rotation.y = baseY + Math.sin(t * 1.1 + phase * 1.3) * 0.035;
+        object.rotation.z =
+          baseZ - sway * 0.09 + Math.sin(t * 1.75 + phase) * 0.05;
+      }
+    );
+  });
 
   useEffect(() => {
     // Prefer the first-person Blender camera when it exists.
