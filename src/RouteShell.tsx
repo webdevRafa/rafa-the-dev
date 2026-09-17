@@ -13,6 +13,7 @@ const SpaceOdysseyExperience = lazy(
   () => import("./space/SpaceOdysseyExperience.tsx")
 );
 const IslandExperience = lazy(() => import("./island/IslandExperience.tsx"));
+const EngineExperience = lazy(() => import("./engine/EngineExperience.tsx"));
 
 function RouteShell() {
   const { pathname } = useLocation();
@@ -68,6 +69,19 @@ function RouteShell() {
             </Suspense>
           }
         />
+        <Route
+          path="/3d-experience/engine"
+          element={
+            <Suspense
+              fallback={
+                <div style={{ minHeight: "100dvh", background: "#050608" }} />
+              }
+            >
+              <EngineExperience />
+            </Suspense>
+          }
+        />
+
         <Route
           path="/admin"
           element={

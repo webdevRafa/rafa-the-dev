@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ArrowUpRight,
   ChevronDown,
+  Cpu,
   Menu,
   Rocket,
   ShoppingBag,
@@ -219,6 +220,18 @@ function SiteHeader() {
               <span>
                 <strong>Island escape</strong>
                 <small>A tropical shoreline</small>
+              </span>
+            </Link>
+            <Link
+              to="/3d-experience/engine"
+              role="menuitem"
+              tabIndex={experienceMenuOpen ? 0 : -1}
+              onClick={closeMenu}
+            >
+              <Cpu size={18} aria-hidden="true" />
+              <span>
+                <strong>Acquisition engine</strong>
+                <small>A living growth machine</small>
               </span>
             </Link>
           </div>
