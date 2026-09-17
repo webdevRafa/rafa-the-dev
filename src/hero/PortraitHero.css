@@ -1,0 +1,23 @@
+.portrait-hero {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/*
+ * No dark vignette, opacity overlay, spotlight, or tint is applied.
+ * The canvas displays the GLB exactly as its exported materials render.
+ */
+.portrait-hero canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portrait-hero {
+    transform: none;
+  }
+}
