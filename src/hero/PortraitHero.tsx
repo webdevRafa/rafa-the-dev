@@ -37,11 +37,11 @@ function PortraitModel() {
 
   const layers = useMemo<LayerSet>(
     () => ({
-      background: model.getObjectByName("Portrait_BG"),
-      torso: model.getObjectByName("Portrait_Torso"),
-      face: model.getObjectByName("Portrait_Face"),
+      background: model.getObjectByName("Portrait_BG") ?? null,
+      torso: model.getObjectByName("Portrait_Torso") ?? null,
+      face: model.getObjectByName("Portrait_Face") ?? null,
     }),
-    [model],
+    [model]
   );
 
   const layerBases = useMemo<LayerBases>(
@@ -50,7 +50,7 @@ function PortraitModel() {
       torso: layers.torso?.position.clone() ?? null,
       face: layers.face?.position.clone() ?? null,
     }),
-    [layers],
+    [layers]
   );
 
   const modelMetrics = useMemo(() => {
@@ -75,7 +75,7 @@ function PortraitModel() {
 
     return Math.min(
       usableWidth / modelMetrics.width,
-      usableHeight / modelMetrics.height,
+      usableHeight / modelMetrics.height
     );
   }, [
     modelMetrics.height,
@@ -91,7 +91,7 @@ function PortraitModel() {
 
     if (missing.length > 0) {
       console.warn(
-        `Portrait GLB is missing expected layer(s): ${missing.join(", ")}`,
+        `Portrait GLB is missing expected layer(s): ${missing.join(", ")}`
       );
     }
   }, [layers]);
@@ -142,13 +142,13 @@ function PortraitModel() {
     pointer.current.x = THREE.MathUtils.lerp(
       pointer.current.x,
       reduceMotion ? 0 : pointerTarget.current.x,
-      pointerEase,
+      pointerEase
     );
 
     pointer.current.y = THREE.MathUtils.lerp(
       pointer.current.y,
       reduceMotion ? 0 : pointerTarget.current.y,
-      pointerEase,
+      pointerEase
     );
 
     const px = pointer.current.x;
@@ -161,13 +161,13 @@ function PortraitModel() {
     group.rotation.y = THREE.MathUtils.lerp(
       group.rotation.y,
       reduceMotion ? 0 : px * 0.025,
-      motionEase,
+      motionEase
     );
 
     group.rotation.x = THREE.MathUtils.lerp(
       group.rotation.x,
       reduceMotion ? 0 : -py * 0.012,
-      motionEase,
+      motionEase
     );
 
     /*
@@ -177,11 +177,7 @@ function PortraitModel() {
       group.scale.setScalar(fitScale);
       initializedScale.current = true;
     } else {
-      const scale = THREE.MathUtils.lerp(
-        group.scale.x,
-        fitScale,
-        motionEase,
-      );
+      const scale = THREE.MathUtils.lerp(group.scale.x, fitScale, motionEase);
 
       group.scale.setScalar(scale);
     }
@@ -197,13 +193,13 @@ function PortraitModel() {
       layers.background.position.x = THREE.MathUtils.lerp(
         layers.background.position.x,
         backgroundBase.x + px * 0.008,
-        motionEase,
+        motionEase
       );
 
       layers.background.position.y = THREE.MathUtils.lerp(
         layers.background.position.y,
         backgroundBase.y + py * 0.004,
-        motionEase,
+        motionEase
       );
     }
 
@@ -213,13 +209,13 @@ function PortraitModel() {
       layers.torso.position.x = THREE.MathUtils.lerp(
         layers.torso.position.x,
         torsoBase.x + px * 0.026,
-        motionEase,
+        motionEase
       );
 
       layers.torso.position.y = THREE.MathUtils.lerp(
         layers.torso.position.y,
         torsoBase.y + py * 0.012,
-        motionEase,
+        motionEase
       );
     }
 
@@ -229,13 +225,13 @@ function PortraitModel() {
       layers.face.position.x = THREE.MathUtils.lerp(
         layers.face.position.x,
         faceBase.x + px * 0.055,
-        motionEase,
+        motionEase
       );
 
       layers.face.position.y = THREE.MathUtils.lerp(
         layers.face.position.y,
         faceBase.y + py * 0.025,
-        motionEase,
+        motionEase
       );
     }
   });
