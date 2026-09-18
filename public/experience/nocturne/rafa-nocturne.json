@@ -1,0 +1,764 @@
+{
+  "schemaVersion": 1,
+  "asset": "rafa-nocturne.glb",
+  "coordinates": "glTF Y-up; meter units",
+  "quality": "BALANCED",
+  "zones": [
+    "Hub",
+    "Gallery",
+    "Workshop",
+    "Archive",
+    "Office"
+  ],
+  "initialZone": "Hub",
+  "cameras": {
+    "CAM_Rafa_Close": {
+      "position": [
+        0.0,
+        1.64,
+        1.25
+      ],
+      "target": [
+        0.0,
+        1.7,
+        -0.4
+      ],
+      "verticalFovDegrees": 43
+    },
+    "CAM_Hub_Desktop": {
+      "position": [
+        0.0,
+        1.82,
+        5.9
+      ],
+      "target": [
+        0.0,
+        1.53,
+        -1.7
+      ],
+      "verticalFovDegrees": 62
+    },
+    "CAM_Hub_Mobile": {
+      "position": [
+        0.0,
+        1.74,
+        5.9
+      ],
+      "target": [
+        0.0,
+        1.47,
+        -0.9
+      ],
+      "verticalFovDegrees": 65
+    },
+    "CAM_gallery_Desktop": {
+      "position": [
+        -3.55,
+        1.7,
+        -7.0
+      ],
+      "target": [
+        -3.55,
+        1.65,
+        -11.7
+      ],
+      "verticalFovDegrees": 58
+    },
+    "CAM_gallery_Mobile": {
+      "position": [
+        -3.55,
+        1.65,
+        -6.65
+      ],
+      "target": [
+        -3.55,
+        1.68,
+        -11.2
+      ],
+      "verticalFovDegrees": 66
+    },
+    "CAM_Project_satx": {
+      "position": [
+        -5.65,
+        1.91,
+        -9.85
+      ],
+      "target": [
+        -5.65,
+        1.94,
+        -11.76
+      ],
+      "verticalFovDegrees": 45
+    },
+    "CAM_Project_roofzeus": {
+      "position": [
+        -3.55,
+        1.91,
+        -9.85
+      ],
+      "target": [
+        -3.55,
+        1.94,
+        -11.76
+      ],
+      "verticalFovDegrees": 45
+    },
+    "CAM_Project_rancho": {
+      "position": [
+        -1.4499999999999997,
+        1.91,
+        -9.85
+      ],
+      "target": [
+        -1.4499999999999997,
+        1.94,
+        -11.76
+      ],
+      "verticalFovDegrees": 45
+    },
+    "CAM_workshop_Desktop": {
+      "position": [
+        3.55,
+        1.7,
+        -7.0
+      ],
+      "target": [
+        3.55,
+        1.65,
+        -11.7
+      ],
+      "verticalFovDegrees": 58
+    },
+    "CAM_workshop_Mobile": {
+      "position": [
+        3.55,
+        1.65,
+        -6.65
+      ],
+      "target": [
+        3.55,
+        1.68,
+        -11.2
+      ],
+      "verticalFovDegrees": 66
+    },
+    "CAM_archive_Desktop": {
+      "position": [
+        -8.4,
+        1.7,
+        -0.8999999999999996
+      ],
+      "target": [
+        -13.100000000000001,
+        1.65,
+        -0.8999999999999986
+      ],
+      "verticalFovDegrees": 58
+    },
+    "CAM_archive_Mobile": {
+      "position": [
+        -8.05,
+        1.65,
+        -0.8999999999999997
+      ],
+      "target": [
+        -12.600000000000001,
+        1.68,
+        -0.8999999999999987
+      ],
+      "verticalFovDegrees": 66
+    },
+    "CAM_office_Desktop": {
+      "position": [
+        8.4,
+        1.7,
+        -0.8999999999999996
+      ],
+      "target": [
+        13.100000000000001,
+        1.65,
+        -0.8999999999999986
+      ],
+      "verticalFovDegrees": 58
+    },
+    "CAM_office_Mobile": {
+      "position": [
+        8.05,
+        1.65,
+        -0.8999999999999997
+      ],
+      "target": [
+        12.600000000000001,
+        1.68,
+        -0.8999999999999987
+      ],
+      "verticalFovDegrees": 66
+    }
+  },
+  "routes": {
+    "gallery": {
+      "roomRoot": "Gallery",
+      "title": "THE GALLERY",
+      "hinge": "Door_gallery_Hinge",
+      "doorOpenClip": "Door_gallery_Open",
+      "doorCloseClip": "Door_gallery_Close",
+      "positions": [
+        [
+          0.0,
+          1.82,
+          5.9
+        ],
+        [
+          -3.55,
+          1.72,
+          3.25
+        ],
+        [
+          -3.55,
+          1.68,
+          -3.15
+        ],
+        [
+          -3.55,
+          1.67,
+          -4.48
+        ],
+        [
+          -3.55,
+          1.68,
+          -5.68
+        ],
+        [
+          -3.55,
+          1.7,
+          -7.0
+        ]
+      ],
+      "targets": [
+        [
+          0.0,
+          1.53,
+          -1.7
+        ],
+        [
+          -3.55,
+          1.55,
+          -5.15
+        ],
+        [
+          -3.55,
+          1.55,
+          -6.7
+        ],
+        [
+          -3.55,
+          1.6,
+          -8.3
+        ],
+        [
+          -3.55,
+          1.63,
+          -10.2
+        ],
+        [
+          -3.55,
+          1.65,
+          -11.7
+        ]
+      ],
+      "positionNodes": [
+        "PATH_gallery_00",
+        "PATH_gallery_01",
+        "PATH_gallery_02",
+        "PATH_gallery_03",
+        "PATH_gallery_04",
+        "PATH_gallery_05"
+      ],
+      "targetNodes": [
+        "LOOK_gallery_00",
+        "LOOK_gallery_01",
+        "LOOK_gallery_02",
+        "LOOK_gallery_03",
+        "LOOK_gallery_04",
+        "LOOK_gallery_05"
+      ],
+      "knots": [
+        0,
+        0.18,
+        0.39,
+        0.57,
+        0.77,
+        1
+      ],
+      "duration": 3.2,
+      "openAt": 0.18,
+      "crossAt": 0.57,
+      "contentAnchor": "Anchor_gallery_Content",
+      "exitHit": "Hit_Exit_gallery"
+    },
+    "workshop": {
+      "roomRoot": "Workshop",
+      "title": "THE WORKSHOP",
+      "hinge": "Door_workshop_Hinge",
+      "doorOpenClip": "Door_workshop_Open",
+      "doorCloseClip": "Door_workshop_Close",
+      "positions": [
+        [
+          0.0,
+          1.82,
+          5.9
+        ],
+        [
+          3.55,
+          1.72,
+          3.25
+        ],
+        [
+          3.55,
+          1.68,
+          -3.15
+        ],
+        [
+          3.55,
+          1.67,
+          -4.48
+        ],
+        [
+          3.55,
+          1.68,
+          -5.68
+        ],
+        [
+          3.55,
+          1.7,
+          -7.0
+        ]
+      ],
+      "targets": [
+        [
+          0.0,
+          1.53,
+          -1.7
+        ],
+        [
+          3.55,
+          1.55,
+          -5.15
+        ],
+        [
+          3.55,
+          1.55,
+          -6.7
+        ],
+        [
+          3.55,
+          1.6,
+          -8.3
+        ],
+        [
+          3.55,
+          1.63,
+          -10.2
+        ],
+        [
+          3.55,
+          1.65,
+          -11.7
+        ]
+      ],
+      "positionNodes": [
+        "PATH_workshop_00",
+        "PATH_workshop_01",
+        "PATH_workshop_02",
+        "PATH_workshop_03",
+        "PATH_workshop_04",
+        "PATH_workshop_05"
+      ],
+      "targetNodes": [
+        "LOOK_workshop_00",
+        "LOOK_workshop_01",
+        "LOOK_workshop_02",
+        "LOOK_workshop_03",
+        "LOOK_workshop_04",
+        "LOOK_workshop_05"
+      ],
+      "knots": [
+        0,
+        0.18,
+        0.39,
+        0.57,
+        0.77,
+        1
+      ],
+      "duration": 3.2,
+      "openAt": 0.18,
+      "crossAt": 0.57,
+      "contentAnchor": "Anchor_workshop_Content",
+      "exitHit": "Hit_Exit_workshop"
+    },
+    "archive": {
+      "roomRoot": "Archive",
+      "title": "THE ARCHIVE",
+      "hinge": "Door_archive_Hinge",
+      "doorOpenClip": "Door_archive_Open",
+      "doorCloseClip": "Door_archive_Close",
+      "positions": [
+        [
+          0.0,
+          1.82,
+          5.9
+        ],
+        [
+          -4.2,
+          1.72,
+          3.15
+        ],
+        [
+          -4.550000000000001,
+          1.68,
+          -0.8999999999999999
+        ],
+        [
+          -5.880000000000001,
+          1.67,
+          -0.9
+        ],
+        [
+          -7.08,
+          1.68,
+          -0.9
+        ],
+        [
+          -8.4,
+          1.7,
+          -0.9000000000000001
+        ]
+      ],
+      "targets": [
+        [
+          0.0,
+          1.53,
+          -1.7
+        ],
+        [
+          -6.550000000000001,
+          1.55,
+          -0.9
+        ],
+        [
+          -8.1,
+          1.55,
+          -0.9000000000000001
+        ],
+        [
+          -9.7,
+          1.6,
+          -0.9000000000000002
+        ],
+        [
+          -11.600000000000001,
+          1.63,
+          -0.9000000000000004
+        ],
+        [
+          -13.100000000000001,
+          1.65,
+          -0.9000000000000005
+        ]
+      ],
+      "positionNodes": [
+        "PATH_archive_00",
+        "PATH_archive_01",
+        "PATH_archive_02",
+        "PATH_archive_03",
+        "PATH_archive_04",
+        "PATH_archive_05"
+      ],
+      "targetNodes": [
+        "LOOK_archive_00",
+        "LOOK_archive_01",
+        "LOOK_archive_02",
+        "LOOK_archive_03",
+        "LOOK_archive_04",
+        "LOOK_archive_05"
+      ],
+      "knots": [
+        0,
+        0.18,
+        0.39,
+        0.57,
+        0.77,
+        1
+      ],
+      "duration": 3.2,
+      "openAt": 0.18,
+      "crossAt": 0.57,
+      "contentAnchor": "Anchor_archive_Content",
+      "exitHit": "Hit_Exit_archive"
+    },
+    "office": {
+      "roomRoot": "Office",
+      "title": "THE OFFICE",
+      "hinge": "Door_office_Hinge",
+      "doorOpenClip": "Door_office_Open",
+      "doorCloseClip": "Door_office_Close",
+      "positions": [
+        [
+          0.0,
+          1.82,
+          5.9
+        ],
+        [
+          4.2,
+          1.72,
+          3.15
+        ],
+        [
+          4.550000000000001,
+          1.68,
+          -0.8999999999999999
+        ],
+        [
+          5.880000000000001,
+          1.67,
+          -0.9
+        ],
+        [
+          7.08,
+          1.68,
+          -0.9
+        ],
+        [
+          8.4,
+          1.7,
+          -0.9000000000000001
+        ]
+      ],
+      "targets": [
+        [
+          0.0,
+          1.53,
+          -1.7
+        ],
+        [
+          6.550000000000001,
+          1.55,
+          -0.9
+        ],
+        [
+          8.1,
+          1.55,
+          -0.9000000000000001
+        ],
+        [
+          9.7,
+          1.6,
+          -0.9000000000000002
+        ],
+        [
+          11.600000000000001,
+          1.63,
+          -0.9000000000000004
+        ],
+        [
+          13.100000000000001,
+          1.65,
+          -0.9000000000000005
+        ]
+      ],
+      "positionNodes": [
+        "PATH_office_00",
+        "PATH_office_01",
+        "PATH_office_02",
+        "PATH_office_03",
+        "PATH_office_04",
+        "PATH_office_05"
+      ],
+      "targetNodes": [
+        "LOOK_office_00",
+        "LOOK_office_01",
+        "LOOK_office_02",
+        "LOOK_office_03",
+        "LOOK_office_04",
+        "LOOK_office_05"
+      ],
+      "knots": [
+        0,
+        0.18,
+        0.39,
+        0.57,
+        0.77,
+        1
+      ],
+      "duration": 3.2,
+      "openAt": 0.18,
+      "crossAt": 0.57,
+      "contentAnchor": "Anchor_office_Content",
+      "exitHit": "Hit_Exit_office"
+    }
+  },
+  "interactions": {
+    "Hit_Door_gallery": {
+      "kind": "door",
+      "room": "gallery",
+      "node": "Hit_Door_gallery",
+      "hinge": "Door_gallery_Hinge",
+      "label": "THE GALLERY"
+    },
+    "Hit_Door_workshop": {
+      "kind": "door",
+      "room": "workshop",
+      "node": "Hit_Door_workshop",
+      "hinge": "Door_workshop_Hinge",
+      "label": "THE WORKSHOP"
+    },
+    "Hit_Door_archive": {
+      "kind": "door",
+      "room": "archive",
+      "node": "Hit_Door_archive",
+      "hinge": "Door_archive_Hinge",
+      "label": "THE ARCHIVE"
+    },
+    "Hit_Door_office": {
+      "kind": "door",
+      "room": "office",
+      "node": "Hit_Door_office",
+      "hinge": "Door_office_Hinge",
+      "label": "THE OFFICE"
+    },
+    "Hit_Rafa": {
+      "kind": "intro",
+      "node": "Hit_Rafa",
+      "label": "Meet Rafa",
+      "zone": "hub"
+    },
+    "Hit_Exit_gallery": {
+      "kind": "exit",
+      "node": "Hit_Exit_gallery",
+      "room": "gallery",
+      "label": "Return to studio"
+    },
+    "Hit_Project_satx": {
+      "kind": "project",
+      "node": "Hit_Project_satx",
+      "projectId": "satx",
+      "label": "SATX INK",
+      "zone": "gallery"
+    },
+    "Hit_Project_roofzeus": {
+      "kind": "project",
+      "node": "Hit_Project_roofzeus",
+      "projectId": "roofzeus",
+      "label": "ROOF ZEUS",
+      "zone": "gallery"
+    },
+    "Hit_Project_rancho": {
+      "kind": "project",
+      "node": "Hit_Project_rancho",
+      "projectId": "rancho",
+      "label": "RANCHO DE PALOMA BLANCA",
+      "zone": "gallery"
+    },
+    "Hit_Exit_workshop": {
+      "kind": "exit",
+      "node": "Hit_Exit_workshop",
+      "room": "workshop",
+      "label": "Return to studio"
+    },
+    "Hit_Exit_archive": {
+      "kind": "exit",
+      "node": "Hit_Exit_archive",
+      "room": "archive",
+      "label": "Return to studio"
+    },
+    "Book_ABOUT": {
+      "kind": "about",
+      "node": "Book_ABOUT",
+      "label": "About",
+      "zone": "archive"
+    },
+    "Book_RESUME": {
+      "kind": "resume",
+      "node": "Book_RESUME",
+      "label": "Resume",
+      "zone": "archive"
+    },
+    "Hit_Exit_office": {
+      "kind": "exit",
+      "node": "Hit_Exit_office",
+      "room": "office",
+      "label": "Return to studio"
+    },
+    "Hit_Contact_Form": {
+      "kind": "contact",
+      "label": "Work with me",
+      "node": "Hit_Contact_Form",
+      "zone": "office"
+    }
+  },
+  "ambientClips": [
+    "Rafa_Idle",
+    "Fireplace_Loop"
+  ],
+  "greetingClip": "Rafa_Greet",
+  "render": {
+    "toneMapping": "ACESFilmic",
+    "exposure": 1.1,
+    "background": "#07090b",
+    "ambientIntensity": 0.22,
+    "desktopMaxDpr": 1.5,
+    "mobileMaxDpr": 1.0,
+    "mobileShadows": false,
+    "activeZoneLightsOnly": true
+  },
+  "input": {
+    "desktop": "click door; optional gentle pointer look",
+    "mobile": "tap door or HTML room menu; horizontal drag to look",
+    "keyboard": "HTML room buttons, Escape returns; never trap focus",
+    "reducedMotion": "cut/fade between settled camera poses"
+  },
+  "missingLogos": [],
+  "statistics": {
+    "quality": "BALANCED",
+    "nodes": 359,
+    "meshes": 226,
+    "materials": 47,
+    "triangles": 95655,
+    "clips": [
+      "Fireplace_Loop",
+      "Door_gallery_Open",
+      "Door_gallery_Close",
+      "Door_workshop_Open",
+      "Door_workshop_Close",
+      "Door_archive_Open",
+      "Door_archive_Close",
+      "Door_office_Open",
+      "Door_office_Close",
+      "Rafa_Idle",
+      "Rafa_Greet"
+    ],
+    "zones": {
+      "Hub": 46545,
+      "Gallery": 4306,
+      "Workshop": 8366,
+      "Archive": 31396,
+      "Office": 5042
+    },
+    "checks": [
+      "finite geometry",
+      "valid indices and UV lengths",
+      "acyclic named hierarchy",
+      "animation targets exist",
+      "monotonic animation times",
+      "door centerline clearance"
+    ],
+    "glbBytes": 9294460
+  },
+  "notes": [
+    "GLB contains assets and animation clips, not the website's event/state logic.",
+    "Do not autoplay all door clips. Use the supplied runtime controller.",
+    "Keep body/face visible; no photographic opacity animation is used.",
+    "Rafa is an articulated, stylized mesh character, not a photoreal or skinned walking rig.",
+    "Long content, project case studies and Firebase inquiry form remain HTML."
+  ]
+}
