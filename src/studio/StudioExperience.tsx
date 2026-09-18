@@ -32,15 +32,15 @@ const ROOMS: { id: RoomId; title: string; caption: string }[] = [
   { id: "archive", title: "The Archive", caption: "About & resume" },
   { id: "office", title: "The Office", caption: "Get in touch" },
 ];
-const PROJECTS: Record<string, { name: string; repo: string }> = {
-  satx: { name: "SATX Ink", repo: "https://github.com/webdevRafa/satxink" },
+const PROJECTS: Record<string, { name: string; site: string }> = {
+  satx: { name: "SATX Ink", site: "https://satxink.com" },
   roofzeus: {
     name: "Roof Zeus",
-    repo: "https://github.com/webdevRafa/roofzeus",
+    site: "https://roofzeus.com",
   },
   rancho: {
     name: "Rancho de Paloma Blanca",
-    repo: "https://github.com/webdevRafa/rancho-de-paloma-blanca",
+    site: "https://ranchodepalomablanca.com",
   },
 };
 
@@ -132,17 +132,14 @@ function ContentPanel({ content, busy, focused, interact }: PanelProps) {
       <>
         <p className="nct-kicker">Selected project</p>
         <h2 id="nct-panel-heading">{project.name}</h2>
-        <p>
-          This display is connected to the project below. Case-study text can be
-          added here without changing the 3D model.
-        </p>
+        <p>Explore the live project and see the finished experience.</p>
         <a
           className="nct-link"
-          href={project.repo}
+          href={project.site}
           target="_blank"
           rel="noopener noreferrer"
         >
-          View repository <span aria-hidden="true">↗</span>
+          Visit website <span aria-hidden="true">↗</span>
         </a>
       </>
     );
