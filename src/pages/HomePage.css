@@ -1,0 +1,46 @@
+.scroll-showcase { background: #000; color: #fff; }
+.showcase-stage { position: relative; height: 100svh; min-height: 540px; overflow: clip; isolation: isolate; }
+.showcase-intro { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; }
+.intro-copy { width: 100%; text-align: center; }
+.intro-brand { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: clamp(25px, 3vw, 36px); font-weight: 700; letter-spacing: -.06em; margin: 0 0 22px; }
+.intro-brand > span { font-size: 1.5em; line-height: .9; background: radial-gradient(circle at 30% 35%, #ff8cff, #f20065 30%, #7d007f 58%, #0b0d0c 80%); background-clip: text; color: transparent; }
+.intro-heading { margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(32px, 5.15vw, 80px); font-weight: 700; letter-spacing: -.06em; line-height: 1; white-space: nowrap; }
+.intro-heading > span { display: inline-block; will-change: transform; }
+.intro-description { margin: 24px 0 0; font-size: clamp(15px, 1.7vw, 24px); }
+.scroll-invitation { position: absolute; bottom: 34px; border: 0; background: none; color: #888; font-size: 12px; letter-spacing: .04em; cursor: pointer; padding: 12px; }
+.scroll-invitation span { margin-left: 12px; color: #ee258f; }
+.showcase-playground { position: absolute; inset: 0; z-index: 2; background: #f1eee8; color: #19171b; display: flex; flex-direction: column; justify-content: space-between; padding: clamp(22px, 4vw, 56px); visibility: hidden; }
+.playground-meta { display: flex; justify-content: space-between; gap: 16px; font-family: var(--font-mono); text-transform: uppercase; font-size: 10px; letter-spacing: .1em; color: #716c74; }
+.playground-content { text-align: center; margin: auto; width: 100%; }
+.playground-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: .18em; margin: 0 0 14px; }
+.playground-content h2 { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: clamp(40px, 6vw, 80px); line-height: 1; letter-spacing: -.06em; margin: 0; }
+.playground-description { color: #716c74; font-size: clamp(13px, 1.3vw, 17px); margin: 16px 0 0; }
+.orb-scene { position: relative; height: clamp(170px, 32svh, 320px); display: grid; place-items: center; perspective: 700px; }
+.color-orb { width: clamp(125px, 22svh, 225px); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 30% 25%, #fff 0%, var(--orb-light) 9%, var(--orb-color) 40%, var(--orb-dark) 80%); box-shadow: inset -12px -16px 28px #0003, inset 6px 6px 18px #fff5; transform: rotate(-18deg); transition: transform .5s ease; position: relative; z-index: 1; }
+.orb-scene:hover .color-orb { transform: translateY(-12px) rotate(8deg); }
+.orb-shadow { position: absolute; width: 120px; height: 14px; background: #24112b30; filter: blur(12px); bottom: 12%; border-radius: 50%; }
+.color-controls { display: flex; justify-content: center; gap: 10px; }
+.color-controls button { display: grid; place-items: center; width: 44px; height: 44px; padding: 6px; border-radius: 50%; border: 1px solid transparent; background: transparent; cursor: pointer; transition: border-color .2s, transform .2s; }
+.color-controls button span { width: 25px; height: 25px; border-radius: 50%; background: var(--swatch); }
+.color-controls button[aria-pressed=true] { border-color: #29212e; }
+.color-controls button:hover { transform: translateY(-3px); }
+.color-controls button:focus-visible, .scroll-invitation:focus-visible { outline: 2px solid #b41479; outline-offset: 4px; }
+.color-name { font-size: 11px; color: #716c74; margin: 10px 0; }
+.playground-footer { margin: 20px 0 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .showcase-playground:not(.is-ready) .color-controls { visibility: hidden; }
+  .showcase-playground:not(.is-ready) { pointer-events: none; }
+}
+@media (max-width: 600px) {
+  .intro-heading { font-size: clamp(25px, 7.5vw, 44px); }
+  .intro-brand { margin-bottom: 22px; }
+  .intro-description { max-width: 280px; margin: 20px auto 0; line-height: 1.6; }
+  .playground-meta { font-size: 8px; letter-spacing: .04em; }
+  .playground-footer { flex-direction: column; align-items: center; gap: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .showcase-stage { height: auto; overflow: visible; }
+  .showcase-intro, .showcase-playground { position: relative; min-height: 100svh; visibility: visible; }
+  .showcase-intro { min-height: max(540px, 100svh); }
+  .color-orb, .color-controls button { transition: none; }
+}
