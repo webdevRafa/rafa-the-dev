@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=DM+Mono:wght@400;500&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Oswald:wght@500;600&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 
 @theme {
+  --color-accent:#eb00f2;
   --color-ink: #0b0d0c;
   --color-ink-soft: #111412;
   --color-panel: #151816;
@@ -23,9 +23,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+
 * {
   box-sizing: border-box;
 }
+
+.hero-title {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 0.88;
+}
+
 
 html {
   scroll-behavior: auto;
@@ -59,3 +68,5 @@ a {
   color: #0b0d0c;
   background: #d8ff65;
 }
+
+

@@ -1,36 +1,13 @@
 import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
+import HomePage from "./pages/HomePage.tsx";
 
 const AdminPage = lazy(() => import("./admin/AdminPage.tsx"));
-const StudioExperience = lazy(() => import("./studio/StudioExperience.tsx"));
-
-function StudioFallback() {
-  return (
-    <div
-      style={{
-        minHeight: "100dvh",
-        display: "grid",
-        placeItems: "center",
-        background: "#07090b",
-        color: "#f3f0e8",
-      }}
-    >
-      Loading studio…
-    </div>
-  );
-}
 
 function RouteShell() {
   return (
     <Routes>
-      <Route
-        path="/"
-        element={
-          <Suspense fallback={<StudioFallback />}>
-            <StudioExperience />
-          </Suspense>
-        }
-      />
+      <Route path="/" element={<HomePage />} />
 
       <Route path="/studio" element={<Navigate to="/" replace />} />
 
