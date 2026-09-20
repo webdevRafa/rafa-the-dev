@@ -1,46 +1,67 @@
 .scroll-showcase { background: #000; color: #fff; }
-.showcase-stage { position: relative; height: 100svh; min-height: 540px; overflow: clip; isolation: isolate; }
+.showcase-stage { position: relative; height: 100svh; min-height: 480px; overflow: clip; isolation: isolate; }
 .showcase-intro { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; }
 .intro-copy { width: 100%; text-align: center; }
 .intro-brand { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: clamp(25px, 3vw, 36px); font-weight: 700; letter-spacing: -.06em; margin: 0 0 22px; }
 .intro-brand > span { font-size: 1.5em; line-height: .9; background: radial-gradient(circle at 30% 35%, #ff8cff, #f20065 30%, #7d007f 58%, #0b0d0c 80%); background-clip: text; color: transparent; }
 .intro-heading { margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(32px, 5.15vw, 80px); font-weight: 700; letter-spacing: -.06em; line-height: 1; white-space: nowrap; }
-.intro-heading > span { display: inline-block; will-change: transform; }
+.intro-heading > span { display: inline-block; }
 .intro-description { margin: 24px 0 0; font-size: clamp(15px, 1.7vw, 24px); }
-.scroll-invitation { position: absolute; bottom: 34px; border: 0; background: none; color: #888; font-size: 12px; letter-spacing: .04em; cursor: pointer; padding: 12px; }
+.scroll-invitation { position: absolute; bottom: 34px; border: 0; background: none; color: #aaa; font-size: 12px; letter-spacing: .04em; cursor: pointer; padding: 12px; }
 .scroll-invitation span { margin-left: 12px; color: #ee258f; }
-.showcase-playground { position: absolute; inset: 0; z-index: 2; background: #f1eee8; color: #19171b; display: flex; flex-direction: column; justify-content: space-between; padding: clamp(22px, 4vw, 56px); visibility: hidden; }
-.playground-meta { display: flex; justify-content: space-between; gap: 16px; font-family: var(--font-mono); text-transform: uppercase; font-size: 10px; letter-spacing: .1em; color: #716c74; }
-.playground-content { text-align: center; margin: auto; width: 100%; }
-.playground-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: .18em; margin: 0 0 14px; }
-.playground-content h2 { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: clamp(40px, 6vw, 80px); line-height: 1; letter-spacing: -.06em; margin: 0; }
-.playground-description { color: #716c74; font-size: clamp(13px, 1.3vw, 17px); margin: 16px 0 0; }
-.orb-scene { position: relative; height: clamp(170px, 32svh, 320px); display: grid; place-items: center; perspective: 700px; }
-.color-orb { width: clamp(125px, 22svh, 225px); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 30% 25%, #fff 0%, var(--orb-light) 9%, var(--orb-color) 40%, var(--orb-dark) 80%); box-shadow: inset -12px -16px 28px #0003, inset 6px 6px 18px #fff5; transform: rotate(-18deg); transition: transform .5s ease; position: relative; z-index: 1; }
-.orb-scene:hover .color-orb { transform: translateY(-12px) rotate(8deg); }
-.orb-shadow { position: absolute; width: 120px; height: 14px; background: #24112b30; filter: blur(12px); bottom: 12%; border-radius: 50%; }
-.color-controls { display: flex; justify-content: center; gap: 10px; }
-.color-controls button { display: grid; place-items: center; width: 44px; height: 44px; padding: 6px; border-radius: 50%; border: 1px solid transparent; background: transparent; cursor: pointer; transition: border-color .2s, transform .2s; }
-.color-controls button span { width: 25px; height: 25px; border-radius: 50%; background: var(--swatch); }
-.color-controls button[aria-pressed=true] { border-color: #29212e; }
-.color-controls button:hover { transform: translateY(-3px); }
-.color-controls button:focus-visible, .scroll-invitation:focus-visible { outline: 2px solid #b41479; outline-offset: 4px; }
-.color-name { font-size: 11px; color: #716c74; margin: 10px 0; }
-.playground-footer { margin: 20px 0 0; }
-@media (prefers-reduced-motion: no-preference) {
-  .showcase-playground:not(.is-ready) .color-controls { visibility: hidden; }
-  .showcase-playground:not(.is-ready) { pointer-events: none; }
-}
+.scroll-invitation:focus-visible { outline: 2px solid #ed168e; outline-offset: 5px; }
+.sky-section { position: absolute; inset: 0; z-index: 2; overflow: clip; visibility: hidden; color: #173748; background: #b2d8de; }
+.sky-art, .sky-art > svg, .sky-day, .sky-sunset, .sky-night { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.sky-art { isolation: isolate; }
+.sky-day { background: linear-gradient(#80bdcf 0%, #b9dce1 44%, #efe5c9 76%, #d6d9c5); }
+.sky-sunset { opacity: 0; background: linear-gradient(#737dba 0%, #c695b6 35%, #e8ad9f 55%, #f6c89b 76%, #bca1a4); }
+.sky-night { opacity: 0; background: linear-gradient(#080f25 0%, #15243f 42%, #35405e 72%, #6c647a); }
+.sun-track { position: absolute; top: 20%; left: 72%; width: clamp(65px, 8vw, 120px); aspect-ratio: 1; }
+.sun { position: absolute; inset: 0; border-radius: 50%; background: #fff4d1; box-shadow: 0 0 40px #fff1bb66, 0 0 100px #ffdfa72b; }
+.sun-halo { position: absolute; inset: -140%; border-radius: 50%; background: radial-gradient(#fff5cf24, transparent 68%); }
+.moon-track { opacity: 0; position: absolute; left: 73%; top: 18%; width: clamp(42px, 5vw, 74px); aspect-ratio: 1; }
+.moon { width: 100%; height: 100%; border-radius: 50%; background: radial-gradient(circle at 32% 28%, #fffff4, #d3e0df 75%); box-shadow: 0 0 45px #d2e6ff25, 0 0 120px #d2e6ff13; position: relative; }
+.moon span, .moon i { position: absolute; border-radius: 50%; background: #829da31c; }
+.moon span { width: 24%; height: 26%; top: 22%; left: 52%; }
+.moon i { width: 15%; height: 15%; top: 57%; left: 25%; }
+.stars, .moon-reflection, .cabin-light { opacity: 0; }
+.sun-reflection { opacity: .15; transform-origin: 1090px 680px; }
+.sky-copy { position: absolute; z-index: 1; top: 17%; left: 9%; width: min(570px, 52%); transform-origin: 50% 50%; }
+.sky-eyebrow { font-family: var(--font-mono); text-transform: uppercase; font-size: 11px; letter-spacing: .2em; margin: 0 0 24px; }
+.sky-copy h2 { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: clamp(40px, 5.5vw, 84px); line-height: 1.02; letter-spacing: -.055em; margin: 0; text-wrap: balance; }
+.sky-description { max-width: 405px; font-size: clamp(14px, 1.25vw, 18px); line-height: 1.75; margin: 25px 0 0; text-wrap: pretty; }
+.sky-meta { position: absolute; z-index: 2; left: 4%; right: 4%; display: flex; justify-content: space-between; gap: 20px; font: 10px var(--font-mono); letter-spacing: .09em; text-transform: uppercase; }
+.sky-top { top: 35px; }
+.sky-bottom { bottom: 32px; align-items: center; color: #edf4f4; }
+.sky-phase { position: relative; min-width: 170px; height: 16px; }
+.sky-phase span { position: absolute; inset: 0; }
+.phase-sunset, .phase-night { opacity: 0; }
+.sky-scroll-note { display: flex; align-items: center; gap: 22px; }
+.sky-progress { width: 80px; height: 2px; background: #ffffff38; }
+.sky-progress-fill { width: 100%; height: 100%; background: #edf4f4; transform-origin: left; transform: scaleX(0); }
 @media (max-width: 600px) {
   .intro-heading { font-size: clamp(25px, 7.5vw, 44px); }
-  .intro-brand { margin-bottom: 22px; }
   .intro-description { max-width: 280px; margin: 20px auto 0; line-height: 1.6; }
-  .playground-meta { font-size: 8px; letter-spacing: .04em; }
-  .playground-footer { flex-direction: column; align-items: center; gap: 8px; }
+  .sky-copy { top: 24%; left: 7%; width: 86%; }
+  .sky-copy h2 { font-size: clamp(40px, 11vw, 60px); }
+  .sky-description { max-width: 290px; margin-top: 18px; font-size: 14px; }
+  .sky-eyebrow { margin-bottom: 17px; font-size: 9px; }
+  .sky-meta { left: 7%; right: 7%; font-size: 8px; letter-spacing: .04em; }
+  .sky-top { top: 24px; }
+  .sky-top > span:last-child { max-width: 110px; text-align: right; }
+  .sky-bottom { bottom: 25px; align-items: start; flex-direction: column; gap: 13px; }
+  .sky-scroll-note { width: 100%; justify-content: space-between; }
+  .sun-track { top: 12%; left: 72%; width: 55px; }
+  .moon-track { top: 12%; left: 75%; width: 42px; }
+}
+@media (max-height: 600px) and (min-width: 601px) {
+  .sky-copy { top: 22%; }
+  .sky-copy h2 { font-size: 44px; }
+  .sky-eyebrow { margin-bottom: 12px; }
+  .sky-description { margin-top: 15px; font-size: 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .showcase-stage { height: auto; overflow: visible; }
-  .showcase-intro, .showcase-playground { position: relative; min-height: 100svh; visibility: visible; }
-  .showcase-intro { min-height: max(540px, 100svh); }
-  .color-orb, .color-controls button { transition: none; }
+  .showcase-intro, .sky-section { position: relative; min-height: max(540px, 100svh); visibility: visible; }
+  .sky-scroll-note { display: none; }
 }
