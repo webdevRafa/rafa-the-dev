@@ -2,7 +2,8 @@ import { useLayoutEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import SkyScene from './SkyScene'
-import { addCityLighting } from './cityTimeline'
+import UndergroundSection from './UndergroundSection'
+import { addCityLighting, setCityNight } from './cityTimeline'
 import './HomePage.css'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -45,6 +46,9 @@ export default function HomePage() {
       void document.fonts.ready.then(() => { if (active) ScrollTrigger.refresh() })
       return () => { active = false; timeline.current = null }
     }, root)
+    media.add('(prefers-reduced-motion: reduce)', () => {
+      setCityNight(scene.current!, gsap.utils.selector(root.current!))
+    }, root)
     return () => media.revert()
   }, [])
 
@@ -74,7 +78,7 @@ export default function HomePage() {
           </div>
         </section>
       </div>
-      {/* Add section three here in normal document flow, not inside showcase-stage. */}
+      <UndergroundSection />
     </main>
   )
 }

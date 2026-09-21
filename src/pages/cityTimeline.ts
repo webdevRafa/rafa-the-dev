@@ -1,3 +1,5 @@
+import { gsap } from 'gsap'
+
 // The geometry never changes between lighting states. A shared palette colors
 // gradients, facade planes, foliage and reflected light on the same SVG tree.
 const goldenHour = {
@@ -24,6 +26,18 @@ const afterHours = {
   '--water': '#143c69', '--water-light': '#6393bb',
   '--paving': '#494d63', '--paving-light': '#737085',
   '--road': '#171f34', '--road-light': '#303e59', '--awning': '#28334a',
+}
+
+// The static night view keeps the underground continuation coherent for people
+// who prefer reduced motion, without a scrubbed timeline or pinned viewport.
+export function setCityNight(section: HTMLElement, select: gsap.utils.SelectorFunc) {
+  gsap.set(section, { ...afterHours, color: '#faf1e2' })
+  gsap.set(select('.city-sun, .day-shadows'), { opacity: 0 })
+  gsap.set(select('.city-moon, .city-star, .window-warm-light, .city-lights, .bridge-lights'), { opacity: 1 })
+  gsap.set(select('.water-warm-reflection'), { opacity: .75 })
+  gsap.set(select('.lamp-glow'), { opacity: .8 })
+  gsap.set(select('.lamp-bulb'), { fill: '#fff0b0' })
+  gsap.set(select('.light-pool'), { opacity: .7 })
 }
 
 export function addCityLighting(

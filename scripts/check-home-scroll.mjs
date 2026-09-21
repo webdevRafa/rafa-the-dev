@@ -102,6 +102,44 @@ async function assertNight(page) {
   assert.equal(await page.locator('.sky-section').evaluate(el => getComputedStyle(el).backgroundColor), 'rgb(7, 24, 50)')
 }
 
+async function assertUndergroundImage(page, viewport) {
+  const image = page.locator('.underground-section picture img')
+  await image.evaluate(async el => { await el.decode() })
+  const asset = await image.evaluate(el => {
+    const source = [...el.parentElement.querySelectorAll('source')]
+      .find(node => !node.media || matchMedia(node.media).matches)
+    const candidates = (source?.srcset || el.srcset || el.src).split(',')
+      .map(candidate => new URL(candidate.trim().split(/\s+/)[0], location.href).href)
+    return {
+      complete: el.complete && el.naturalWidth > 0 && el.naturalHeight > 0,
+      currentSrc: el.currentSrc,
+      candidates,
+      portrait: innerWidth < innerHeight,
+      sourceMedia: source?.media || '',
+    }
+  })
+  assert.equal(asset.complete, true, 'Underground illustration has fully decoded')
+  assert.ok(asset.candidates.includes(asset.currentSrc),
+    `Picture selects the expected responsive source at ${viewport.width}x${viewport.height}: ${asset.currentSrc}`)
+  if (asset.portrait) {
+    assert.ok(asset.sourceMedia, 'Portrait viewport uses an art-directed picture source')
+  }
+}
+
+async function assertUndergroundCopy(page, viewport) {
+  const section = page.locator('.underground-section')
+  assert.equal(await section.getAttribute('id'), 'beneath-the-interface')
+  assert.equal(await section.getAttribute('aria-labelledby'), 'underground-heading')
+  assert.equal(await section.locator('h2').count(), 1)
+  assert.match(await section.locator('h2').innerText(), /The details you don.t see\s+are the ones that make it work\./)
+  const copy = await page.locator('.underground-copy').boundingBox()
+  assert.ok(copy && copy.x >= 0 && copy.x + copy.width <= viewport.width + 1
+    && copy.y >= 0 && copy.y + copy.height <= viewport.height + 1,
+  `Underground copy fits the viewport at ${viewport.width}x${viewport.height}: ${JSON.stringify(copy)}`)
+  assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
+    'Third section does not introduce horizontal document overflow')
+}
+
 try {
   for (const viewport of viewports) {
     const name = `${viewport.width}x${viewport.height}`
@@ -117,6 +155,9 @@ try {
     await page.evaluate(() => document.fonts.ready)
     await page.locator('.pin-spacer').waitFor()
     await page.waitForTimeout(350)
+    assert.equal(await page.locator('.pin-spacer').count(), 1, 'Only the city experience is pinned')
+    assert.equal(await page.locator('.underground-section').evaluate(el => !!el.closest('.pin-spacer')), false,
+      'Underground section is outside the city pin')
     assert.equal(await page.locator('.sky-section').isVisible(), false)
     const svg = page.locator('.city-artwork')
     assert.equal(await svg.count(), 1, 'One shared SVG scene, not separate endpoint images')
@@ -172,23 +213,38 @@ try {
     assert.equal(await page.locator('.sky-section').isVisible(), false)
     assert.equal(await opacity(page, '.intro-description'), 1)
 
-    // A future third section must flow after this scene, never remain trapped in its pin.
+    // The real underground section follows the final night frame in normal DOM flow.
     const { start, distance } = await scrollRange(page)
     const stageHeight = await page.locator('.showcase-stage').evaluate(el => el.offsetHeight)
-    await page.evaluate(() => {
-      const next = document.createElement('section')
-      next.id = 'flow-test'
-      next.textContent = 'Normal next section'
-      next.style.cssText = 'height:100vh;background:white;color:black;position:relative'
-      document.querySelector('main').append(next)
-    })
+    await settledScroll(page, start + distance)
+    await assertNight(page)
     await settledScroll(page, start + distance + stageHeight - viewport.height / 2)
     assert.ok(await page.locator('.showcase-stage').evaluate(el => el.getBoundingClientRect().top < -100))
-    const nextTop = await page.locator('#flow-test').evaluate(el => el.getBoundingClientRect().top)
-    assert.ok(Math.abs(nextTop - viewport.height / 2) < 3, 'Next section advances normally after pin release')
+    const seam = await page.evaluate(() => ({
+      cityBottom: document.querySelector('.showcase-stage').getBoundingClientRect().bottom,
+      undergroundTop: document.querySelector('.underground-section').getBoundingClientRect().top,
+      scrollY,
+    }))
+    assert.ok(Math.abs(seam.undergroundTop - viewport.height / 2) < 3,
+      'Underground section advances normally after pin release')
+    assert.ok(Math.abs(seam.cityBottom - seam.undergroundTop) <= 2,
+      'City and underground sections meet without a gap or overlap')
+    await assertNight(page)
+    await assertUndergroundImage(page, viewport)
+    await page.screenshot({ path: `test-results/city-underground-seam-${name}.png` })
+
+    await settledScroll(page, start + distance + stageHeight)
+    const underground = await page.locator('.underground-section').evaluate(el => ({
+      top: el.getBoundingClientRect().top, scrollY,
+    }))
+    assert.ok(Math.abs((seam.undergroundTop - underground.top) - (underground.scrollY - seam.scrollY)) < 2,
+      'Third section tracks native scroll without an additional pin or transform')
+    assert.ok(Math.abs(underground.top) < 3, 'Third section can reach the top of the viewport')
+    await assertUndergroundCopy(page, viewport)
+    await page.screenshot({ path: `test-results/underground-${name}.png` })
     assert.deepEqual(errors, [], 'No page errors or missing GSAP targets')
     await page.close()
-    console.log(`PASS ${name}: reveal, day/sunset/night, fixed geometry, resize/rewind, normal-flow exit`)
+    console.log(`PASS ${name}: reveal, day/sunset/night, fixed geometry, resize/rewind, seamless normal-flow underground, responsive image and copy`)
   }
 
   const page = await browser.newPage({ reducedMotion: 'reduce', viewport: { width: 390, height: 844 } })
@@ -199,15 +255,22 @@ try {
   await page.evaluate(() => document.fonts.ready)
   assert.equal(await page.locator('.pin-spacer').count(), 0)
   assert.equal(await page.locator('.sky-section').isVisible(), true)
-  await assertDay(page)
+  await assertNight(page)
   await page.locator('.sky-section').scrollIntoViewIfNeeded()
   const reducedGeometry = await geometry(page)
   await page.waitForTimeout(1000)
   assertSameGeometry(reducedGeometry, await geometry(page))
   await page.screenshot({ path: 'test-results/city-reduced-motion-390x844.png' })
+  const undergroundTop = await page.locator('.underground-section').evaluate(el =>
+    el.getBoundingClientRect().top + scrollY)
+  await settledScroll(page, undergroundTop)
+  await assertUndergroundImage(page, { width: 390, height: 844 })
+  await assertUndergroundCopy(page, { width: 390, height: 844 })
+  assert.equal(await page.locator('.pin-spacer').count(), 0, 'Reduced motion keeps both illustrations in normal flow')
+  await page.screenshot({ path: 'test-results/underground-reduced-motion-390x844.png' })
   assert.deepEqual(errors, [])
   await page.close()
-  console.log('PASS reduced motion: static daylight scene in normal document flow')
+  console.log('PASS reduced motion: static night and underground scenes in normal document flow')
 } finally {
   await browser.close()
 }
