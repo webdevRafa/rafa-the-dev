@@ -1,0 +1,47 @@
+.interface-section {
+  position: relative;
+  height: 100svh;
+  min-height: 360px;
+  display: grid;
+  place-items: center;
+  padding: 48px clamp(24px, 6vw, 100px);
+  background: #171f34;
+  color: #f4f0e8;
+  overflow: clip;
+}
+.interface-layout { display: grid; grid-template-columns: 1.15fr 1fr; align-items: center; gap: clamp(32px, 6vw, 96px); width: min(100%, 1080px); }
+.interface-eyebrow { margin: 0 0 22px; font: 10px var(--font-mono); letter-spacing: .18em; text-transform: uppercase; color: #b4d5d3; }
+.interface-copy h2 { margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(36px, 3.8vw, 56px); font-weight: 600; line-height: 1.08; letter-spacing: -.045em; text-wrap: balance; }
+.interface-description { max-width: 460px; margin: 26px 0 0; color: #b8c3d3; font-size: clamp(14px, 1.05vw, 17px); line-height: 1.8; text-wrap: pretty; }
+.interface-figure { width: 100%; max-width: 440px; justify-self: center; }
+.interface-artwork { display: block; width: 100%; height: auto; overflow: visible; }
+.layer-label { opacity: 0; }
+.layer-label text { font: 13px var(--font-mono); letter-spacing: .02em; }
+.next-chapter { min-height: 100svh; display: grid; place-items: center; padding: 48px 24px; background: #f1eee7; color: #202a3b; text-align: center; }
+.next-chapter > div { max-width: 720px; }
+.next-chapter .interface-eyebrow { color: #53616e; }
+.next-chapter h2 { margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(40px, 6vw, 80px); font-weight: 600; letter-spacing: -.055em; line-height: 1.05; text-wrap: balance; }
+.next-chapter p:last-child { margin: 24px auto 0; max-width: 390px; color: #627080; font-size: 15px; line-height: 1.8; }
+@media (max-width: 700px) {
+  .interface-section { padding: 36px 24px; }
+  .interface-layout { grid-template-columns: 1fr; gap: 24px; max-width: 440px; }
+  .interface-copy { text-align: center; }
+  .interface-eyebrow { margin-bottom: 17px; font-size: 9px; }
+  .interface-copy h2 { font-size: clamp(30px, 7.8vw, 42px); }
+  .interface-description { margin: 20px auto 0; font-size: 14px; }
+  .interface-figure { max-width: 330px; }
+}
+@media (max-height: 600px) and (min-width: 701px) {
+  .interface-section { padding-block: 24px; }
+  .interface-layout { gap: 24px; }
+  .interface-copy h2 { font-size: 34px; }
+  .interface-description { margin-top: 16px; font-size: 13px; }
+  .interface-figure { max-width: 320px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .layer-structure { transform: translateY(90px); }
+  .layer-interaction { transform: translateY(0); }
+  .layer-polish { transform: translateY(-90px); }
+  .layer-label { opacity: 1; }
+  .interface-section { height: auto; min-height: max(640px, 100svh); overflow: visible; }
+}

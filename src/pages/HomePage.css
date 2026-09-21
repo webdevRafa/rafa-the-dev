@@ -29,6 +29,7 @@
 .sky-art { isolation: isolate; }
 .sky-art::after { content: ''; position: absolute; inset: auto 0 0; height: clamp(18px, 3svh, 36px); background: linear-gradient(transparent, var(--road)); pointer-events: none; }
 .city-artwork { display: block; }
+.city-exit-wash { position: absolute; inset: 0; z-index: 3; pointer-events: none; background: #171f34; opacity: 0; }
 .city-moon, .city-star, .window-warm-light, .city-lights, .bridge-lights,
 .water-warm-reflection, .lamp-glow, .light-pool { opacity: 0; }
 .day-shadows { opacity: .33; }

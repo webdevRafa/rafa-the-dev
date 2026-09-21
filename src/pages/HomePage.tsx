@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import SkyScene from './SkyScene'
-import UndergroundSection from './UndergroundSection'
+import InterfaceLayers from './InterfaceLayers'
 import { addCityLighting, setCityNight } from './cityTimeline'
 import './HomePage.css'
 
@@ -23,7 +23,7 @@ export default function HomePage() {
       const tl = gsap.timeline({
         defaults: { ease: 'none' },
         scrollTrigger: {
-          id: 'home-sky', trigger: stage.current, start: 'top top',
+          id: 'home-sky', trigger: stage.current, start: 'top top', refreshPriority: 10,
           end: () => `+=${window.innerHeight * 4.5}`,
           pin: true, pinSpacing: true, scrub: .85, anticipatePin: 1,
           invalidateOnRefresh: true,
@@ -41,6 +41,18 @@ export default function HomePage() {
         .to(select('.sky-copy'), { scale: 1, opacity: 1, duration: .55, ease: 'power2.out' }, .52)
 
       addCityLighting(tl, scene.current!, select)
+
+      // Once the city releases its pin, its exit is ordinary document scroll.
+      // Only this color wash tracks how much of the viewport it has left.
+      gsap.to(select('.city-exit-wash'), {
+        opacity: 1, ease: 'none',
+        scrollTrigger: {
+          id: 'city-exit', trigger: stage.current, refreshPriority: 5,
+          start: () => tl.scrollTrigger!.end,
+          end: () => tl.scrollTrigger!.end + stage.current!.offsetHeight,
+          scrub: true, invalidateOnRefresh: true,
+        },
+      })
 
       let active = true
       void document.fonts.ready.then(() => { if (active) ScrollTrigger.refresh() })
@@ -76,9 +88,17 @@ export default function HomePage() {
             <h2 id="sky-heading">I bring interfaces<br />to life.</h2>
             <p className="sky-description">Through motion, interaction, and the details that make a website feel good to use.</p>
           </div>
+          <div className="city-exit-wash" aria-hidden="true" />
         </section>
       </div>
-      <UndergroundSection />
+      <InterfaceLayers />
+      <section className="next-chapter" aria-labelledby="next-heading">
+        <div>
+          <p className="interface-eyebrow">Room for what’s next</p>
+          <h2 id="next-heading">Another idea.<br />A new experience.</h2>
+          <p>This is where the next experiment begins. For now, a little space to let this one land.</p>
+        </div>
+      </section>
     </main>
   )
 }
