@@ -1,59 +1,214 @@
 import { chromium } from 'playwright'
 import assert from 'node:assert/strict'
+import { mkdir } from 'node:fs/promises'
 
 // Optional local QA dependency: npm install --no-save --package-lock=false playwright
-// Run a Vite server on 5188 or set TEST_URL.
+// Run a Vite server on 5188 or set TEST_URL. Screenshots stay in ignored test-results/.
+const url = process.env.TEST_URL || 'http://127.0.0.1:5188'
+const viewports = [
+  { width: 390, height: 844 },
+  { width: 1672, height: 941 },
+  { width: 1440, height: 900 },
+  { width: 768, height: 1024 },
+  { width: 320, height: 700 },
+  { width: 844, height: 390 },
+]
+// Named checkpoints in the four-unit, scroll-scrubbed city timeline.
+const progress = { preview: .15, day: 1.12 / 4, sunset: 2.35 / 4, night: 1 }
+const anchors = ['left-building', 'right-building', 'tower']
 const browser = await chromium.launch({ channel: 'chrome', headless: true })
+await mkdir('test-results', { recursive: true })
+
+const opacity = (page, selector) => page.locator(selector).first()
+  .evaluate(el => Number(getComputedStyle(el).opacity))
+
+async function settledScroll(page, y) {
+  await page.evaluate(top => window.scrollTo({ top, behavior: 'instant' }), y)
+  // ScrollTrigger's scrub is .85s; sample only once it has caught up to the input.
+  await page.waitForTimeout(1150)
+}
+
+async function scrollRange(page) {
+  return page.locator('.pin-spacer').evaluate(el => ({
+    start: el.getBoundingClientRect().top + window.scrollY,
+    distance: parseFloat(getComputedStyle(el).paddingBottom),
+  }))
+}
+
+async function seek(page, fraction) {
+  const { start, distance } = await scrollRange(page)
+  assert.ok(distance > 0, 'Pinned experience has a measurable scroll range')
+  await settledScroll(page, start + distance * fraction)
+}
+
+async function geometry(page) {
+  return page.locator('[data-scene-anchor]').evaluateAll(elements => Object.fromEntries(
+    elements.map(el => {
+      const { x, y, width, height } = el.getBoundingClientRect()
+      return [el.getAttribute('data-scene-anchor'), { x, y, width, height }]
+    }),
+  ))
+}
+
+function assertSameGeometry(before, after) {
+  for (const anchor of anchors) {
+    assert.ok(before[anchor] && after[anchor], `Missing stable scene anchor: ${anchor}`)
+    for (const key of ['x', 'y', 'width', 'height']) {
+      assert.ok(Math.abs(before[anchor][key] - after[anchor][key]) < .2,
+        `${anchor}.${key} shifted between day and night`)
+    }
+  }
+}
+
+async function assertCelestialVisible(page, body, viewport) {
+  // First circle is the soft halo; second is the actual sun/moon disk.
+  const disk = await page.locator(`.city-${body} > circle:nth-of-type(2)`).boundingBox()
+  assert.ok(disk, `${body} disk exists`)
+  const center = { x: disk.x + disk.width / 2, y: disk.y + disk.height / 2 }
+  assert.ok(center.x > 0 && center.x < viewport.width && center.y > 0 && center.y < viewport.height,
+    `${body} center stays on screen at ${viewport.width}x${viewport.height}: ${JSON.stringify(center)}`)
+}
+
+async function assertForegroundWindowVisible(page) {
+  const substantialWindows = await page.locator('.window-warm-light').evaluateAll(elements => elements.filter(el => {
+    const rect = el.getBoundingClientRect()
+    const visibleWidth = Math.max(0, Math.min(innerWidth, rect.right) - Math.max(0, rect.left))
+    const visibleHeight = Math.max(0, Math.min(innerHeight, rect.bottom) - Math.max(0, rect.top))
+    return visibleWidth >= 8 && visibleHeight >= 12
+      && visibleWidth * visibleHeight >= rect.width * rect.height * .4
+  }).length)
+  assert.ok(substantialWindows >= 1, 'Portrait framing keeps at least one foreground window substantially visible')
+}
+
+async function assertDay(page) {
+  assert.equal(await opacity(page, '.city-moon'), 0)
+  assert.equal(await opacity(page, '.city-star'), 0)
+  assert.equal(await opacity(page, '.window-warm-light'), 0)
+  assert.equal(await opacity(page, '.lamp-glow'), 0)
+  assert.equal(await opacity(page, '.city-sun'), 1)
+  assert.ok(await opacity(page, '.day-shadows') > .3)
+  assert.equal(await page.locator('.sky-section').evaluate(el => getComputedStyle(el).backgroundColor), 'rgb(121, 184, 245)')
+}
+
+async function assertNight(page) {
+  assert.equal(await opacity(page, '.city-moon'), 1)
+  assert.equal(await opacity(page, '.city-sun'), 0)
+  assert.equal(await opacity(page, '.city-star'), 1)
+  assert.equal(await opacity(page, '.day-shadows'), 0)
+  const windows = await page.locator('.window-warm-light')
+    .evaluateAll(elements => elements.map(el => Number(getComputedStyle(el).opacity)))
+  assert.ok(windows.length >= 4 && windows.every(value => value === 1), 'Windows illuminate completely')
+  assert.ok(await opacity(page, '.lamp-glow') > .7)
+  assert.equal(await page.locator('.sky-section').evaluate(el => getComputedStyle(el).backgroundColor), 'rgb(7, 24, 50)')
+}
+
 try {
-  for (const width of [1440, 390, 320]) {
-    const page = await browser.newPage({ viewport: { width, height: 900 } })
+  for (const viewport of viewports) {
+    const name = `${viewport.width}x${viewport.height}`
+    const page = await browser.newPage({ viewport })
     const errors = []
     page.on('pageerror', error => errors.push(error.message))
-    await page.goto(process.env.TEST_URL || 'http://127.0.0.1:5188')
+    page.on('console', message => {
+      if (/GSAP target.*not found|Invalid property.*Missing plugin/i.test(message.text())) {
+        errors.push(message.text())
+      }
+    })
+    await page.goto(url)
     await page.evaluate(() => document.fonts.ready)
-    await page.waitForTimeout(300)
+    await page.locator('.pin-spacer').waitFor()
+    await page.waitForTimeout(350)
     assert.equal(await page.locator('.sky-section').isVisible(), false)
-    const seek = async progress => {
-      await page.evaluate(p => window.scrollTo(0, (document.documentElement.scrollHeight - innerHeight) * p), progress)
-      await page.waitForTimeout(1000)
-    }
-    await seek(.15)
+    const svg = page.locator('.city-artwork')
+    assert.equal(await svg.count(), 1, 'One shared SVG scene, not separate endpoint images')
+    assert.equal(await svg.locator('image').count(), 0, 'The illustration contains no raster image layers')
+    assert.ok(await svg.locator('*').count() < 900, 'Keep SVG scene complexity bounded')
+    assert.equal(await page.locator('.sky-section').evaluate(el =>
+      [el, ...el.querySelectorAll('*')].some(node => /url\([^)]*\.(png|jpe?g|webp)/i.test(getComputedStyle(node).backgroundImage)),
+    ), false, 'No raster reference backgrounds')
+
+    await seek(page, progress.preview)
     assert.equal(await page.locator('.sky-section').isVisible(), true)
-    await page.screenshot({ path: `test-results/sky-preview-${width}.png` })
-    await seek(.32)
-    assert.equal(await page.locator('.sky-night').evaluate(el => getComputedStyle(el).opacity), '0')
-    await page.screenshot({ path: `test-results/sky-day-${width}.png` })
-    await seek(.59)
-    await page.screenshot({ path: `test-results/sky-sunset-${width}.png` })
-    await seek(1)
-    assert.equal(await page.locator('.sky-night').evaluate(el => getComputedStyle(el).opacity), '1')
-    assert.equal(await page.locator('.moon-track').evaluate(el => getComputedStyle(el).opacity), '1')
-    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
-    await page.screenshot({ path: `test-results/sky-night-${width}.png` })
-    await seek(0)
+    assert.ok(await opacity(page, '.intro-description') < .05)
+    await page.screenshot({ path: `test-results/city-preview-${name}.png` })
+
+    await seek(page, progress.day)
+    await assertDay(page)
+    const dayGeometry = await geometry(page)
+    const copyBox = await page.locator('.sky-copy').boundingBox()
+    assert.ok(copyBox && copyBox.x >= 0 && copyBox.x + copyBox.width <= viewport.width + 1
+      && copyBox.y >= 0 && copyBox.y + copyBox.height <= viewport.height + 1,
+      'Section copy fits its viewport')
+    const footerBox = await page.locator('.sky-bottom').boundingBox()
+    assert.ok(footerBox && footerBox.y >= 0 && footerBox.y + footerBox.height <= viewport.height + 1,
+      'Scene progress remains visible, including landscape phones')
+    await page.screenshot({ path: `test-results/city-day-${name}.png` })
+    await assertCelestialVisible(page, 'sun', viewport)
+    if (viewport.width < viewport.height) await assertForegroundWindowVisible(page)
+
+    await seek(page, progress.sunset)
+    assert.ok(await opacity(page, '.city-sun') < .7, 'Sun is setting at golden hour')
+    await page.screenshot({ path: `test-results/city-sunset-${name}.png` })
+
+    await seek(page, progress.night)
+    await assertNight(page)
+    assertSameGeometry(dayGeometry, await geometry(page))
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'No horizontal document overflow')
+    await page.screenshot({ path: `test-results/city-night-${name}.png` })
+    await assertCelestialVisible(page, 'moon', viewport)
+
+    // Refresh should recalculate the scroll distance without losing reversibility.
+    const resized = { width: viewport.width + 24, height: viewport.height - 24 }
+    await page.setViewportSize(resized)
+    await page.waitForTimeout(350)
+    await seek(page, progress.night)
+    await assertNight(page)
+    await seek(page, progress.day)
+    await assertDay(page)
+    await page.setViewportSize(viewport)
+    await page.waitForTimeout(350)
+    await seek(page, progress.day)
+    await assertDay(page)
+    assertSameGeometry(dayGeometry, await geometry(page))
+    await seek(page, 0)
     assert.equal(await page.locator('.sky-section').isVisible(), false)
-    assert.equal(await page.locator('.intro-description').evaluate(el => getComputedStyle(el).opacity), '1')
-    // Verify a future regular DOM section is not pinned, overlaid, or intercepted.
-    const releaseY = await page.evaluate(() => document.documentElement.scrollHeight - innerHeight)
+    assert.equal(await opacity(page, '.intro-description'), 1)
+
+    // A future third section must flow after this scene, never remain trapped in its pin.
+    const { start, distance } = await scrollRange(page)
+    const stageHeight = await page.locator('.showcase-stage').evaluate(el => el.offsetHeight)
     await page.evaluate(() => {
       const next = document.createElement('section')
-      next.id = 'flow-test'; next.textContent = 'Normal next section'
+      next.id = 'flow-test'
+      next.textContent = 'Normal next section'
       next.style.cssText = 'height:100vh;background:white;color:black;position:relative'
       document.querySelector('main').append(next)
     })
-    await page.evaluate(y => window.scrollTo(0, y + innerHeight / 2), releaseY)
-    await page.waitForTimeout(1000)
+    await settledScroll(page, start + distance + stageHeight - viewport.height / 2)
     assert.ok(await page.locator('.showcase-stage').evaluate(el => el.getBoundingClientRect().top < -100))
     const nextTop = await page.locator('#flow-test').evaluate(el => el.getBoundingClientRect().top)
-    assert.ok(nextTop >= 0 && nextTop < 900)
-    assert.deepEqual(errors, [])
+    assert.ok(Math.abs(nextTop - viewport.height / 2) < 3, 'Next section advances normally after pin release')
+    assert.deepEqual(errors, [], 'No page errors or missing GSAP targets')
     await page.close()
-    console.log(`PASS ${width}px: reveal, day/sunset/night, rewind, no overflow, normal-flow release`)
+    console.log(`PASS ${name}: reveal, day/sunset/night, fixed geometry, resize/rewind, normal-flow exit`)
   }
+
   const page = await browser.newPage({ reducedMotion: 'reduce', viewport: { width: 390, height: 844 } })
-  await page.goto(process.env.TEST_URL || 'http://127.0.0.1:5188')
+  const errors = []
+  page.on('pageerror', error => errors.push(error.message))
+  await page.goto(url)
   await page.getByRole('heading', { name: 'I bring interfaces to life.' }).waitFor()
+  await page.evaluate(() => document.fonts.ready)
   assert.equal(await page.locator('.pin-spacer').count(), 0)
   assert.equal(await page.locator('.sky-section').isVisible(), true)
-  console.log('PASS reduced motion: readable static landscape in normal document flow')
-} finally { await browser.close() }
+  await assertDay(page)
+  await page.locator('.sky-section').scrollIntoViewIfNeeded()
+  const reducedGeometry = await geometry(page)
+  await page.waitForTimeout(1000)
+  assertSameGeometry(reducedGeometry, await geometry(page))
+  await page.screenshot({ path: 'test-results/city-reduced-motion-390x844.png' })
+  assert.deepEqual(errors, [])
+  await page.close()
+  console.log('PASS reduced motion: static daylight scene in normal document flow')
+} finally {
+  await browser.close()
+}
