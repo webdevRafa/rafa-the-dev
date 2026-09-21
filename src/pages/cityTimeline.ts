@@ -53,10 +53,5 @@ export function addCityLighting(
     .to(select('.lamp-bulb'), { fill: '#fff0b0', duration: .5 }, 2.7)
     .to(select('.light-pool'), { opacity: .7, duration: .65 }, 2.8)
     .to(section, { color: '#faf1e2', duration: .55 }, 2.5)
-    .to(select('.phase-day'), { opacity: 0, duration: .15 }, 1.85)
-    .fromTo(select('.phase-sunset'), { opacity: 0 }, { opacity: 1, duration: .15 }, 2.0)
-    .to(select('.phase-sunset'), { opacity: 0, duration: .15 }, 2.85)
-    .fromTo(select('.phase-night'), { opacity: 0 }, { opacity: 1, duration: .2 }, 3.0)
-    .fromTo(select('.sky-progress-fill'), { scaleX: 0 }, { scaleX: 1, duration: 2.58 }, 1.12)
     .to({}, { duration: .3 }, 3.7)
 }

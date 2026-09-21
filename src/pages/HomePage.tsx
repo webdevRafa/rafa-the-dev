@@ -38,7 +38,6 @@ export default function HomePage() {
         .to(scene.current, { autoAlpha: 1, duration: .15 }, .25)
         .to(scene.current, { clipPath: 'inset(0% 0% round 0px)', duration: .6, ease: 'power2.inOut' }, .42)
         .to(select('.sky-copy'), { scale: 1, opacity: 1, duration: .55, ease: 'power2.out' }, .52)
-        .fromTo(select('.sky-meta'), { opacity: 0 }, { opacity: 1, duration: .2 }, .9)
 
       addCityLighting(tl, scene.current!, select)
 
@@ -68,15 +67,10 @@ export default function HomePage() {
         </section>
         <section ref={scene} className="sky-section" aria-labelledby="sky-heading">
           <SkyScene />
-          <div className="sky-meta sky-top"><span>rafathedev / experiments</span><span>01 — The hours between</span></div>
           <div className="sky-copy">
             <p className="sky-eyebrow">Design in motion</p>
             <h2 id="sky-heading">I bring interfaces<br />to life.</h2>
             <p className="sky-description">Through motion, interaction, and the details that make a website feel good to use.</p>
-          </div>
-          <div className="sky-meta sky-bottom">
-            <div className="sky-phase" aria-hidden="true"><span className="phase-day">01 / Daylight</span><span className="phase-sunset">02 / Golden hour</span><span className="phase-night">03 / After hours</span></div>
-            <div className="sky-scroll-note"><span>Keep scrolling. Watch it change.</span><div className="sky-progress" aria-hidden="true"><div className="sky-progress-fill" /></div></div>
           </div>
         </section>
       </div>

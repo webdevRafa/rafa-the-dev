@@ -138,9 +138,8 @@ try {
     assert.ok(copyBox && copyBox.x >= 0 && copyBox.x + copyBox.width <= viewport.width + 1
       && copyBox.y >= 0 && copyBox.y + copyBox.height <= viewport.height + 1,
       'Section copy fits its viewport')
-    const footerBox = await page.locator('.sky-bottom').boundingBox()
-    assert.ok(footerBox && footerBox.y >= 0 && footerBox.y + footerBox.height <= viewport.height + 1,
-      'Scene progress remains visible, including landscape phones')
+    assert.equal(await page.locator('.sky-meta, .sky-phase, .sky-scroll-note, .sky-progress').count(), 0,
+      'Corner labels and progress decoration are removed on every viewport')
     await page.screenshot({ path: `test-results/city-day-${name}.png` })
     await assertCelestialVisible(page, 'sun', viewport)
     if (viewport.width < viewport.height) await assertForegroundWindowVisible(page)
